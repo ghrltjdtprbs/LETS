@@ -80,5 +80,4 @@ public class PackageService {
         return packageDepartureOptionRepository.findById(id).orElseThrow(
             PackageDepartureOptionNotFoundException::new);
     }
-
 }
