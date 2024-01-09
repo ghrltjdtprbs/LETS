@@ -9,7 +9,6 @@ import com.yanolja_final.domain.user.entity.User;
 import jakarta.validation.constraints.NotNull;
 
 public record OrderCreateRequest(
-
     @NotNull
     Long packageId,
     @NotNull
