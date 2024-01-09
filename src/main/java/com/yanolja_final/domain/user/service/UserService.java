@@ -99,4 +99,17 @@ public class UserService {
         return userRepository.findById(id)
             .orElseThrow(() -> new UserNotFoundException());
     }
+
+    @Transactional(readOnly = true)
+    public User findActiveUserById (Long id){
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        isDeletedUser(user);
+        return user;
+    }
+
+    private static void isDeletedUser(User user) {
+        if (user.isDeleted()) {
+            throw new UserNotFoundException();
+        }
+    }
 }
