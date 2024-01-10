@@ -1,10 +1,9 @@
 package com.yanolja_final.domain.packages.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yanolja_final.domain.order.exception.MaximumCapacityExceededException;
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
-import com.yanolja_final.domain.order.exception.MaximumCapacityExceededException;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
 import com.yanolja_final.domain.packages.exception.PackageDateNotFoundException;
@@ -25,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class PackageService {
 
     private final PackageRepository packageRepository;
-    private final ObjectMapper objectMapper;
     private final PackageDepartureOptionRepository packageDepartureOptionRepository;
 
     // Package
