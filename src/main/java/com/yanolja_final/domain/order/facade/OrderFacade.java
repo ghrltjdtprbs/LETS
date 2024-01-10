@@ -25,6 +25,7 @@ public class OrderFacade {
         Package aPackage = packageService.getPackageWithIncrementPurchasedCount(request.packageId());
         packageService.updateCurrentPeopleWithOrder(
             request.availableDateId(),
+            request.packageId(),
             request.totalCount()
         );
         return orderService.create(user, aPackage, request);

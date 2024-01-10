@@ -24,6 +24,7 @@ public enum ErrorCode {
     // PACKAGE
     PACKAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 패키지입니다."),
     PACKAGE_DEPARTURE_OPTION_NOT_FOUND(HttpStatus.NOT_FOUND,"존재하지 않는 패키지 옵션입니다."),
+    PACKAGE_DATE_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 패키지와 일치하는 날짜가 없습니다."),
     AVAILABLE_DATE_NOT_FOUND(HttpStatus.NOT_FOUND, "예약 가능한 날짜가 아닙니다."),
 
     // ORDER
