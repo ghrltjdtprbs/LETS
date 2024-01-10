@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public record NoticeListResponse(
-
     Long noticeId,
     String title,
     String createdAt,

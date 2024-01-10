@@ -26,15 +26,15 @@ public class NoticeService {
 
     public ResponseDTO<List<NoticeListResponse>> getNoticeList() {
         List<Notice> notices = noticeRepository.findAll();
-        List<NoticeListResponse> noticeListResponses = NoticeListResponse.fromNotices(notices);
-        return ResponseDTO.okWithData(noticeListResponses);
+        List<NoticeListResponse> response = NoticeListResponse.fromNotices(notices);
+        return ResponseDTO.okWithData(response);
     }
 
 
     public ResponseDTO<NoticeResponse> getSpecificNotice(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
             .orElseThrow(() -> new NoticeNotFoundException());
-        NoticeResponse specificNoticeResponse = NoticeResponse.fromNotice(notice);
-        return ResponseDTO.okWithData(specificNoticeResponse);
+        NoticeResponse response = NoticeResponse.fromNotice(notice);
+        return ResponseDTO.okWithData(response);
     }
 }

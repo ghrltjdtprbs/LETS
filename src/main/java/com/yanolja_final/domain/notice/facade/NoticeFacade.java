@@ -21,12 +21,10 @@ public class NoticeFacade {
         return response;
     }
 
-
     public ResponseDTO<List<NoticeListResponse>> getNoticeList() {
         ResponseDTO<List<NoticeListResponse>> response = noticeService.getNoticeList();
         return response;
     }
-
 
     public ResponseDTO<NoticeResponse> getSpecificNotice(Long noticeId) {
         ResponseDTO<NoticeResponse> response = noticeService.getSpecificNotice(noticeId);

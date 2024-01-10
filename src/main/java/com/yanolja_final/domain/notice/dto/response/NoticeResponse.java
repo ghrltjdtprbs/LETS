@@ -12,7 +12,6 @@ public record NoticeResponse(
 ) {
 
     public static NoticeResponse fromNotice(Notice notice) {
-
         String[] splitContent = notice.getContent().split("\n");
         String[] splitCategories = notice.getCategories().split(",");
 

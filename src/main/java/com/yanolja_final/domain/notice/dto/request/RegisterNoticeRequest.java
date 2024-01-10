@@ -15,7 +15,6 @@ public record RegisterNoticeRequest(
     @NotNull
     String[] categories
 ) {
-
     public Notice toEntity() {
         String splitContent = Arrays.stream(content)
             .map(String::trim)
