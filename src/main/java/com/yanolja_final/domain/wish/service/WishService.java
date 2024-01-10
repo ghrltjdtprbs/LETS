@@ -25,8 +25,8 @@ public class WishService {
         return wishRepository.save(new Wish(user, aPackage));
     }
 
-    public void deleteWish(Long wishId, Long userId) {
-        Wish wish = wishRepository.findByIdAndUserId(wishId, userId).orElseThrow(() ->
+    public void deleteWish(Package aPackage, User user) {
+        Wish wish = wishRepository.findByIdAndUserId(aPackage, user).orElseThrow(() ->
             new WishNotFoundException());
         wishRepository.delete(wish);
     }

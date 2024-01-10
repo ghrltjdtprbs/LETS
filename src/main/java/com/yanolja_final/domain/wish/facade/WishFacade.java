@@ -28,8 +28,10 @@ public class WishFacade {
         return wishService.createWish(aPackage, user);
     }
 
-    public void deleteWish(Long wishId, Long userId) {
-        wishService.deleteWish(wishId, userId);
+    public void deleteWish(Long packageId, Long userId) {
+        Package aPackage = packageService.findById(packageId);
+        User user = userService.findById(userId);
+        wishService.deleteWish(aPackage, user);
     }
 
     public Page<WishListResponse> getUserWishes(Long userId, Pageable pageable) {
