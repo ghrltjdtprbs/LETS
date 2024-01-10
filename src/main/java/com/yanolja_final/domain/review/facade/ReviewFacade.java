@@ -2,8 +2,6 @@ package com.yanolja_final.domain.review.facade;
 
 import com.yanolja_final.domain.order.entity.Order;
 import com.yanolja_final.domain.order.service.OrderService;
-import com.yanolja_final.domain.packages.entity.Package;
-import com.yanolja_final.domain.packages.service.PackageService;
 import com.yanolja_final.domain.review.dto.request.CreateReviewRequest;
 import com.yanolja_final.domain.review.dto.response.ReviewResponse;
 import com.yanolja_final.domain.review.entity.Review;
@@ -24,7 +22,6 @@ import org.springframework.stereotype.Service;
 public class ReviewFacade {
 
     private final ReviewService reviewService;
-    private final PackageService packageService;
     private final UserService userService;
     private final OrderService orderService;
 
@@ -42,7 +39,6 @@ public class ReviewFacade {
 
         return ReviewResponse.fromReview(review);
     }
-
 
     public void deleteReview(Long reviewId, Long userId) {
         reviewService.deleteReview(reviewId, userId);
