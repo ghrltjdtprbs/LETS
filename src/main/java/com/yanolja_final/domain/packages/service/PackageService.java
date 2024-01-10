@@ -7,6 +7,7 @@ import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.order.exception.MaximumCapacityExceededException;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
+import com.yanolja_final.domain.packages.exception.PackageDateNotFoundException;
 import com.yanolja_final.domain.packages.exception.PackageDepartureOptionNotFoundException;
 import com.yanolja_final.domain.packages.exception.PackageNotFoundException;
 import com.yanolja_final.domain.packages.repository.PackageDepartureOptionRepository;
@@ -60,8 +61,14 @@ public class PackageService {
     }
 
     // PackageDepartureOption
-    public void updateCurrentPeopleWithOrder(Long id, int orderTotalPeople) {
+    public void updateCurrentPeopleWithOrder(Long id, Long packageId, int orderTotalPeople) {
         PackageDepartureOption packageDepartureOption = findByDepartureOptionId(id);
+
+        packageDepartureOptionRepository.findByPackageIdAndDepartureOptionId(packageId, id)
+            .orElseThrow(
+                PackageDateNotFoundException::new
+            );
+
         if (packageDepartureOption.getIncrementCurrentReservationCount(orderTotalPeople)
             > packageDepartureOption.getMaxReservationCount()) {
             throw new MaximumCapacityExceededException();
@@ -73,4 +80,5 @@ public class PackageService {
         return packageDepartureOptionRepository.findById(id).orElseThrow(
             PackageDepartureOptionNotFoundException::new);
     }
+
 }
