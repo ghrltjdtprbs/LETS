@@ -2,9 +2,9 @@ package com.yanolja_final.domain.packages.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yanolja_final.domain.order.exception.MaximumCapacityReachedException;
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
+import com.yanolja_final.domain.order.exception.MaximumCapacityExceededException;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
 import com.yanolja_final.domain.packages.exception.PackageDepartureOptionNotFoundException;
@@ -64,7 +64,7 @@ public class PackageService {
         PackageDepartureOption packageDepartureOption = findByDepartureOptionId(id);
         if (packageDepartureOption.getIncrementCurrentReservationCount(orderTotalPeople)
             > packageDepartureOption.getMaxReservationCount()) {
-            throw new MaximumCapacityReachedException();
+            throw new MaximumCapacityExceededException();
         }
         packageDepartureOptionRepository.save(packageDepartureOption);
     }
