@@ -29,9 +29,7 @@ public class WishFacade {
     }
 
     public void deleteWish(Long packageId, Long userId) {
-        Package aPackage = packageService.findById(packageId);
-        User user = userService.findById(userId);
-        wishService.deleteWish(aPackage, user);
+         wishService.deleteWish(packageId, userId);
     }
 
     public Page<WishListResponse> getUserWishes(Long userId, Pageable pageable) {
