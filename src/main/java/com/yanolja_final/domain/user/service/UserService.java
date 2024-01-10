@@ -103,11 +103,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public User findActiveUserById (Long id){
         User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
-        isDeletedUser(user);
+        assertNotDeleted (user);
         return user;
     }
 
-    private static void isDeletedUser(User user) {
+    private static void assertNotDeleted (User user) {
         if (user.isDeleted()) {
             throw new UserNotFoundException();
         }
