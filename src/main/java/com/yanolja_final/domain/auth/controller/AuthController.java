@@ -25,6 +25,7 @@ public class AuthController {
 
     @Value("${cookie.domain}")
     private String domain;
+    private final CookieUtils cookieUtils;
 
     private final AuthFacade authFacade;
 
@@ -35,7 +36,7 @@ public class AuthController {
     ) {
         TokenDTO tokenDTO = authFacade.login(loginRequest);
 
-        Cookie accessToken = CookieUtils.makeCookie(
+        Cookie accessToken = cookieUtils.makeCookie(
             ACCESS_TOKEN_COOKIE_NAME, tokenDTO.accessToken()
         );
         response.addCookie(accessToken);
