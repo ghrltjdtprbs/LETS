@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
+
+    @Value("${cookie.domain}")
+    private String domain;
+
     private final AuthFacade authFacade;
 
     @PostMapping("/email/login")
@@ -44,6 +49,7 @@ public class AuthController {
         Cookie emptyAccessToken = new Cookie(ACCESS_TOKEN_COOKIE_NAME, null);
         emptyAccessToken.setMaxAge(0);
         emptyAccessToken.setHttpOnly(false);
+        emptyAccessToken.setDomain(domain);
         emptyAccessToken.setPath("/");
 
         response.addCookie(emptyAccessToken);

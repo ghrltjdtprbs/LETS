@@ -3,6 +3,7 @@ package com.yanolja_final.domain.user.controller;
 import com.yanolja_final.domain.auth.controller.AuthController;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import com.yanolja_final.domain.user.dto.request.CreateUserRequest;
@@ -24,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
 
+    @Value("${cookie.domain}")
+    private String domain;
+
     private final UserFacade userFacade;
 
     @PostMapping("/email")
@@ -42,6 +46,7 @@ public class UserController {
         Cookie emptyAccessToken = new Cookie(AuthController.ACCESS_TOKEN_COOKIE_NAME, null);
         emptyAccessToken.setMaxAge(0);
         emptyAccessToken.setHttpOnly(false);
+        emptyAccessToken.setDomain(domain);
         emptyAccessToken.setPath("/");
 
         response.addCookie(emptyAccessToken);

@@ -1,8 +1,12 @@
 package com.yanolja_final.global.common;
 
 import jakarta.servlet.http.Cookie;
+import org.springframework.beans.factory.annotation.Value;
 
 public class CookieUtils {
+
+    @Value("${cookie.domain")
+    private static String domain;
 
     private CookieUtils() {
     }
@@ -12,7 +16,7 @@ public class CookieUtils {
         cookie.setPath("/");
         cookie.setAttribute("Samesite", "None");
 
-        cookie.setDomain("localhost");
+        cookie.setDomain(domain);
         cookie.setSecure(false);
 
         return cookie;
