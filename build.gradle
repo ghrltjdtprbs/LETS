@@ -76,3 +76,16 @@ tasks.register('copyDocument', Copy) {
 build {
     dependsOn copyDocument
 }
+
+jar {
+    enabled = false
+}
+
+
+bootJar {
+    archiveBaseName = 'app'
+    archiveVersion = ''
+    archiveClassifier = null
+    archiveExtension = 'jar'
+    enabled = true
+}
