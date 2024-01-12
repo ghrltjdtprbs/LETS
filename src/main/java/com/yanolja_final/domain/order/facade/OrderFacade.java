@@ -6,6 +6,7 @@ import com.yanolja_final.domain.order.controller.response.OrderResponse;
 import com.yanolja_final.domain.order.entity.Order;
 import com.yanolja_final.domain.order.service.OrderService;
 import com.yanolja_final.domain.packages.entity.Package;
+import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
 import com.yanolja_final.domain.packages.service.PackageService;
 import com.yanolja_final.domain.review.service.ReviewService;
 import com.yanolja_final.domain.user.entity.User;
@@ -36,14 +37,14 @@ public class OrderFacade {
         Page<Order> ordersPage = orderService.read(user, pageable);
         List<OrderResponse> responses = ordersPage.getContent().stream()
             .map(order -> {
-                Package aPackage = order.getAPackage();
-                String firstIntroImageUrl = aPackage.getIntroImages().get(0).getImageUrl();
-
-                boolean isWish = wishService.isUserWishingPackage(order.getId(), aPackage.getId());
+                PackageDepartureOption packageDepartureOption =
+                    packageService.findByDepartureOptionId(order.getAvailableDateId());
+                boolean isWish =
+                    wishService.isUserWishingPackage(order.getId(), order.getAPackage().getId());
                 boolean isReviewed =
-                    reviewService.isUserReviewedPackage(order.getId(), aPackage.getId());
-
-                return OrderResponse.from(order, aPackage, firstIntroImageUrl, isWish, isReviewed);
+                    reviewService.isUserReviewedPackage(order.getId(), order.getAPackage().getId());
+                return OrderResponse.from(order, packageDepartureOption.getDepartureDate(), isWish,
+                    isReviewed);
             })
             .collect(Collectors.toList());
 
@@ -53,12 +54,16 @@ public class OrderFacade {
     @Transactional
     public OrderCreateResponse create(Long userId, OrderCreateRequest request) {
         User user = userService.findActiveUserById(userId);
-        Package aPackage = packageService.getPackageWithIncrementPurchasedCount(request.packageId());
+        Package aPackage =
+            packageService.getPackageWithIncrementPurchasedCount(request.packageId());
+        PackageDepartureOption packageDepartureOption =
+            packageService.findByDepartureOptionId(request.availableDateId());
+
         packageService.updateCurrentPeopleWithOrder(
             request.availableDateId(),
             request.packageId(),
             request.totalCount()
         );
-        return orderService.create(user, aPackage, request);
+        return orderService.create(user, aPackage, packageDepartureOption, request);
     }
 }
