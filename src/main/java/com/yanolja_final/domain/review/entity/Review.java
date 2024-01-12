@@ -58,4 +58,8 @@ public class Review extends BaseEntity {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return createdAt.format(formatter);
     }
+
+    public int getTotalScore() {
+        return productScore + scheduleScore + guideScore + appointmentScore;
+    }
 }

@@ -41,4 +41,12 @@ public class PackageDepartureOption extends BaseEntity {
     private Integer minReservationCount;
 
     private Integer maxReservationCount;
+
+    public boolean isNotExpired() {
+        return !departureDate.isBefore(LocalDate.now());
+    }
+
+    public int getRemainReservationCount() {
+        return this.maxReservationCount - this.currentReservationCount;
+    }
 }

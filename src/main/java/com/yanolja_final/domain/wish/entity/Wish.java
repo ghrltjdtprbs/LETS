@@ -34,10 +34,10 @@ public class Wish extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "package_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Package aPackage;
+    private Package APackage;
 
-    public Wish(User user, Package aPackage) {
+    public Wish(User user, Package APackage) {
         this.user = user;
-        this.aPackage = aPackage;
+        this.APackage = APackage;
     }
 }

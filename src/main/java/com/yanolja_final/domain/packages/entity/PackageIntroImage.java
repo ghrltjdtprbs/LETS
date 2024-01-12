@@ -18,7 +18,7 @@ public class PackageIntroImage extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "package_id")
     private Long packageId;
 
     @Column(length = 300, nullable = false)
