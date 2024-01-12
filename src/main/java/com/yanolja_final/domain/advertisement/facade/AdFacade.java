@@ -1,5 +1,6 @@
 package com.yanolja_final.domain.advertisement.facade;
 
+import com.yanolja_final.domain.advertisement.dto.response.AdDetailResponse;
 import com.yanolja_final.domain.advertisement.dto.response.AdListItemResponse;
 import com.yanolja_final.domain.advertisement.service.AdService;
 import java.util.List;
@@ -14,5 +15,9 @@ public class AdFacade {
 
     public List<AdListItemResponse> getList() {
         return adService.getList();
+    }
+
+    public AdDetailResponse getDetail(Long id) {
+        return adService.getDetail(id);
     }
 }

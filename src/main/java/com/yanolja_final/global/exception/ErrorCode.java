@@ -35,8 +35,11 @@ public enum ErrorCode {
     UNAUTHORIZED_REVIEW_ACCESS(HttpStatus.FORBIDDEN, "리뷰 작성 권한이 없습니다."),
     REVIEW_ALREADY_REGISTERED(HttpStatus.BAD_REQUEST, "이미 리뷰를 작성하였습니다."),
 
-    //NOTICE
+    // NOTICE
     NOTICE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 공지사항ID 입니다."),
+
+    // ADVERTISEMENT
+    ADVERTISEMENT_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 패키지입니다."),
 
     // 5xx
     INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 내부 에러");
