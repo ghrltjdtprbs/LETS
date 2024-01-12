@@ -31,21 +31,20 @@ public class GlobalExceptionRestAdvice {
     }
 
     @ExceptionHandler
-    public ResponseDTO<Void> validationException(BindException e) {
-        log.warn("[ValidationException] Message = {}",
+    public ResponseDTO<Void> bindException(BindException e) {
+        log.warn("[bindException] Message = {}",
             NestedExceptionUtils.getMostSpecificCause(e).getMessage());
 
         BindingResult bindingResult = e.getBindingResult();
         List<FieldError> fieldErrors = getSortedFieldErrors(bindingResult);
 
-        String response = "[Request error] "
-            + fieldErrors.stream()
+        String response = fieldErrors.stream()
             .map(fieldError -> String.format("%s (%s=%s)",
                     fieldError.getDefaultMessage(),
                     fieldError.getField(),
                     fieldError.getRejectedValue()
                 )
-            ).collect(Collectors.joining());
+            ).collect(Collectors.joining(", "));
         return ResponseDTO.errorWithMessage(HttpStatus.BAD_REQUEST, response);
     }
 
