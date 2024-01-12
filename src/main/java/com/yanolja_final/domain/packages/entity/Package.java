@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @NoArgsConstructor
@@ -28,6 +29,7 @@ import lombok.NoArgsConstructor;
 public class Package extends BaseEntity {
 
     @Id
+    @Column
     private Long id;
 
     @Column
@@ -82,9 +84,11 @@ public class Package extends BaseEntity {
     private String schedules;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "package_id")
     private List<PackageDepartureOption> availableDates;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "package_id")
     private List<PackageImage> images;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -99,5 +103,16 @@ public class Package extends BaseEntity {
 
     public String getNationName() {
         return this.nation.getName();
+    }
+
+    public String getThumbnailImageUrl() {
+        return this.images.get(0).getImageUrl();
+    }
+
+    public int getMinPrice() {
+        return availableDates.stream()
+            .mapToInt(PackageDepartureOption::getAdultPrice)
+            .min()
+            .orElse(-1);
     }
 }
