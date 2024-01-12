@@ -113,7 +113,7 @@ public class Package extends BaseEntity {
         return this.hashtags.stream().map(Hashtag::getName).collect(Collectors.toList());
     }
 
-    public void plusPurchasedCount(){
+    public void plusPurchasedCount() {
         this.purchasedCount++;
     }
 
@@ -132,11 +132,14 @@ public class Package extends BaseEntity {
     public PackageDepartureOption getAvailableDate(String strDepartDate) {
         if (strDepartDate == null) {
             int minPrice = getMinPrice();
-            return availableDates.stream().filter(ad -> ad.getAdultPrice().equals(minPrice)).findFirst().orElseThrow(PackageNotFoundException::new);
+            return availableDates.stream().filter(ad -> ad.getAdultPrice().equals(minPrice))
+                .findFirst().orElseThrow(PackageNotFoundException::new);
         }
-        LocalDate departDate = LocalDate.parse(strDepartDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return availableDates.stream().filter(ad -> ad.getDepartureDate().equals(departDate)).findFirst().orElseThrow(
-            AvailableDateNotFoundException::new);
+        LocalDate departDate =
+            LocalDate.parse(strDepartDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return availableDates.stream().filter(ad -> ad.getDepartureDate().equals(departDate))
+            .findFirst().orElseThrow(
+                AvailableDateNotFoundException::new);
     }
 
     public List<String> getImageUrls() {
@@ -148,7 +151,8 @@ public class Package extends BaseEntity {
     }
 
     public List<String> getIntroImageUrls() {
-        return this.introImages.stream().map(PackageIntroImage::getImageUrl).collect(Collectors.toList());
+        return this.introImages.stream().map(PackageIntroImage::getImageUrl)
+            .collect(Collectors.toList());
     }
 
     public void viewed() {

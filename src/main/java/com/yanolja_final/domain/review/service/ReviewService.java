@@ -8,12 +8,10 @@ import com.yanolja_final.domain.review.exception.ReviewNotFoundException;
 import com.yanolja_final.domain.review.exception.UnauthorizedReviewDeletionException;
 import com.yanolja_final.domain.review.repository.ReviewRepository;
 import com.yanolja_final.domain.user.entity.User;
-
 import jakarta.transaction.Transactional;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,7 +23,7 @@ public class ReviewService {
 
     private final ReviewRepository reviewRepository;
 
-    public Review createReview(Order  order, User user, CreateReviewRequest request) {
+    public Review createReview(Order order, User user, CreateReviewRequest request) {
         Review review = request.toReview(order, user);
         return reviewRepository.save(review);
     }
@@ -49,5 +47,9 @@ public class ReviewService {
 
     public Page<Review> findPackageReviews(Long packageId, Pageable pageable) {
         return reviewRepository.findReviewsByPackageId(packageId, pageable);
+    }
+
+    public boolean isUserReviewedPackage(Long userId, Long packageId) {
+        return reviewRepository.isUserReviewedPackage(userId, packageId);
     }
 }

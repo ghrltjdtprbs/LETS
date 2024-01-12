@@ -9,6 +9,8 @@ import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.user.entity.User;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +20,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
+
+    public Page<Order> read(User user, Pageable pageable) {
+        return orderRepository.findByUserId(user.getId(), pageable);
+    }
 
     @Transactional
     public OrderCreateResponse create(User user, Package aPackage,
