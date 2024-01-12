@@ -4,7 +4,7 @@ import com.yanolja_final.domain.order.entity.Order;
 import com.yanolja_final.domain.poll.entity.PollAnswer;
 import com.yanolja_final.domain.review.entity.Review;
 import com.yanolja_final.domain.wish.entity.Wish;
-import com.yanolja_final.global.common.BaseTimeEntity;
+import com.yanolja_final.global.common.SoftDeletableBaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,23 +29,31 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @NoArgsConstructor
 @Getter
-public class User extends BaseTimeEntity {
+public class User extends SoftDeletableBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(length = 320, unique = true)
     private String email;
 
-    @Column(unique = true)
+    @Column(length = 30, unique = true)
     private String phoneNumber;
 
+    @Column(length = 10, nullable = false)
     private String username;
 
-    private String encryptedPassword;
+    @Column(length = 100)
+    private String addr1;
 
-    private String nickname;
+    @Column(length = 100)
+    private String addr2;
+
+    @Column(length = 10)
+    private String postCode;
+
+    private String encryptedPassword;
 
     private boolean isTermsAgreed = false;
 
@@ -56,26 +64,25 @@ public class User extends BaseTimeEntity {
         inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "name")})
     private Set<Authority> authorities;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Order> orders;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Review> reviews;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Wish> wishes;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private List<PollAnswer> pollAnswers;
 
     @Builder
-    public  User(String email, String phoneNumber, String username,
-        String encryptedPassword,String nickname, boolean isTermsAgreed, Set<Authority> authorities) {
+    public User(String email, String phoneNumber, String username,
+        String encryptedPassword, boolean isTermsAgreed, Set<Authority> authorities) {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.encryptedPassword = encryptedPassword;
-        this.nickname = nickname;
         this.isTermsAgreed = isTermsAgreed;
         this.authorities = authorities;
     }
