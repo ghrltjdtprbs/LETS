@@ -16,6 +16,6 @@ public class PackageService {
 
     public Package findById(Long id) {
         return packageRepository.findById(id)
-            .orElseThrow(() -> new PackageNotFoundException());
+            .orElseThrow(PackageNotFoundException::new);
     }
 }
