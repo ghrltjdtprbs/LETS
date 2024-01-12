@@ -142,4 +142,8 @@ public class Package extends BaseEntity {
     public List<String> getIntroImageUrls() {
         return this.introImages.stream().map(PackageIntroImage::getImageUrl).collect(Collectors.toList());
     }
+
+    public String getThumbnailImageUrl() {
+        return this.images.get(0).getImageUrl();
+    }
 }
