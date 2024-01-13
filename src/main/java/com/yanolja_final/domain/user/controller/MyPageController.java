@@ -8,6 +8,7 @@ import com.yanolja_final.global.util.ResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,14 @@ public class MyPageController {
         @LoginedUserId Long userId
     ) {
         MyPageResponse response = myPageFacade.updateUserInfo(request, userId);
+        return ResponseEntity.ok(ResponseDTO.okWithData(response));
+    }
+
+    @GetMapping("/info")
+    public ResponseEntity<ResponseDTO<MyPageResponse>> getUserInfo(
+        @LoginedUserId Long userId
+    ) {
+        MyPageResponse response = myPageFacade.getUserInfo(userId);
         return ResponseEntity.ok(ResponseDTO.okWithData(response));
     }
 }
