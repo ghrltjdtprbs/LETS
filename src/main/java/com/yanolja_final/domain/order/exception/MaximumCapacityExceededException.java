@@ -6,6 +6,6 @@ import com.yanolja_final.global.exception.ErrorCode;
 public class MaximumCapacityExceededException extends ApplicationException {
 
     public MaximumCapacityExceededException() {
-        super(ErrorCode.MAXIMUN_CAPACITY);
+        super(ErrorCode.MAXIMUM_CAPACITY);
     }
 }
