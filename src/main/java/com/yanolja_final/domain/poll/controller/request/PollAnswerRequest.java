@@ -15,7 +15,7 @@ public record PollAnswerRequest(
         return PollAnswer.builder()
             .answer(Character.toUpperCase(choose))
             .user(user)
-            .poll(poll)
+            .pollId(poll.getId())
             .build();
     }
 }

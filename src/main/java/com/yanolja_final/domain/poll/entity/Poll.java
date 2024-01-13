@@ -8,6 +8,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import java.util.List;
 import lombok.Getter;
@@ -35,7 +36,7 @@ public class Poll extends BaseEntity {
     private String aQuestion;
 
     @Column(nullable = false)
-    private Integer aCount=0;
+    private Integer aCount = 0;
 
     @Column(length = 50, nullable = false)
     private String bName;
@@ -47,13 +48,10 @@ public class Poll extends BaseEntity {
     private String bQuestion;
 
     @Column(nullable = false)
-    private Integer bCount=0;
+    private Integer bCount = 0;
 
-    @OneToMany(
-        fetch = FetchType.LAZY,
-        mappedBy = "poll",
-        cascade = CascadeType.REMOVE
-    )
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "pollId")
     private List<PollAnswer> pollAnswers;
 
     public void incrementACount() {
