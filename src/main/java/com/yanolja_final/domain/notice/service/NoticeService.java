@@ -6,7 +6,6 @@ import com.yanolja_final.domain.notice.dto.response.NoticeResponse;
 import com.yanolja_final.domain.notice.entity.Notice;
 import com.yanolja_final.domain.notice.exception.NoticeNotFoundException;
 import com.yanolja_final.domain.notice.repository.NoticeRepository;
-import com.yanolja_final.global.util.ResponseDTO;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,24 +16,23 @@ public class NoticeService {
 
     private final NoticeRepository noticeRepository;
 
-    public ResponseDTO<NoticeResponse> registerNotice(RegisterNoticeRequest request) {
+    public NoticeResponse registerNotice(RegisterNoticeRequest request) {
         Notice notice = request.toEntity();
         Notice newNotice = noticeRepository.save(notice);
-        return ResponseDTO.okWithData(NoticeResponse.fromNotice(newNotice));
+        NoticeResponse response = NoticeResponse.from(newNotice);
+        return response;
     }
 
-
-    public ResponseDTO<List<NoticeListResponse>> getNoticeList() {
+    public List<NoticeListResponse> getNoticeList() {
         List<Notice> notices = noticeRepository.findAll();
         List<NoticeListResponse> response = NoticeListResponse.fromNotices(notices);
-        return ResponseDTO.okWithData(response);
+        return response;
     }
 
-
-    public ResponseDTO<NoticeResponse> getSpecificNotice(Long noticeId) {
+    public NoticeResponse getSpecificNotice(Long noticeId) {
         Notice notice = noticeRepository.findById(noticeId)
             .orElseThrow(() -> new NoticeNotFoundException());
-        NoticeResponse response = NoticeResponse.fromNotice(notice);
-        return ResponseDTO.okWithData(response);
+        NoticeResponse response = NoticeResponse.from(notice);
+        return response;
     }
 }
