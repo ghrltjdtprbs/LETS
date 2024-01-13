@@ -7,7 +7,6 @@ import com.yanolja_final.global.config.argumentresolver.LoginedUserId;
 import com.yanolja_final.global.util.ResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,7 +25,7 @@ public class MyPageController {
         @Valid @RequestBody UpdateMyPageRequest request,
         @LoginedUserId Long userId
     ) {
-        ResponseDTO<MyPageResponse> response = myPageFacade.updateUserInfo(request, userId);
-        return ResponseEntity.status(HttpStatus.valueOf(response.getCode())).body(response);
+        MyPageResponse response = myPageFacade.updateUserInfo(request, userId);
+        return ResponseEntity.ok(ResponseDTO.okWithData(response));
     }
 }

@@ -13,8 +13,8 @@ public class MyPageFacade {
 
     private final MyPageService myPageService;
 
-    public ResponseDTO<MyPageResponse> updateUserInfo(UpdateMyPageRequest request, Long userId) {
-        ResponseDTO<MyPageResponse> response = myPageService.updateUserInfo(request, userId);
+    public MyPageResponse updateUserInfo(UpdateMyPageRequest request, Long userId) {
+        MyPageResponse response = myPageService.updateUserInfo(request, userId);
         return response;
     }
 }
