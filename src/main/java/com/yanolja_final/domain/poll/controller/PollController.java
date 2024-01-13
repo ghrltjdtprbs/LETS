@@ -1,6 +1,8 @@
 package com.yanolja_final.domain.poll.controller;
 
 import com.yanolja_final.domain.poll.controller.request.PollAnswerRequest;
+import com.yanolja_final.domain.poll.controller.response.PollResponse;
+import com.yanolja_final.domain.poll.controller.response.PollResultResponse;
 import com.yanolja_final.domain.poll.facade.PollFacade;
 import com.yanolja_final.global.config.argumentresolver.LoginedUserId;
 import com.yanolja_final.global.util.ResponseDTO;
@@ -21,11 +23,11 @@ public class PollController {
     private final PollFacade pollFacade;
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<Object>> getActivePoll(
+    public ResponseEntity<ResponseDTO<PollResponse>> getActivePoll(
         @LoginedUserId Long userId
     ) {
         return ResponseEntity.ok(
-            ResponseDTO.okWithData(pollFacade.findActivePoll(userId))
+            ResponseDTO.okWithData(pollFacade.getActivePoll(userId))
         );
     }
 
@@ -36,5 +38,14 @@ public class PollController {
     ) {
         pollFacade.savePollAnswer(userId, request);
         return ResponseEntity.ok(ResponseDTO.ok());
+    }
+
+    @GetMapping("/result")
+    public ResponseEntity<ResponseDTO<PollResultResponse>> getActivePollResult(
+        @LoginedUserId Long userId
+    ) {
+        return ResponseEntity.ok(
+            ResponseDTO.okWithData(pollFacade.getActivePollResult(userId))
+        );
     }
 }

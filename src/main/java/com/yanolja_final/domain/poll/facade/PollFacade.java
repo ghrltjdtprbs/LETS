@@ -1,6 +1,8 @@
 package com.yanolja_final.domain.poll.facade;
 
 import com.yanolja_final.domain.poll.controller.request.PollAnswerRequest;
+import com.yanolja_final.domain.poll.controller.response.PollResponse;
+import com.yanolja_final.domain.poll.controller.response.PollResultResponse;
 import com.yanolja_final.domain.poll.service.PollService;
 import com.yanolja_final.domain.user.entity.User;
 import com.yanolja_final.domain.user.service.UserService;
@@ -19,8 +21,13 @@ public class PollFacade {
         pollService.savePollAnswer(user, request);
     }
 
-    public Object findActivePoll(Long userId) {
+    public PollResponse getActivePoll(Long userId) {
         User user = userService.findActiveUserById(userId);
-        return pollService.findActivePoll(user);
+        return pollService.getActivePoll(user);
+    }
+
+    public PollResultResponse getActivePollResult(Long userId) {
+        User user = userService.findActiveUserById(userId);
+        return pollService.getActivePollResult(user);
     }
 }

@@ -6,7 +6,7 @@ import com.yanolja_final.domain.poll.entity.Poll;
 public record PollResponse(
     @JsonProperty("alreadySubmitted")
     boolean isAlreadySubmitted,
-    String title,
+    String subject,
     Long pollId,
     String[] A,
     String[] B

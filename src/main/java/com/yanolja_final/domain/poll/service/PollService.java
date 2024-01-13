@@ -1,17 +1,18 @@
 package com.yanolja_final.domain.poll.service;
 
 import com.yanolja_final.domain.poll.controller.request.PollAnswerRequest;
-import com.yanolja_final.domain.poll.controller.response.NotVotedResponse;
 import com.yanolja_final.domain.poll.controller.response.PollResponse;
-import com.yanolja_final.domain.poll.controller.response.VotedResponse;
+import com.yanolja_final.domain.poll.controller.response.PollResultResponse;
 import com.yanolja_final.domain.poll.entity.Poll;
 import com.yanolja_final.domain.poll.entity.PollAnswer;
 import com.yanolja_final.domain.poll.exception.InvalidOptionException;
 import com.yanolja_final.domain.poll.exception.PollAnswerException;
 import com.yanolja_final.domain.poll.exception.PollNotFoundException;
+import com.yanolja_final.domain.poll.exception.PollNotVotedException;
 import com.yanolja_final.domain.poll.repository.PollAnswerRepository;
 import com.yanolja_final.domain.poll.repository.PollRepository;
 import com.yanolja_final.domain.user.entity.User;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,10 +40,24 @@ public class PollService {
         pollRepository.save(poll);
     }
 
-    public PollResponse findActivePoll(User user) {
+    public PollResponse getActivePoll(User user) {
         Poll poll = findPollMaxId();
-        boolean isAlreadySubmitted = pollAnswerRepository.existsByUserIdAndPollId(user.getId(), poll.getId());
-        return PollResponse.from(poll, !isAlreadySubmitted);
+        Optional<PollAnswer> pollAnswer =
+            pollAnswerRepository.findByUserIdAndPollId(user.getId(), poll.getId());
+
+        if (pollAnswer.isPresent()) {
+            return PollResponse.from(poll, true);
+        }
+        return PollResponse.from(poll, false);
+    }
+
+    public PollResultResponse getActivePollResult(User user) {
+        Poll poll = findPollMaxId();
+        PollAnswer pollAnswer =
+            pollAnswerRepository.findByUserIdAndPollId(user.getId(), poll.getId())
+                .orElseThrow(PollNotVotedException::new);
+
+        return PollResultResponse.from(poll, pollAnswer.getAnswer());
     }
 
     private void updatePollCount(char option, Poll poll) {
