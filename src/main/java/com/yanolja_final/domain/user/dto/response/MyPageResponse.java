@@ -10,7 +10,7 @@ public record MyPageResponse(
     String addr2,
     String postCode
 ) {
-    public static MyPageResponse fromUser(User user) {
+    public static MyPageResponse from(User user) {
         return new MyPageResponse(
           user.getEmail(),
           user.getUsername(),
