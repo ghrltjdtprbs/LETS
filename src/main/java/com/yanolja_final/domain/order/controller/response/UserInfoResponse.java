@@ -4,15 +4,13 @@ import com.yanolja_final.domain.user.entity.User;
 
 public record UserInfoResponse(
     String username,
-    String email,
-    String phone
+    String email
 ) {
 
-    public static UserInfoResponse fromEntity(User user){
+    public static UserInfoResponse fromEntity(User user) {
         return new UserInfoResponse(
             user.getUsername(),
-            user.getEmail(),
-            user.getPhoneNumber()
+            user.getEmail()
         );
     }
 }

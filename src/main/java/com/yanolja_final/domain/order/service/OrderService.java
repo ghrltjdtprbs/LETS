@@ -8,8 +8,6 @@ import com.yanolja_final.domain.order.repository.OrderRepository;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.user.entity.User;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class OrderService {
 
     private final OrderRepository orderRepository;
-    private static int dailyOrderCount = -1;
 
     @Transactional
     public OrderCreateResponse create(User user, Package aPackage,
@@ -31,15 +28,17 @@ public class OrderService {
         return OrderCreateResponse.fromEntities(order, user);
     }
 
+    public Order findById(Long orderId) {
+        return orderRepository.findById(orderId)
+            .orElseThrow(OrderNotFoundException::new);
+    }
+
     private String generateDailyOrderCode() {
         LocalDate today = LocalDate.now();
-        Optional<LocalDateTime> lastOrderDateTime = orderRepository.findLatestCreatedAt();
-        if (dailyOrderCount == -1 || !today.equals(lastOrderDateTime.get().toLocalDate())) {
-            dailyOrderCount = 0;
-        }
+        Long todayOrderCount = orderRepository.countOrdersByCreatedAt(today);
 
         String orderCode = String.format("%04d%02d%02d%05d",
-            today.getYear(), today.getMonthValue(), today.getDayOfMonth(), ++dailyOrderCount);
+            today.getYear(), today.getMonthValue(), today.getDayOfMonth(), todayOrderCount);
         return orderCode;
     }
 }
