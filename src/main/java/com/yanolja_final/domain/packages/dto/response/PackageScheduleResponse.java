@@ -1,4 +1,4 @@
-package com.yanolja_final.domain.packages.controller;
+package com.yanolja_final.domain.packages.dto.response;
 
 import java.util.List;
 

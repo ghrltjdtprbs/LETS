@@ -2,6 +2,7 @@ package com.yanolja_final.domain.packages.controller;
 
 import com.yanolja_final.domain.packages.dto.response.PackageDetailResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
+import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.facade.PackageFacade;
 import com.yanolja_final.global.config.argumentresolver.LoginedUserId;
 import com.yanolja_final.global.util.PaginationUtils;

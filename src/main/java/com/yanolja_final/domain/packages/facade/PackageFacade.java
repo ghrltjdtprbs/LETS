@@ -1,6 +1,6 @@
 package com.yanolja_final.domain.packages.facade;
 
-import com.yanolja_final.domain.packages.controller.PackageScheduleResponse;
+import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageDetailResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.entity.Package;
