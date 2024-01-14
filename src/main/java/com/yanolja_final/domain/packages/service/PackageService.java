@@ -4,7 +4,6 @@ import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.exception.PackageNotFoundException;
 import com.yanolja_final.domain.packages.repository.PackageRepository;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,5 +25,10 @@ public class PackageService {
     public Page<PackageListItemResponse> getAllList(Pageable pageable) {
         Page<Package> packages = packageRepository.findAll(pageable);
         return packages.map(PackageListItemResponse::from);
+    }
+
+    public void viewed(Package aPackage) {
+        aPackage.viewed();
+        packageRepository.save(aPackage);
     }
 }
