@@ -146,4 +146,8 @@ public class Package extends BaseEntity {
     public String getThumbnailImageUrl() {
         return this.images.get(0).getImageUrl();
     }
+
+    public void viewed() {
+        this.viewedCount++;
+    }
 }

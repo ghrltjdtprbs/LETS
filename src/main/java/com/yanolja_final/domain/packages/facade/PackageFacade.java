@@ -17,10 +17,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class PackageFacade {
 
     private final PackageService packageService;
@@ -39,6 +41,7 @@ public class PackageFacade {
         double averageStars = reviewCount == 0 ? 0.0 : scoreSum / (double) reviewCount / 4;
 
         PackageDepartureOption departOption = aPackage.getAvailableDate(departDate);
+        packageService.viewed(aPackage);
 
         return PackageDetailResponse.from(aPackage, departOption, user, isWish, averageStars, reviewCount);
     }

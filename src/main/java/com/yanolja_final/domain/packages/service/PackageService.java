@@ -2,8 +2,8 @@ package com.yanolja_final.domain.packages.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
+import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.exception.PackageNotFoundException;
 import com.yanolja_final.domain.packages.repository.PackageRepository;
@@ -35,9 +35,15 @@ public class PackageService {
     public List<PackageScheduleResponse> getSchedulesById(Long packageId) {
         Package aPackage = findById(packageId);
         try {
-            return List.of(objectMapper.readValue(aPackage.getSchedules(), PackageScheduleResponse[].class));
+            return List.of(
+                objectMapper.readValue(aPackage.getSchedules(), PackageScheduleResponse[].class));
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void viewed(Package aPackage) {
+        aPackage.viewed();
+        packageRepository.save(aPackage);
     }
 }
