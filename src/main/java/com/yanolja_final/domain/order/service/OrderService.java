@@ -33,7 +33,7 @@ public class OrderService {
         OrderCreateRequest request
     ) {
         String code = generateDailyOrderCode();
-        Order order = request.toEntities(user, aPackage, packageDepartureOption, code);
+        Order order = request.toEntity(user, aPackage, packageDepartureOption, code);
         orderRepository.save(order);
         return OrderCreateResponse.fromEntities(order, user);
     }

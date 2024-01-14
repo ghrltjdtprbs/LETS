@@ -21,7 +21,7 @@ public record OrderCreateRequest(
     OrderGuestInfoRequest numberOfPeople
 ) {
 
-    public Order toEntities(User user, Package aPackage,
+    public Order toEntity(User user, Package aPackage,
         PackageDepartureOption packageDepartureOption, String code) {
         return Order.builder()
             .user(user)

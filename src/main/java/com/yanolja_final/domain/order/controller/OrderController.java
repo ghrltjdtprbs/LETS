@@ -28,7 +28,7 @@ public class OrderController {
     @GetMapping
     public ResponseEntity<ResponseDTO<Map<String, Object>>> read(
         @LoginedUserId Long userId,
-        @PageableDefault(size = 10) Pageable pageable
+        Pageable pageable
     ) {
         return ResponseEntity.ok(
             ResponseDTO.okWithData(

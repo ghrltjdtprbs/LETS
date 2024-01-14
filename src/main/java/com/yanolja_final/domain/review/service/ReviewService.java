@@ -41,15 +41,15 @@ public class ReviewService {
         return reviewRepository.findByUserId(userId, pageable).map(ReviewResponse::fromReview);
     }
 
+    public boolean isUserReviewedPackage(Long userId, Long packageId) {
+        return reviewRepository.isUserReviewedPackage(userId, packageId);
+    }
+
     public List<Review> findReviewsByPackageId(Long packageId) {
         return reviewRepository.findReviewsByPackageIdSummary(packageId);
     }
 
     public Page<Review> findPackageReviews(Long packageId, Pageable pageable) {
         return reviewRepository.findReviewsByPackageId(packageId, pageable);
-    }
-
-    public boolean isUserReviewedPackage(Long userId, Long packageId) {
-        return reviewRepository.isUserReviewedPackage(userId, packageId);
     }
 }

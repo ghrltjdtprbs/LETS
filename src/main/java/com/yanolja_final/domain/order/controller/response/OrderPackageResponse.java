@@ -51,6 +51,6 @@ public record OrderPackageResponse(
         String startDateString = departDate.format(formatter);
         String endDateString = endDate.format(formatter);
 
-        return startDateString + " ~ " + endDateString;
+        return startDateString + "~" + endDateString;
     }
 }
