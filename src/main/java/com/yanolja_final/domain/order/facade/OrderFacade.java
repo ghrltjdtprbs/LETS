@@ -12,11 +12,8 @@ import com.yanolja_final.domain.review.service.ReviewService;
 import com.yanolja_final.domain.user.entity.User;
 import com.yanolja_final.domain.user.service.UserService;
 import com.yanolja_final.domain.wish.service.WishService;
-import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,20 +32,19 @@ public class OrderFacade {
     public Page<OrderResponse> read(Long userId, Pageable pageable) {
         User user = userService.findActiveUserById(userId);
         Page<Order> ordersPage = orderService.read(user, pageable);
-        List<OrderResponse> responses = ordersPage.getContent().stream()
-            .map(order -> {
-                PackageDepartureOption packageDepartureOption =
-                    packageService.findByDepartureOptionId(order.getAvailableDateId());
-                boolean isWish =
-                    wishService.isUserWishingPackage(order.getId(), order.getAPackage().getId());
-                boolean isReviewed =
-                    reviewService.isUserReviewedPackage(order.getId(), order.getAPackage().getId());
-                return OrderResponse.from(order, packageDepartureOption.getDepartureDate(), isWish,
-                    isReviewed);
-            })
-            .collect(Collectors.toList());
 
-        return new PageImpl<>(responses, pageable, ordersPage.getTotalElements());
+        Page<OrderResponse> orderResponsePage = ordersPage.map(order -> {
+            PackageDepartureOption packageDepartureOption =
+                packageService.findByDepartureOptionId(order.getAvailableDateId());
+            boolean isWish =
+                wishService.isUserWishingPackage(order.getId(), order.getAPackage().getId());
+            boolean isReviewed =
+                reviewService.isUserReviewedPackage(order.getId(), order.getAPackage().getId());
+            return OrderResponse.from(order, packageDepartureOption.getDepartureDate(), isWish,
+                isReviewed);
+        });
+
+        return orderResponsePage;
     }
 
     @Transactional
