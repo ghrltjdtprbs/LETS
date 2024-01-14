@@ -1,5 +1,6 @@
 package com.yanolja_final.domain.packages.facade;
 
+import com.yanolja_final.domain.packages.dto.response.PackageAvailableDateResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageDetailResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
@@ -11,7 +12,9 @@ import com.yanolja_final.domain.review.service.ReviewService;
 import com.yanolja_final.domain.user.entity.User;
 import com.yanolja_final.domain.user.service.UserService;
 import com.yanolja_final.domain.wish.service.WishService;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -49,5 +52,15 @@ public class PackageFacade {
 
     public List<PackageScheduleResponse> getSchedules(Long packageId) {
         return packageService.getSchedulesById(packageId);
+    }
+
+    public List<PackageAvailableDateResponse> getAvailableDates(Long packageId) {
+        Package aPackage = packageService.findById(packageId);
+        List<PackageDepartureOption> availableDates = aPackage.getAvailableDates();
+        return availableDates.stream()
+            .filter(PackageDepartureOption::isNotExpired)
+            .sorted(Comparator.comparing(PackageDepartureOption::getDepartureDate))
+            .map(PackageAvailableDateResponse::from)
+            .collect(Collectors.toList());
     }
 }
