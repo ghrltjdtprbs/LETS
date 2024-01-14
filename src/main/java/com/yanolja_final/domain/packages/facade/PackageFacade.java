@@ -1,5 +1,6 @@
 package com.yanolja_final.domain.packages.facade;
 
+import com.yanolja_final.domain.packages.controller.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageDetailResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.entity.Package;
@@ -44,5 +45,9 @@ public class PackageFacade {
 
     public Page<PackageListItemResponse> getAllList(Pageable pageable) {
         return packageService.getAllList(pageable);
+    }
+
+    public List<PackageScheduleResponse> getSchedules(Long packageId) {
+        return packageService.getSchedulesById(packageId);
     }
 }
