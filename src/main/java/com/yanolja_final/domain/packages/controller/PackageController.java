@@ -2,10 +2,12 @@ package com.yanolja_final.domain.packages.controller;
 
 import com.yanolja_final.domain.packages.dto.response.PackageDetailResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
+import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.facade.PackageFacade;
 import com.yanolja_final.global.config.argumentresolver.LoginedUserId;
 import com.yanolja_final.global.util.PaginationUtils;
 import com.yanolja_final.global.util.ResponseDTO;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -37,5 +39,13 @@ public class PackageController {
     public ResponseDTO<Map<String, Object>> listOfAll(Pageable pageable) {
         Page<PackageListItemResponse> list = packageFacade.getAllList(pageable);
         return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
+    }
+
+    @GetMapping("/{id}/schedules")
+    public ResponseDTO<List<PackageScheduleResponse>> schedules(
+        @PathVariable Long id
+    ) {
+        List<PackageScheduleResponse> schedules = packageFacade.getSchedules(id);
+        return ResponseDTO.okWithData(schedules);
     }
 }
