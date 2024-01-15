@@ -1,7 +1,6 @@
 package com.yanolja_final.domain.user.entity;
 
 import com.yanolja_final.domain.order.entity.Order;
-import com.yanolja_final.domain.poll.entity.PollAnswer;
 import com.yanolja_final.domain.review.entity.Review;
 import com.yanolja_final.domain.wish.entity.Wish;
 import com.yanolja_final.global.common.SoftDeletableBaseEntity;
@@ -16,7 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -100,5 +98,20 @@ public class User extends SoftDeletableBaseEntity {
     @Override
     public void delete(LocalDateTime currentTime) {
         super.delete(currentTime);
+    }
+
+    public void updateUserInfo(String phoneNumber, String addr1, String addr2, String postCode) {
+        if (phoneNumber != null) {
+            this.phoneNumber = phoneNumber;
+        }
+        if (addr1 != null) {
+            this.addr1 = addr1;
+        }
+        if (addr2 != null) {
+            this.addr2 = addr2;
+        }
+        if (postCode != null) {
+            this.postCode = postCode;
+        }
     }
 }
