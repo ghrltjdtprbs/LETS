@@ -73,6 +73,9 @@ public class User extends SoftDeletableBaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Wish> wishes;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<PollAnswer> pollAnswers;
+
     @Builder
     public User(String email, String phoneNumber, String username,
         String encryptedPassword, boolean isTermsAgreed, Set<Authority> authorities) {
