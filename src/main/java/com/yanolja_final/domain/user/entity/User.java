@@ -1,6 +1,7 @@
 package com.yanolja_final.domain.user.entity;
 
 import com.yanolja_final.domain.order.entity.Order;
+import com.yanolja_final.domain.poll.entity.PollAnswer;
 import com.yanolja_final.domain.review.entity.Review;
 import com.yanolja_final.domain.wish.entity.Wish;
 import com.yanolja_final.global.common.SoftDeletableBaseEntity;
