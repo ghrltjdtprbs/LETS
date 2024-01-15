@@ -17,4 +17,9 @@ public class MyPageFacade {
         MyPageResponse response = myPageService.updateUserInfo(request, userId);
         return response;
     }
+
+    public MyPageResponse getUserInfo(Long userId) {
+        MyPageResponse response = myPageService.getUserInfo(userId);
+        return response;
+    }
 }

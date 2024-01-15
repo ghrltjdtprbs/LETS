@@ -22,4 +22,11 @@ public class MyPageService {
         MyPageResponse response = MyPageResponse.from(user);
         return response;
     }
+
+    public MyPageResponse getUserInfo(Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new UserNotFoundException());
+        MyPageResponse response = MyPageResponse.from(user);
+        return response;
+    }
 }
