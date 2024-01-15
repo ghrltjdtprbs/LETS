@@ -35,4 +35,8 @@ public class WishService {
     public Page<WishListResponse> getUserWishes(Long userId, Pageable pageable) {
         return wishRepository.findByUserId(userId, pageable).map(WishListResponse::new);
     }
+
+    public boolean isWish(User user, Package aPackage) {
+        return wishRepository.existsByUserAndAPackage(user, aPackage);
+    }
 }
