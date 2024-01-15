@@ -16,7 +16,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -73,6 +72,9 @@ public class User extends SoftDeletableBaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Wish> wishes;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<PollAnswer> pollAnswers;
+
     @Builder
     public User(String email, String phoneNumber, String username,
         String encryptedPassword, boolean isTermsAgreed, Set<Authority> authorities) {
@@ -97,5 +99,20 @@ public class User extends SoftDeletableBaseEntity {
     @Override
     public void delete(LocalDateTime currentTime) {
         super.delete(currentTime);
+    }
+
+    public void updateUserInfo(String phoneNumber, String addr1, String addr2, String postCode) {
+        if (phoneNumber != null) {
+            this.phoneNumber = phoneNumber;
+        }
+        if (addr1 != null) {
+            this.addr1 = addr1;
+        }
+        if (addr2 != null) {
+            this.addr2 = addr2;
+        }
+        if (postCode != null) {
+            this.postCode = postCode;
+        }
     }
 }

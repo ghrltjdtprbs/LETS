@@ -13,9 +13,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import lombok.Getter;
@@ -27,6 +25,7 @@ import lombok.NoArgsConstructor;
 public class Package extends BaseEntity {
 
     @Id
+    @Column
     private Long id;
 
     @Column
@@ -51,7 +50,7 @@ public class Package extends BaseEntity {
     private String info;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<PackageIntroImage> introImages = new ArrayList<>();
+    private List<PackageIntroImage> introImages;
 
     @Column(nullable = false)
     private Integer lodgeDays;
@@ -80,10 +79,12 @@ public class Package extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String schedules;
 
-    @OneToMany(mappedBy = "aPackage", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
-    private List<PackageDepartureOption> AvailableDates = new ArrayList<>();
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "package_id")
+    private List<PackageDepartureOption> availableDates;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "package_id")
     private List<PackageImage> images;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -98,5 +99,17 @@ public class Package extends BaseEntity {
 
     public String getNationName() {
         return this.nation.getName();
+    }
+
+    public String getThumbnailImageUrl() {
+        return this.images.get(0).getImageUrl();
+    }
+
+    public int getMinPrice() {
+        return availableDates.stream()
+            .filter(PackageDepartureOption::isNotExpired)
+            .mapToInt(PackageDepartureOption::getAdultPrice)
+            .min()
+            .orElse(-1);
     }
 }

@@ -30,6 +30,9 @@ public class Advertisement extends BaseEntity {
     @Column(length = 30, nullable = false)
     private String name;
 
+    @Column(length = 300, nullable = false)
+    private String imageUrl;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "advertisement")
     private List<AdvertisementImage> images;
 
@@ -42,8 +45,10 @@ public class Advertisement extends BaseEntity {
     private Set<Package> packages;
 
     @Builder
-    private Advertisement(String name, List<AdvertisementImage> images, Set<Package> packages) {
+    protected Advertisement(String name, String imageUrl, List<AdvertisementImage> images,
+        Set<Package> packages) {
         this.name = name;
+        this.imageUrl = imageUrl;
         this.images = images;
         this.packages = packages;
     }

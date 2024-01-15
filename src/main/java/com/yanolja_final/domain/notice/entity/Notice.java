@@ -31,9 +31,10 @@ public class Notice extends BaseEntity {
     private String categories;
 
     @Builder
-    public Notice(String title, String content) {
+    public Notice(String title, String content, String categories) {
         this.title = title;
         this.content = content;
+        this.categories = categories;
     }
 
     public String getFormattedDate() {
