@@ -19,6 +19,6 @@ public interface WishRepository extends JpaRepository<Wish, Long> {
     boolean existsByUserAndAPackage(User user, Package aPackage);
 
     @Query("SELECT CASE WHEN COUNT(w) > 0 THEN true ELSE false END FROM Wish w " +
-        "WHERE w.user.id = :userId AND w.aPackage.id = :packageId")
+        "WHERE w.user.id = :userId AND w.APackage.id = :packageId")
     boolean isUserWishingPackage(@Param("userId") Long userId, @Param("packageId") Long packageId);
 }
