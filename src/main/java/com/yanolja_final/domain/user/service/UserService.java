@@ -99,10 +99,4 @@ public class UserService {
         return userRepository.findById(id)
             .orElseThrow(() -> new UserNotFoundException());
     }
-
-    private static void assertNotDeleted (User user) {
-        if (user.isDeleted()) {
-            throw new UserNotFoundException();
-        }
-    }
 }
