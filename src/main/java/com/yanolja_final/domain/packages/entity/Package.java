@@ -7,15 +7,12 @@ import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ForeignKey;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
@@ -28,6 +25,7 @@ import lombok.NoArgsConstructor;
 public class Package extends BaseEntity {
 
     @Id
+    @Column
     private Long id;
 
     @Column
@@ -82,9 +80,11 @@ public class Package extends BaseEntity {
     private String schedules;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "package_id")
     private List<PackageDepartureOption> availableDates;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "package_id")
     private List<PackageImage> images;
 
     @ManyToMany(fetch = FetchType.LAZY)
@@ -99,5 +99,17 @@ public class Package extends BaseEntity {
 
     public String getNationName() {
         return this.nation.getName();
+    }
+
+    public String getThumbnailImageUrl() {
+        return this.images.get(0).getImageUrl();
+    }
+
+    public int getMinPrice() {
+        return availableDates.stream()
+            .filter(PackageDepartureOption::isNotExpired)
+            .mapToInt(PackageDepartureOption::getAdultPrice)
+            .min()
+            .orElse(-1);
     }
 }
