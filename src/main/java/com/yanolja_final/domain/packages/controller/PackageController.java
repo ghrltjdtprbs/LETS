@@ -1,5 +1,6 @@
 package com.yanolja_final.domain.packages.controller;
 
+import com.yanolja_final.domain.packages.dto.response.PackageAvailableDateResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageDetailResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
@@ -46,6 +47,14 @@ public class PackageController {
         @PathVariable Long id
     ) {
         List<PackageScheduleResponse> schedules = packageFacade.getSchedules(id);
+        return ResponseDTO.okWithData(schedules);
+    }
+
+    @GetMapping("/{id}/available-dates")
+    public ResponseDTO<List<PackageAvailableDateResponse>> availableDates(
+        @PathVariable Long id
+    ) {
+        List<PackageAvailableDateResponse> schedules = packageFacade.getAvailableDates(id);
         return ResponseDTO.okWithData(schedules);
     }
 }
