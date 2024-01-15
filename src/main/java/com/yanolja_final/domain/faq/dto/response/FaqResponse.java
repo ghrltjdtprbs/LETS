@@ -1,9 +1,7 @@
 package com.yanolja_final.domain.faq.dto.response;
 
 import com.yanolja_final.domain.faq.entity.Faq;
-import java.lang.reflect.Array;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public record FaqResponse(
     Long faqId,
@@ -12,7 +10,7 @@ public record FaqResponse(
     String[] categories,
     String[] content
 ) {
-    public static FaqResponse fromFaq(Faq faq) {
+    public static FaqResponse from(Faq faq) {
         String[] splitCategories = faq.getCategories().split(",");
         splitCategories = Arrays.stream(splitCategories)
             .map(String::trim)

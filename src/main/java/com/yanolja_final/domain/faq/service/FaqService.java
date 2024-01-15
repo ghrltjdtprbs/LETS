@@ -6,7 +6,6 @@ import com.yanolja_final.domain.faq.dto.response.FaqResponse;
 import com.yanolja_final.domain.faq.entity.Faq;
 import com.yanolja_final.domain.faq.exception.FaqNotFoundException;
 import com.yanolja_final.domain.faq.repository.FaqRepository;
-import com.yanolja_final.global.util.ResponseDTO;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,23 +16,23 @@ public class FaqService {
 
     private final FaqRepository faqRepository;
 
-    public ResponseDTO<FaqResponse> registerFaq(RegisterFaqRequest request) {
+    public FaqResponse registerFaq(RegisterFaqRequest request) {
         Faq faq = request.toEntity();
         Faq newFaq = faqRepository.save(faq);
-        FaqResponse response = FaqResponse.fromFaq(faq);
-        return ResponseDTO.okWithData(response);
+        FaqResponse response = FaqResponse.from(faq);
+        return response;
     }
 
-    public ResponseDTO<List<FaqListResponse>> getFaqList() {
+    public List<FaqListResponse> getFaqList() {
         List<Faq> faqs = faqRepository.findAll();
         List<FaqListResponse> response = FaqListResponse.fromFaqs(faqs);
-        return ResponseDTO.okWithData(response);
+        return response;
     }
 
-    public ResponseDTO<FaqResponse> getSpecificFaq(Long faqId) {
+    public FaqResponse getSpecificFaq(Long faqId) {
         Faq faq = faqRepository.findById(faqId)
             .orElseThrow(() -> new FaqNotFoundException());
-        FaqResponse response = FaqResponse.fromFaq(faq);
-        return ResponseDTO.okWithData(response);
+        FaqResponse response = FaqResponse.from(faq);
+        return response;
     }
 }

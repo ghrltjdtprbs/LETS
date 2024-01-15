@@ -11,7 +11,7 @@ public record FaqListResponse(
     String createdAt,
     String[] categories
 ) {
-    public static FaqListResponse fromFaq(Faq faq) {
+    public static FaqListResponse from(Faq faq) {
         String[] splitCategories = faq.getCategories().split(",");
         splitCategories = Arrays.stream(splitCategories)
             .map(String::trim)
@@ -27,7 +27,7 @@ public record FaqListResponse(
 
     public static List<FaqListResponse> fromFaqs(List<Faq> faqs) {
         return faqs.stream()
-            .map(FaqListResponse::fromFaq)
+            .map(FaqListResponse::from)
             .collect(Collectors.toList());
     }
 }
