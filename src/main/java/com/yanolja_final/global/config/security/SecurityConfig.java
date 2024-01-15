@@ -78,6 +78,11 @@ public class SecurityConfig {
             UsernamePasswordAuthenticationFilter.class
         );
 
+        http.cors(httpSecurityCorsConfigurer ->
+            httpSecurityCorsConfigurer
+                .configurationSource(corsConfigurationSource())
+        );
+
         return http.build();
     }
 
