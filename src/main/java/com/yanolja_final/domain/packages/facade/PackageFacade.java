@@ -1,6 +1,7 @@
 package com.yanolja_final.domain.packages.facade;
 
 import com.yanolja_final.domain.packages.dto.response.PackageDetailResponse;
+import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
 import com.yanolja_final.domain.packages.service.PackageService;
@@ -9,11 +10,11 @@ import com.yanolja_final.domain.review.service.ReviewService;
 import com.yanolja_final.domain.user.entity.User;
 import com.yanolja_final.domain.user.service.UserService;
 import com.yanolja_final.domain.wish.service.WishService;
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,5 +43,9 @@ public class PackageFacade {
         packageService.viewed(aPackage);
 
         return PackageDetailResponse.from(aPackage, departOption, user, isWish, averageStars, reviewCount);
+    }
+
+    public Page<PackageListItemResponse> getAllList(Pageable pageable) {
+        return packageService.getAllList(pageable);
     }
 }

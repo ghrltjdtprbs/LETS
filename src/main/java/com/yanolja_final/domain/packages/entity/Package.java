@@ -148,6 +148,10 @@ public class Package extends BaseEntity {
         return this.introImages.stream().map(PackageIntroImage::getImageUrl).collect(Collectors.toList());
     }
 
+    public String getThumbnailImageUrl() {
+        return this.images.get(0).getImageUrl();
+    }
+
     public void viewed() {
         this.viewedCount++;
     }
