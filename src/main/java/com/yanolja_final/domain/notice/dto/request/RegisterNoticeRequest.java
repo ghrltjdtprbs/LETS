@@ -4,8 +4,6 @@ import com.yanolja_final.domain.notice.entity.Notice;
 import jakarta.validation.constraints.NotNull;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import javax.print.DocFlavor.STRING;
-import org.aspectj.weaver.ast.Not;
 
 public record RegisterNoticeRequest(
     @NotNull

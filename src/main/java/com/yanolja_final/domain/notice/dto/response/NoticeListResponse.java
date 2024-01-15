@@ -11,7 +11,7 @@ public record NoticeListResponse(
     String[] categories
 
 ) {
-    public static NoticeListResponse fromNotice(Notice notice) {
+    public static NoticeListResponse from(Notice notice) {
         String[] splitCategories = notice.getCategories().split(",");
 
         return new NoticeListResponse(
@@ -21,10 +21,9 @@ public record NoticeListResponse(
             splitCategories
         );
     }
-
     public static List<NoticeListResponse> fromNotices(List<Notice> notices) {
         return notices.stream()
-            .map(NoticeListResponse::fromNotice)
+            .map(NoticeListResponse::from)
             .collect(Collectors.toList());
     }
 }

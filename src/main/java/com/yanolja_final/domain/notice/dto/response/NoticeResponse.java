@@ -2,7 +2,6 @@ package com.yanolja_final.domain.notice.dto.response;
 
 import com.yanolja_final.domain.notice.entity.Notice;
 
-
 public record NoticeResponse(
     Long noticeId,
     String title,
@@ -10,8 +9,7 @@ public record NoticeResponse(
     String[] content,
     String[] categories
 ) {
-
-    public static NoticeResponse fromNotice(Notice notice) {
+    public static NoticeResponse from(Notice notice) {
         String[] splitContent = notice.getContent().split("\n");
         String[] splitCategories = notice.getCategories().split(",");
 
