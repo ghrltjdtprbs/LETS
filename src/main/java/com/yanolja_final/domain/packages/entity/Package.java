@@ -33,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class Package extends BaseEntity {
 
     @Id
+    @Column
     private Long id;
 
     @Column
@@ -87,7 +88,7 @@ public class Package extends BaseEntity {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String schedules;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "package_id")
     private List<PackageDepartureOption> availableDates;
 
@@ -111,6 +112,10 @@ public class Package extends BaseEntity {
 
     public List<String> getHashtagNames() {
         return this.hashtags.stream().map(Hashtag::getName).collect(Collectors.toList());
+    }
+
+    public String getThumbnailImageUrl() {
+        return this.images.get(0).getImageUrl();
     }
 
     public int getMinPrice() {

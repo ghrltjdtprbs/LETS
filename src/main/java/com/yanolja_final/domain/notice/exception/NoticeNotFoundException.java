@@ -8,5 +8,4 @@ public class NoticeNotFoundException extends ApplicationException {
     private static final ErrorCode ERROR_CODE = ErrorCode.NOTICE_NOT_FOUND;
 
     public NoticeNotFoundException() { super(ERROR_CODE); }
-
 }
