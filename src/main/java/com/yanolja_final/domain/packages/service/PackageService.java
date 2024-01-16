@@ -31,6 +31,10 @@ public class PackageService {
         return packageRepository.findAll(pageable);
     }
 
+    public Page<Package> findAllByViewedCount(Pageable pageable) {
+        return packageRepository.findAllByOrderByViewedCountDesc(pageable);
+    }
+
     public List<PackageScheduleResponse> getSchedulesById(Long packageId) {
         Package aPackage = findById(packageId);
         try {

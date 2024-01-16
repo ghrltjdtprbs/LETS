@@ -69,7 +69,9 @@ public class PackageFacade {
             .collect(Collectors.toList());
     }
 
-    public Page<PackageListItemResponse> getTopViews(Pageable pageable) {
-        return null;
+    public Page<PackageListItemResponse> getTopViews(Pageable pageable, Long userId) {
+        User user = userId == null ? null : userService.findById(userId);
+        Page<Package> packages = packageService.findAllByViewedCount(pageable);
+        return packages.map(p -> PackageListItemResponse.from(p, wishService.isWish(user, p)));
     }
 }

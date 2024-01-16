@@ -63,9 +63,10 @@ public class PackageController {
 
     @GetMapping("/top-views")
     public ResponseDTO<Map<String, Object>> topViews(
+        @LoginedUserId Long userId,
         Pageable pageable
     ) {
-        Page<PackageListItemResponse> list = packageFacade.getTopViews(pageable);
+        Page<PackageListItemResponse> list = packageFacade.getTopViews(pageable, userId);
         return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
     }
 }
