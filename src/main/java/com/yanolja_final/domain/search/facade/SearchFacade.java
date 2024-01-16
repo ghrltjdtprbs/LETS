@@ -17,7 +17,7 @@ public class SearchFacade {
     private final HashtagRepository hashtagRepository;
 
     public List<HashtagResponse> getHashtags() {
-        return hashtagRepository.findAll().stream()
+        return hashtagRepository.findAllByOrderByNameAsc().stream()
             .map(HashtagResponse::from)
             .collect(Collectors.toList());
     }
