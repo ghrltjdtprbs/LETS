@@ -37,8 +37,11 @@ public class PackageController {
     }
 
     @GetMapping
-    public ResponseDTO<Map<String, Object>> listOfAll(Pageable pageable) {
-        Page<PackageListItemResponse> list = packageFacade.getAllList(pageable);
+    public ResponseDTO<Map<String, Object>> listOfAll(
+        @LoginedUserId Long userId,
+        Pageable pageable
+    ) {
+        Page<PackageListItemResponse> list = packageFacade.getAllList(pageable, userId);
         return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
     }
 
@@ -56,5 +59,13 @@ public class PackageController {
     ) {
         List<PackageAvailableDateResponse> schedules = packageFacade.getAvailableDates(id);
         return ResponseDTO.okWithData(schedules);
+    }
+
+    @GetMapping("/top-views")
+    public ResponseDTO<Map<String, Object>> topViews(
+        Pageable pageable
+    ) {
+        Page<PackageListItemResponse> list = packageFacade.getTopViews(pageable);
+        return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
     }
 }

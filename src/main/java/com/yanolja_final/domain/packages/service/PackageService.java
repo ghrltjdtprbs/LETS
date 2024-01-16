@@ -27,9 +27,8 @@ public class PackageService {
             .orElseThrow(PackageNotFoundException::new);
     }
 
-    public Page<PackageListItemResponse> getAllList(Pageable pageable) {
-        Page<Package> packages = packageRepository.findAll(pageable);
-        return packages.map(PackageListItemResponse::from);
+    public Page<Package> findAll(Pageable pageable) {
+        return packageRepository.findAll(pageable);
     }
 
     public List<PackageScheduleResponse> getSchedulesById(Long packageId) {

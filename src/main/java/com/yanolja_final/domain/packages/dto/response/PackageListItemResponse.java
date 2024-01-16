@@ -9,17 +9,19 @@ public record PackageListItemResponse(
     String nationName,
     List<String> hashtags,
     int minPrice,
+    boolean isWish,
     int lodgeDays,
     int tripDays
 ) {
 
-    public static PackageListItemResponse from(Package aPackage) {
+    public static PackageListItemResponse from(Package aPackage, boolean isWish) {
         return new PackageListItemResponse(
             aPackage.getId(),
             aPackage.getThumbnailImageUrl(),
             aPackage.getNationName(),
             aPackage.getHashtagNames(),
             aPackage.getMinPrice(),
+            isWish,
             aPackage.getLodgeDays(),
             aPackage.getTripDays()
         );

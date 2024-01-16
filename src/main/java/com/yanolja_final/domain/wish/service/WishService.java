@@ -37,6 +37,9 @@ public class WishService {
     }
 
     public boolean isWish(User user, Package aPackage) {
+        if (user == null) {
+            return false;
+        }
         return wishRepository.existsByUserAndAPackage(user, aPackage);
     }
 }
