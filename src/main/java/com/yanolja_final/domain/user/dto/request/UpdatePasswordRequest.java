@@ -11,14 +11,4 @@ public record UpdatePasswordRequest(
     @Size(min = 6, message = "비밀 번호는 6자 이상이어야 합니다.")
     String password
 ) {
-    public void updatePassword(User user, PasswordEncoder passwordEncoder) {
-        String currentEncryptedPassword = user.getEncryptedPassword();
-        String newEncryptedPassword = passwordEncoder.encode(password);
-
-        if (!passwordEncoder.matches(password, currentEncryptedPassword)) {
-            user.updatePassword(newEncryptedPassword);
-        } else {
-            throw new DuplicatedCurrentPasswordException();
-        }
-    }
 }

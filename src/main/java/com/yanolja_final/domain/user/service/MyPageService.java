@@ -4,6 +4,7 @@ import com.yanolja_final.domain.user.dto.request.UpdateMyPageRequest;
 import com.yanolja_final.domain.user.dto.request.UpdatePasswordRequest;
 import com.yanolja_final.domain.user.dto.response.MyPageResponse;
 import com.yanolja_final.domain.user.entity.User;
+import com.yanolja_final.domain.user.exception.DuplicatedCurrentPasswordException;
 import com.yanolja_final.domain.user.exception.UserNotFoundException;
 import com.yanolja_final.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,14 @@ public class MyPageService {
     public void updatePassword(UpdatePasswordRequest request, Long userId) {
         User user = userRepository.findById(userId)
             .orElseThrow(UserNotFoundException::new);
-        request.updatePassword(user, passwordEncoder);
+        String currentEncryptedPassword = user.getEncryptedPassword();
+        String newEncryptedPassword = passwordEncoder.encode(request.password());
+
+        if (!passwordEncoder.matches(request.password(), currentEncryptedPassword)) {
+            user.updatePassword(newEncryptedPassword);
+        } else {
+            throw new DuplicatedCurrentPasswordException();
+        }
         userRepository.save(user);
     }
 }
