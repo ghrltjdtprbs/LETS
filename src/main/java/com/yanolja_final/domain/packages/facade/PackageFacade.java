@@ -99,7 +99,11 @@ public class PackageFacade {
 
         List<Package> similarPackages = getSimilarPackages(packages, basePackage);
 
-        return new PageImpl<>(similarPackages, pageable, similarPackages.size())
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), similarPackages.size());
+        List<Package> sublist = similarPackages.subList(start, end);
+
+        return new PageImpl<>(sublist, pageable, sublist.size())
             .map(p -> PackageListItemResponse.from(p, wishService.isWish(user, p)));
     }
 
