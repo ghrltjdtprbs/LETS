@@ -16,6 +16,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @EnableWebSecurity
 @Configuration
@@ -24,7 +27,9 @@ public class SecurityConfig {
 
     private static final String[] ALLOWED_PATHS
         = {
-        "/v1/docs/**", "/v1/users/email/**", "/h2-console/**", "/v1/themes/**"
+        "/v1/docs/**", "/v1/users/email/**", "/h2-console/**", "/health", "/v1/notices",
+        "/v1/notices/**", "/v1/faq", "/v1/faq/**", "/v1/reviews/packages/**",
+        "/v1/packages/**", "/v1/advertisements", "/v1/advertisements/**"
     };
 
     private final JwtFilter jwtFilter;
@@ -73,6 +78,28 @@ public class SecurityConfig {
             UsernamePasswordAuthenticationFilter.class
         );
 
+        http.cors(httpSecurityCorsConfigurer ->
+            httpSecurityCorsConfigurer
+                .configurationSource(corsConfigurationSource())
+        );
+
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration corsConfiguration = new CorsConfiguration();
+
+        corsConfiguration.addAllowedOriginPattern("http://localhost:3000");
+        corsConfiguration.addAllowedOriginPattern("https://winnerone.site");
+        corsConfiguration.addAllowedOriginPattern("https://www.winnerone.site");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        corsConfiguration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", corsConfiguration);
+
+        return source;
     }
 }
