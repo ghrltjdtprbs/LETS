@@ -1,6 +1,8 @@
 package com.yanolja_final.domain.packages.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanolja_final.domain.packages.dto.response.PackageAvailableDateResponse;
+import com.yanolja_final.domain.packages.dto.response.PackageCompareResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageDetailResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
@@ -56,5 +58,14 @@ public class PackageController {
     ) {
         List<PackageAvailableDateResponse> schedules = packageFacade.getAvailableDates(id);
         return ResponseDTO.okWithData(schedules);
+    }
+
+    @GetMapping("/compare")
+    public ResponseDTO<PackageCompareResponse> compare(
+        @RequestParam Long fixedPackageId,
+        @RequestParam Long comparePackageId
+    ) {
+        PackageCompareResponse compared = packageFacade.compare(fixedPackageId, comparePackageId);
+        return ResponseDTO.okWithData(compared);
     }
 }
