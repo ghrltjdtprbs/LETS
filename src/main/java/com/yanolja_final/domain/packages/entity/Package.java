@@ -1,5 +1,7 @@
 package com.yanolja_final.domain.packages.entity;
 
+import com.yanolja_final.domain.packages.exception.AvailableDateNotFoundException;
+import com.yanolja_final.domain.packages.exception.PackageNotFoundException;
 import com.yanolja_final.global.common.BaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -13,15 +15,21 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Entity
 @NoArgsConstructor
 @Getter
+@Slf4j
 public class Package extends BaseEntity {
 
     @Id
@@ -50,6 +58,7 @@ public class Package extends BaseEntity {
     private String info;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "package_id")
     private List<PackageIntroImage> introImages;
 
     @Column(nullable = false)
@@ -101,6 +110,10 @@ public class Package extends BaseEntity {
         return this.nation.getName();
     }
 
+    public List<String> getHashtagNames() {
+        return this.hashtags.stream().map(Hashtag::getName).collect(Collectors.toList());
+    }
+
     public String getThumbnailImageUrl() {
         return this.images.get(0).getImageUrl();
     }
@@ -110,6 +123,32 @@ public class Package extends BaseEntity {
             .filter(PackageDepartureOption::isNotExpired)
             .mapToInt(PackageDepartureOption::getAdultPrice)
             .min()
-            .orElse(-1);
+            .orElseThrow(PackageNotFoundException::new);
+    }
+
+    public PackageDepartureOption getAvailableDate(String strDepartDate) {
+        if (strDepartDate == null) {
+            int minPrice = getMinPrice();
+            return availableDates.stream().filter(ad -> ad.getAdultPrice().equals(minPrice)).findFirst().orElseThrow(PackageNotFoundException::new);
+        }
+        LocalDate departDate = LocalDate.parse(strDepartDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return availableDates.stream().filter(ad -> ad.getDepartureDate().equals(departDate)).findFirst().orElseThrow(
+            AvailableDateNotFoundException::new);
+    }
+
+    public List<String> getImageUrls() {
+        return this.images.stream().map(PackageImage::getImageUrl).collect(Collectors.toList());
+    }
+
+    public String getContinentName() {
+        return this.continent.getName();
+    }
+
+    public List<String> getIntroImageUrls() {
+        return this.introImages.stream().map(PackageIntroImage::getImageUrl).collect(Collectors.toList());
+    }
+
+    public void viewed() {
+        this.viewedCount++;
     }
 }

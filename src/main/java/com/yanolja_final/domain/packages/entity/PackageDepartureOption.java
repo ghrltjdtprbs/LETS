@@ -45,4 +45,16 @@ public class PackageDepartureOption extends BaseEntity {
     public boolean isNotExpired() {
         return !departureDate.isBefore(LocalDate.now());
     }
+
+    public int getRemainReservationCount() {
+        return this.maxReservationCount - this.currentReservationCount;
+    }
+
+    public int getLodgeDays() {
+        return this.aPackage.getLodgeDays();
+    }
+
+    public int getTripDays() {
+        return this.aPackage.getTripDays();
+    }
 }

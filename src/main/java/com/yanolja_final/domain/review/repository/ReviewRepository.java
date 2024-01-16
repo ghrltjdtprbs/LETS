@@ -11,9 +11,9 @@ import org.springframework.data.repository.query.Param;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     Page<Review> findByUserId(Long userId, Pageable pageable);
 
-    @Query("SELECT r FROM Review r WHERE r.order.aPackage.id = :packageId")
+    @Query("SELECT r FROM Review r LEFT JOIN r.order o LEFT JOIN o.aPackage p WHERE p.id = :packageId OR r.packageId = :packageId")
     List<Review> findReviewsByPackageIdSummary(@Param("packageId") Long packageId);
 
-    @Query("SELECT r FROM Review r WHERE r.order.aPackage.id = :packageId")
+    @Query("SELECT r FROM Review r LEFT JOIN r.order o LEFT JOIN o.aPackage p WHERE p.id = :packageId OR r.packageId = :packageId")
     Page<Review> findReviewsByPackageId(@Param("packageId") Long packageId, Pageable pageable);
 }
