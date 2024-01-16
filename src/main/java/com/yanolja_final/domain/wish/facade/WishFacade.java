@@ -33,6 +33,7 @@ public class WishFacade {
     }
 
     public Page<WishListResponse> getUserWishes(Long userId, Pageable pageable) {
-        return wishService.getUserWishes(userId, pageable);
+        return wishService.getUserWishes(userId, pageable)
+            .map(WishListResponse::new);
     }
 }

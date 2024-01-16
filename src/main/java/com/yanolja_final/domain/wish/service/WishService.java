@@ -2,7 +2,6 @@ package com.yanolja_final.domain.wish.service;
 
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.user.entity.User;
-import com.yanolja_final.domain.wish.dto.response.WishListResponse;
 import com.yanolja_final.domain.wish.entity.Wish;
 import com.yanolja_final.domain.wish.exception.WishNotFoundException;
 import com.yanolja_final.domain.wish.repository.WishRepository;
@@ -21,19 +20,20 @@ public class WishService {
 
     private final WishRepository wishRepository;
 
+
     public Wish createWish(Package aPackage, User user) {
         return wishRepository.save(new Wish(user, aPackage));
     }
 
     public void deleteWish(Long packageId, Long userId) {
-        Wish wish = wishRepository.findByaPackage_IdAndUser_Id(packageId, userId)
+        Wish wish = wishRepository.findByAPackage_IdAndUser_Id(packageId, userId)
             .orElseThrow(() -> new WishNotFoundException());
         wishRepository.delete(wish);
     }
 
     @Transactional(readOnly = true)
-    public Page<WishListResponse> getUserWishes(Long userId, Pageable pageable) {
-        return wishRepository.findByUserId(userId, pageable).map(WishListResponse::new);
+    public Page<Wish> getUserWishes(Long userId, Pageable pageable) {
+        return wishRepository.findByUserId(userId, pageable);
     }
 
     public boolean isWish(User user, Package aPackage) {
