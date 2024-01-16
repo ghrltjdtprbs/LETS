@@ -78,4 +78,14 @@ public class PackageController {
         Page<PackageListItemResponse> list = packageFacade.getTopPurchases(pageable, userId);
         return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
     }
+
+    @GetMapping("/similar-packages")
+    public ResponseDTO<Map<String, Object>> similarPackages(
+        @RequestParam Long fixedPackageId,
+        @LoginedUserId Long userId,
+        Pageable pageable
+    ) {
+        Page<PackageListItemResponse> list = packageFacade.getSimilarPackages(pageable, fixedPackageId, userId);
+        return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
+    }
 }

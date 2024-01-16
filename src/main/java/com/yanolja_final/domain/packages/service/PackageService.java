@@ -3,10 +3,13 @@ package com.yanolja_final.domain.packages.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
+import com.yanolja_final.domain.packages.entity.Hashtag;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.exception.PackageNotFoundException;
 import com.yanolja_final.domain.packages.repository.PackageRepository;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,5 +54,9 @@ public class PackageService {
     public void viewed(Package aPackage) {
         aPackage.viewed();
         packageRepository.save(aPackage);
+    }
+
+    public List<Package> findAll() {
+        return packageRepository.findAll();
     }
 }
