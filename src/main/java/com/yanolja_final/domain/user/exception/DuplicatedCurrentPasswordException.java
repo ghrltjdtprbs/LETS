@@ -8,5 +8,4 @@ public class DuplicatedCurrentPasswordException extends ApplicationException {
     private static final ErrorCode ERROR_CODE = ErrorCode.DUPLICATED_CURRENT_PASSWORD;
 
     public DuplicatedCurrentPasswordException() { super(ERROR_CODE); }
-
 }

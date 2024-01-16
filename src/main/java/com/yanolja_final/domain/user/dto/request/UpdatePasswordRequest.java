@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Size;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 public record UpdatePasswordRequest(
-
     @NotNull(message = "비밀 번호를 입력해 주세요.")
     @Size(min = 6, message = "비밀 번호는 6자 이상이어야 합니다.")
     String password

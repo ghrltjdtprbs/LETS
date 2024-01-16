@@ -6,7 +6,6 @@ import com.yanolja_final.domain.user.dto.response.MyPageResponse;
 import com.yanolja_final.domain.user.entity.User;
 import com.yanolja_final.domain.user.exception.UserNotFoundException;
 import com.yanolja_final.domain.user.repository.UserRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
