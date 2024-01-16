@@ -74,4 +74,10 @@ public class PackageFacade {
         Page<Package> packages = packageService.findAllByViewedCount(pageable);
         return packages.map(p -> PackageListItemResponse.from(p, wishService.isWish(user, p)));
     }
+
+    public Page<PackageListItemResponse> getTopPurchases(Pageable pageable, Long userId) {
+        User user = userId == null ? null : userService.findById(userId);
+        Page<Package> packages = packageService.findAllByPurchasedCount(pageable);
+        return packages.map(p -> PackageListItemResponse.from(p, wishService.isWish(user, p)));
+    }
 }
