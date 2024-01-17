@@ -1,5 +1,6 @@
 package com.yanolja_final.domain.packages.service;
 
+import com.yanolja_final.domain.packages.entity.Hashtag;
 import com.yanolja_final.domain.packages.repository.HashtagRepository;
 import com.yanolja_final.domain.search.controller.response.HashTagNamesResponse;
 import com.yanolja_final.domain.search.controller.response.HashtagResponse;
@@ -22,7 +23,7 @@ public class HashtagService {
             .collect(Collectors.toList());
     }
 
-    public HashTagNamesResponse findAllByOrderBySearchCountDesc() {
-        return HashTagNamesResponse.from(hashtagRepository.findByOrderBySearchedCountDesc());
+    public List<Hashtag> findAllByOrderBySearchedCountDesc() {
+        return hashtagRepository.findByOrderBySearchedCountDesc();
     }
 }

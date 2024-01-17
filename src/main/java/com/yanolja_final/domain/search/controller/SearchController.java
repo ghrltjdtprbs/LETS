@@ -36,7 +36,7 @@ public class SearchController {
     @GetMapping("/hashtags")
     public ResponseEntity<ResponseDTO<HashTagNamesResponse>> getAllHashtagNameBySearchedCountDesc() {
         return ResponseEntity.ok(
-            ResponseDTO.okWithData(searchFacade.findAllByOrderBySearchCountDesc())
+            ResponseDTO.okWithData(searchFacade.findAllByOrderBySearchedCountDesc())
         );
     }
 }

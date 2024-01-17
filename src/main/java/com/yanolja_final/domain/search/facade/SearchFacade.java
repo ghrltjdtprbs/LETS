@@ -32,7 +32,7 @@ public class SearchFacade {
         return List.of(ContinentNationResponse.from(nations, continents));
     }
 
-    public HashTagNamesResponse findAllByOrderBySearchCountDesc() {
-        return hashtagService.findAllByOrderBySearchCountDesc();
+    public HashTagNamesResponse findAllByOrderBySearchedCountDesc() {
+        return HashTagNamesResponse.from(hashtagService.findAllByOrderBySearchedCountDesc());
     }
 }
