@@ -89,4 +89,15 @@ public class PackageController {
         PackageCompareResponse compared = packageFacade.compare(fixedPackageId, comparePackageId);
         return ResponseDTO.okWithData(compared);
     }
+
+    @GetMapping("/similar-packages")
+    public ResponseDTO<Map<String, Object>> similarPackages(
+        @RequestParam Long fixedPackageId,
+        @LoginedUserId Long userId,
+        Pageable pageable
+    ) {
+        Page<PackageListItemResponse> list = packageFacade.getSimilarPackages(pageable,
+            fixedPackageId, userId);
+        return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
+    }
 }

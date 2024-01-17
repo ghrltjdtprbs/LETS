@@ -154,4 +154,10 @@ public class Package extends BaseEntity {
     public void viewed() {
         this.viewedCount++;
     }
+
+    public long getCommonHashtagsCount(Package other) {
+        return other.hashtags.stream()
+            .filter(this.hashtags::contains)
+            .count();
+    }
 }

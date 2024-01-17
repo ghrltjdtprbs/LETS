@@ -7,7 +7,9 @@ import com.yanolja_final.domain.packages.entity.Hashtag;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.exception.PackageNotFoundException;
 import com.yanolja_final.domain.packages.repository.PackageRepository;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,6 +33,10 @@ public class PackageService {
 
     public Page<Package> findAll(Pageable pageable) {
         return packageRepository.findAll(pageable);
+    }
+
+    public List<Package> findAll() {
+        return packageRepository.findAll();
     }
 
     public Page<Package> findAllByViewedCount(Pageable pageable) {
