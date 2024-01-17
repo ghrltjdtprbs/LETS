@@ -39,8 +39,11 @@ public class PackageController {
     }
 
     @GetMapping
-    public ResponseDTO<Map<String, Object>> listOfAll(Pageable pageable) {
-        Page<PackageListItemResponse> list = packageFacade.getAllList(pageable);
+    public ResponseDTO<Map<String, Object>> listOfAll(
+        @LoginedUserId Long userId,
+        Pageable pageable
+    ) {
+        Page<PackageListItemResponse> list = packageFacade.getAllList(pageable, userId);
         return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
     }
 
@@ -58,6 +61,24 @@ public class PackageController {
     ) {
         List<PackageAvailableDateResponse> schedules = packageFacade.getAvailableDates(id);
         return ResponseDTO.okWithData(schedules);
+    }
+
+    @GetMapping("/top-views")
+    public ResponseDTO<Map<String, Object>> topViews(
+        @LoginedUserId Long userId,
+        Pageable pageable
+    ) {
+        Page<PackageListItemResponse> list = packageFacade.getTopViews(pageable, userId);
+        return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
+    }
+
+    @GetMapping("/top-purchases")
+    public ResponseDTO<Map<String, Object>> topPurchases(
+        @LoginedUserId Long userId,
+        Pageable pageable
+    ) {
+        Page<PackageListItemResponse> list = packageFacade.getTopPurchases(pageable, userId);
+        return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
     }
 
     @GetMapping("/compare")

@@ -54,8 +54,10 @@ public class PackageFacade {
         return PackageDetailResponse.from(aPackage, departOption, user, isWish, averageStars, reviewCount);
     }
 
-    public Page<PackageListItemResponse> getAllList(Pageable pageable) {
-        return packageService.getAllList(pageable);
+    public Page<PackageListItemResponse> getAllList(Pageable pageable, Long userId) {
+        User user = userId == null ? null : userService.findById(userId);
+        Page<Package> packages = packageService.findAll(pageable);
+        return packages.map(p -> PackageListItemResponse.from(p, wishService.isWish(user, p)));
     }
 
     public List<PackageScheduleResponse> getSchedules(Long packageId) {
@@ -72,6 +74,18 @@ public class PackageFacade {
             .collect(Collectors.toList());
     }
 
+    public Page<PackageListItemResponse> getTopViews(Pageable pageable, Long userId) {
+        User user = userId == null ? null : userService.findById(userId);
+        Page<Package> packages = packageService.findAllByViewedCount(pageable);
+        return packages.map(p -> PackageListItemResponse.from(p, wishService.isWish(user, p)));
+    }
+
+    public Page<PackageListItemResponse> getTopPurchases(Pageable pageable, Long userId) {
+        User user = userId == null ? null : userService.findById(userId);
+        Page<Package> packages = packageService.findAllByPurchasedCount(pageable);
+        return packages.map(p -> PackageListItemResponse.from(p, wishService.isWish(user, p)));
+    }
+
     public PackageCompareResponse compare(Long fixedPackageId, Long comparePackageId) {
         PackageSummaryResponse fixedPackage = getSummary(fixedPackageId);
         PackageSummaryResponse comparePackage = getSummary(comparePackageId);
@@ -83,7 +97,8 @@ public class PackageFacade {
         Package aPackage = packageService.findById(packageId);
         PackageDepartureOption departureOption = aPackage.getAvailableDate(null);
 
-        List<PackageScheduleResponse> scheduleResponses = packageService.getSchedulesById(packageId);
+        List<PackageScheduleResponse> scheduleResponses = packageService.getSchedulesById(
+            packageId);
         List<String> schedules = scheduleResponses.stream()
             .map(PackageScheduleResponse::schedule)
             .flatMap(List::stream)
