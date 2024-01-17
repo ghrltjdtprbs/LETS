@@ -20,6 +20,7 @@ public enum ErrorCode {
 
     // AUTH
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 틀렸습니다."),
+    DUPLICATED_CURRENT_PASSWORD(HttpStatus.BAD_REQUEST, "현재 비밀번호와 동일합니다."),
 
     // PACKAGE
     PACKAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 패키지입니다."),
