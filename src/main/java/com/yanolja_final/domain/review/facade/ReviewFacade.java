@@ -43,7 +43,6 @@ public class ReviewFacade {
         return ReviewResponse.fromReview(review);
     }
 
-
     public void deleteReview(Long reviewId, Long userId) {
         reviewService.deleteReview(reviewId, userId);
     }
