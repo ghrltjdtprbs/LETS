@@ -2,7 +2,6 @@ package com.yanolja_final.domain.packages.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.entity.Hashtag;
 import com.yanolja_final.domain.packages.entity.Package;
@@ -36,6 +35,10 @@ public class PackageService {
 
     public Page<Package> findAllByViewedCount(Pageable pageable) {
         return packageRepository.findAllByOrderByViewedCountDesc(pageable);
+    }
+
+    public Page<Package> findAllByPurchasedCount(Pageable pageable) {
+        return packageRepository.findAllByOrderByMonthlyPurchasedCountDesc(pageable);
     }
 
     public List<PackageScheduleResponse> getSchedulesById(Long packageId) {

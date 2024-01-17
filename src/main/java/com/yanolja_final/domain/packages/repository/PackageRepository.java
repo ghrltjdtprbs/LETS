@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface PackageRepository extends JpaRepository<Package, Long> {
 
     Page<Package> findAllByOrderByViewedCountDesc(Pageable pageable);
-    
+
+    Page<Package> findAllByOrderByMonthlyPurchasedCountDesc(Pageable pageable);
+
     Page<Package> findByHashtagsContains(Hashtag hashtag, Pageable pageable);
 }
