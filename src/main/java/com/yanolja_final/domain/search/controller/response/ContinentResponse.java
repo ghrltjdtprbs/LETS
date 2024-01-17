@@ -1,4 +1,4 @@
-package com.yanolja_final.domain.packages.dto.response;
+package com.yanolja_final.domain.search.controller.response;
 
 import com.yanolja_final.domain.packages.entity.Continent;
 
