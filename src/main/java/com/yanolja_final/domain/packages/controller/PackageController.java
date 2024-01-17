@@ -1,6 +1,8 @@
 package com.yanolja_final.domain.packages.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanolja_final.domain.packages.dto.response.PackageAvailableDateResponse;
+import com.yanolja_final.domain.packages.dto.response.PackageCompareResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageDetailResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
@@ -79,13 +81,23 @@ public class PackageController {
         return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
     }
 
+    @GetMapping("/compare")
+    public ResponseDTO<PackageCompareResponse> compare(
+        @RequestParam Long fixedPackageId,
+        @RequestParam Long comparePackageId
+    ) {
+        PackageCompareResponse compared = packageFacade.compare(fixedPackageId, comparePackageId);
+        return ResponseDTO.okWithData(compared);
+    }
+
     @GetMapping("/similar-packages")
     public ResponseDTO<Map<String, Object>> similarPackages(
         @RequestParam Long fixedPackageId,
         @LoginedUserId Long userId,
         Pageable pageable
     ) {
-        Page<PackageListItemResponse> list = packageFacade.getSimilarPackages(pageable, fixedPackageId, userId);
+        Page<PackageListItemResponse> list = packageFacade.getSimilarPackages(pageable,
+            fixedPackageId, userId);
         return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
     }
 }

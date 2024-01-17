@@ -12,7 +12,9 @@ import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,10 @@ public class PackageService {
 
     public Page<Package> findAll(Pageable pageable) {
         return packageRepository.findAll(pageable);
+    }
+
+    public List<Package> findAll() {
+        return packageRepository.findAll();
     }
 
     public Page<Package> findAllByViewedCount(Pageable pageable) {
@@ -56,7 +62,14 @@ public class PackageService {
         packageRepository.save(aPackage);
     }
 
-    public List<Package> findAll() {
-        return packageRepository.findAll();
+    public Page<Package> getPackagesByHashtag(Hashtag hashtag, String sortBy, Pageable pageable) {
+        Sort sort = Sort.by("departureTime").ascending();
+        if ("price_desc".equals(sortBy)) {
+            sort = Sort.by("price").descending();
+        } else if ("price_asc".equals(sortBy)) {
+            sort = Sort.by("price").ascending();
+        }
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+        return packageRepository.findByHashtagsContains(hashtag, pageable);
     }
 }
