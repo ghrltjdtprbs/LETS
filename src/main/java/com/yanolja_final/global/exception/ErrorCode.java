@@ -20,6 +20,7 @@ public enum ErrorCode {
 
     // AUTH
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 틀렸습니다."),
+    DUPLICATED_CURRENT_PASSWORD(HttpStatus.BAD_REQUEST, "현재 비밀번호와 동일합니다."),
 
     // PACKAGE
     PACKAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 패키지입니다."),
@@ -30,6 +31,9 @@ public enum ErrorCode {
 
     // WISH
     WISH_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 찜ID 입니다."),
+
+    // THEME
+    THEME_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 테마 입니다."),
 
     // POLL
     POLL_NOT_FOUND(HttpStatus.BAD_REQUEST, "등록된 찬/반 토론 이벤트가 없습니다."),
