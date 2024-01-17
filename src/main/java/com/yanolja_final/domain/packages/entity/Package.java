@@ -74,6 +74,9 @@ public class Package extends BaseEntity {
     private String exclusionList;
 
     @Column(nullable = false)
+    private Integer hotelStars;
+
+    @Column(nullable = false)
     private Integer viewedCount = 0;
 
     @Column(nullable = false)
