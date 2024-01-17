@@ -6,6 +6,7 @@ import com.yanolja_final.domain.packages.repository.ContinentRepository;
 import com.yanolja_final.domain.packages.repository.HashtagRepository;
 import com.yanolja_final.domain.packages.repository.NationRepository;
 import com.yanolja_final.domain.packages.service.ContinentService;
+import com.yanolja_final.domain.packages.service.HashtagService;
 import com.yanolja_final.domain.packages.service.NationService;
 import com.yanolja_final.domain.search.controller.response.ContinentNationResponse;
 import com.yanolja_final.domain.search.controller.response.HashtagResponse;
@@ -20,14 +21,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class SearchFacade {
 
-    private final HashtagRepository hashtagRepository;
+    private final HashtagService hashtagService;
     private final NationService nationService;
     private final ContinentService continentService;
 
     public List<HashtagResponse> getHashtags() {
-        return hashtagRepository.findAllByOrderByNameAsc().stream()
-            .map(HashtagResponse::from)
-            .collect(Collectors.toList());
+        return hashtagService.getAllHashtagInfo();
     }
 
     public List<ContinentNationResponse> getAllContinentAndNationInfo() {
