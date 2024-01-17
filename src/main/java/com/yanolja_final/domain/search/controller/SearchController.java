@@ -1,6 +1,7 @@
 package com.yanolja_final.domain.search.controller;
 
 import com.yanolja_final.domain.search.controller.response.ContinentNationResponse;
+import com.yanolja_final.domain.search.controller.response.HashTagNamesResponse;
 import com.yanolja_final.domain.search.controller.response.HashtagResponse;
 import com.yanolja_final.domain.search.facade.SearchFacade;
 import com.yanolja_final.global.util.ResponseDTO;
@@ -29,6 +30,13 @@ public class SearchController {
     public ResponseEntity<ResponseDTO<List<ContinentNationResponse>>> getAllContinentAndNationInfo() {
         return ResponseEntity.ok(
             ResponseDTO.okWithData(searchFacade.getAllContinentAndNationInfo())
+        );
+    }
+
+    @GetMapping("/hashtags")
+    public ResponseEntity<ResponseDTO<HashTagNamesResponse>> getAllHashtagNameBySearchedCountDesc() {
+        return ResponseEntity.ok(
+            ResponseDTO.okWithData(searchFacade.findAllByOrderBySearchCountDesc())
         );
     }
 }
