@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -115,6 +114,10 @@ public class Package extends BaseEntity {
 
     public List<String> getHashtagNames() {
         return this.hashtags.stream().map(Hashtag::getName).collect(Collectors.toList());
+    }
+
+    public void plusPurchasedCount(){
+        this.purchasedCount++;
     }
 
     public String getThumbnailImageUrl() {

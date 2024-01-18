@@ -2,14 +2,17 @@ package com.yanolja_final.domain.packages.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yanolja_final.domain.order.exception.MaximumCapacityExceededException;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.entity.Hashtag;
 import com.yanolja_final.domain.packages.entity.Package;
+import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
+import com.yanolja_final.domain.packages.exception.PackageDateNotFoundException;
+import com.yanolja_final.domain.packages.exception.PackageDepartureOptionNotFoundException;
 import com.yanolja_final.domain.packages.exception.PackageNotFoundException;
+import com.yanolja_final.domain.packages.repository.PackageDepartureOptionRepository;
 import com.yanolja_final.domain.packages.repository.PackageRepository;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +28,14 @@ public class PackageService {
 
     private final PackageRepository packageRepository;
     private final ObjectMapper objectMapper;
+    private final PackageDepartureOptionRepository packageDepartureOptionRepository;
+
+    // Package
+    public Package getPackageWithIncrementPurchasedCount(Long id) {
+        Package aPackage = findById(id);
+        aPackage.plusPurchasedCount();
+        return packageRepository.save(aPackage);
+    }
 
     public Package findById(Long id) {
         return packageRepository.findById(id)
@@ -72,4 +83,26 @@ public class PackageService {
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
         return packageRepository.findByHashtagsContains(hashtag, pageable);
     }
+
+    // PackageDepartureOption
+    public void updateCurrentPeopleWithOrder(Long id, Long packageId, int orderTotalPeople) {
+        PackageDepartureOption packageDepartureOption = findByDepartureOptionId(id);
+
+        packageDepartureOptionRepository.findByPackageIdAndDepartureOptionId(packageId, id)
+            .orElseThrow(
+                PackageDateNotFoundException::new
+            );
+
+        if (packageDepartureOption.getIncrementCurrentReservationCount(orderTotalPeople)
+            > packageDepartureOption.getMaxReservationCount()) {
+            throw new MaximumCapacityExceededException();
+        }
+        packageDepartureOptionRepository.save(packageDepartureOption);
+    }
+
+    public PackageDepartureOption findByDepartureOptionId(Long id) {
+        return packageDepartureOptionRepository.findById(id).orElseThrow(
+            PackageDepartureOptionNotFoundException::new);
+    }
+
 }
