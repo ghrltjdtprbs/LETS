@@ -6,7 +6,9 @@ import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.exception.PackageNotFoundException;
+import com.yanolja_final.domain.packages.repository.PackageQueryRepository;
 import com.yanolja_final.domain.packages.repository.PackageRepository;
+import com.yanolja_final.domain.search.controller.response.SearchedPackageCountResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PackageService {
 
     private final PackageRepository packageRepository;
+    private final PackageQueryRepository packageQueryRepository;
     private final ObjectMapper objectMapper;
 
     public Package findById(Long id) {
@@ -45,5 +48,22 @@ public class PackageService {
     public void viewed(Package aPackage) {
         aPackage.viewed();
         packageRepository.save(aPackage);
+    }
+
+
+    public SearchedPackageCountResponse getFilteredPackageCount(Integer minPrice, Integer maxPrice,
+        String hashtags,
+        String nations, String continents) {
+        Integer count = packageQueryRepository.countByAdultPriceRangeAndFilters(minPrice, maxPrice,
+            slideString(nations),
+            slideString(continents), slideString(hashtags));
+        return SearchedPackageCountResponse.from(count);
+    }
+
+    private String[] slideString(String str) {
+        if (str == null) {
+            return null;
+        }
+        return str.split(",");
     }
 }
