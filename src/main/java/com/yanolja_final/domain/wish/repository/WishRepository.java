@@ -15,8 +15,6 @@ public interface WishRepository extends JpaRepository<Wish, Long> {
 
     Optional<Wish> findByIdAndUserId(Long wishId, Long userId);
 
-    Page<Wish> findByUserId(Long userId, Pageable pageable);
-
     boolean existsByUserAndAPackage(User user, Package aPackage);
 
     @Query("SELECT CASE WHEN COUNT(w) > 0 THEN true ELSE false END FROM Wish w " +
@@ -24,8 +22,6 @@ public interface WishRepository extends JpaRepository<Wish, Long> {
     boolean isUserWishingPackage(@Param("userId") Long userId, @Param("packageId") Long packageId);
 
     Optional<Wish> findByAPackage_IdAndUser_Id(Long packageId, Long userId);
-
-    boolean existsByUserAndAPackage(User user, Package aPackage);
 
     @EntityGraph(attributePaths = {"APackage"})
     Page<Wish> findByUserId(Long userId, Pageable pageable);
