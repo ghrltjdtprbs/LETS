@@ -3,6 +3,7 @@ package com.yanolja_final.domain.packages.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanolja_final.domain.order.exception.MaximumCapacityExceededException;
+import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.entity.Hashtag;
 import com.yanolja_final.domain.packages.entity.Package;
@@ -27,8 +28,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class PackageService {
 
     private final PackageRepository packageRepository;
-    private final ObjectMapper objectMapper;
     private final PackageDepartureOptionRepository packageDepartureOptionRepository;
+    private final ObjectMapper objectMapper;
 
     // Package
     public Package getPackageWithIncrementPurchasedCount(Long id) {

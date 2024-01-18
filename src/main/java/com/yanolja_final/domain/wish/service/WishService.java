@@ -5,13 +5,11 @@ import com.yanolja_final.domain.user.entity.User;
 import com.yanolja_final.domain.wish.entity.Wish;
 import com.yanolja_final.domain.wish.exception.WishNotFoundException;
 import com.yanolja_final.domain.wish.repository.WishRepository;
-
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +32,11 @@ public class WishService {
     @Transactional(readOnly = true)
     public Page<Wish> getUserWishes(Long userId, Pageable pageable) {
         return wishRepository.findByUserId(userId, pageable);
+    }
+
+    @Transactional(readOnly = true)
+    public boolean isUserWishingPackage(Long userId, Long packageId) {
+        return wishRepository.isUserWishingPackage(userId, packageId);
     }
 
     public boolean isWish(User user, Package aPackage) {

@@ -6,9 +6,12 @@ import com.yanolja_final.domain.order.entity.Order;
 import com.yanolja_final.domain.order.exception.OrderNotFoundException;
 import com.yanolja_final.domain.order.repository.OrderRepository;
 import com.yanolja_final.domain.packages.entity.Package;
+import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
 import com.yanolja_final.domain.user.entity.User;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,11 +22,18 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
 
+    public Page<Order> read(User user, Pageable pageable) {
+        return orderRepository.findByUserId(user.getId(), pageable);
+    }
+
     @Transactional
-    public OrderCreateResponse create(User user, Package aPackage,
-        OrderCreateRequest request) {
+    public OrderCreateResponse create(
+        User user, Package aPackage,
+        PackageDepartureOption packageDepartureOption,
+        OrderCreateRequest request
+    ) {
         String code = generateDailyOrderCode();
-        Order order = request.toEntity(user, aPackage, code);
+        Order order = request.toEntity(user, aPackage, packageDepartureOption, code);
         orderRepository.save(order);
         return OrderCreateResponse.fromEntities(order, user);
     }

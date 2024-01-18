@@ -44,6 +44,9 @@ public class Order extends SoftDeletableBaseEntity {
     @Column(nullable = false)
     private Long availableDateId;
 
+    @Column(nullable = false)
+    private Integer totalPrice;
+
     @Column(length = 100, nullable = false)
     private String code;
 
@@ -51,12 +54,14 @@ public class Order extends SoftDeletableBaseEntity {
     private String detailInfo;
 
     @Builder
-    public Order(User user, Package aPackage, Review review, Long availableDateId, String code,
+    public Order(User user, Package aPackage, Review review, Long availableDateId,
+        Integer totalPrice, String code,
         String detailInfo) {
         this.user = user;
         this.aPackage = aPackage;
         this.review = review;
         this.availableDateId = availableDateId;
+        this.totalPrice = totalPrice;
         this.code = code;
         this.detailInfo = detailInfo;
     }
