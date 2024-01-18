@@ -29,7 +29,7 @@ public class SecurityConfig {
         = {
         "/v1/docs/**", "/v1/users/email/**", "/h2-console/**", "/health", "/v1/notices",
         "/v1/notices/**", "/v1/faq", "/v1/faq/**", "/v1/reviews/packages/**",
-        "/v1/packages/**", "/v1/advertisements", "/v1/advertisements/**"
+        "/v1/packages/**", "/v1/advertisements", "/v1/advertisements/**", "/v1/themes/**"
     };
 
     private final JwtFilter jwtFilter;
@@ -76,6 +76,11 @@ public class SecurityConfig {
         http.addFilterBefore(
             jwtFilter,
             UsernamePasswordAuthenticationFilter.class
+        );
+
+        http.cors(httpSecurityCorsConfigurer ->
+            httpSecurityCorsConfigurer
+                .configurationSource(corsConfigurationSource())
         );
 
         return http.build();
