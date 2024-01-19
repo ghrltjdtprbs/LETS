@@ -2,7 +2,6 @@ package com.yanolja_final.domain.packages.service;
 
 import com.yanolja_final.domain.packages.entity.Hashtag;
 import com.yanolja_final.domain.packages.repository.HashtagRepository;
-import com.yanolja_final.domain.search.controller.response.HashTagNamesResponse;
 import com.yanolja_final.domain.search.controller.response.HashtagResponse;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +15,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class HashtagService {
 
     private final HashtagRepository hashtagRepository;
+
+    public Hashtag getHashtagByKeyword(String keyword) {
+        return hashtagRepository.findByNameContaining(keyword).orElse(null);
+    }
 
     public List<HashtagResponse> getAllHashtagInfo() {
         return hashtagRepository.findAllByOrderByNameAsc().stream()

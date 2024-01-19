@@ -1,7 +1,10 @@
 package com.yanolja_final.domain.packages.controller;
 
-import com.yanolja_final.domain.packages.repository.HashtagRepository;
+import com.yanolja_final.domain.packages.facade.HashtagFacade;
+import com.yanolja_final.global.config.argumentresolver.LoginedUserId;
+import com.yanolja_final.global.util.PaginationUtils;
 import com.yanolja_final.global.util.ResponseDTO;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -15,14 +18,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/hashtag-search")
 public class HashtagController {
 
-    private final HashtagRepository hashtagRepository;
+    private final HashtagFacade hashtagFacade;
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<Void>>  getPackagesByHashtagKeyword(
+    public ResponseEntity<ResponseDTO<Map<String, Object>>> getPackagesByHashtagKeyword(
+        @LoginedUserId Long userId,
         @RequestParam String keyword,
         Pageable pageable,
-        @RequestParam String sortBy
-    ){
-
+        @RequestParam(required = false) String sortBy
+    ) {
+        return ResponseEntity.ok(
+            ResponseDTO.okWithData(
+                PaginationUtils.createPageResponse(
+                    hashtagFacade.getPackagesByHashtagKeyword(userId, keyword, pageable, sortBy))
+            )
+        );
     }
 }
