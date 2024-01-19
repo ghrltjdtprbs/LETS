@@ -16,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -43,9 +44,25 @@ public class Order extends SoftDeletableBaseEntity {
     @Column(nullable = false)
     private Long availableDateId;
 
+    @Column(nullable = false)
+    private Integer totalPrice;
+
     @Column(length = 100, nullable = false)
     private String code;
 
     @Column(name = "detail", columnDefinition = "TEXT", nullable = false)
     private String detailInfo;
+
+    @Builder
+    public Order(User user, Package aPackage, Review review, Long availableDateId,
+        Integer totalPrice, String code,
+        String detailInfo) {
+        this.user = user;
+        this.aPackage = aPackage;
+        this.review = review;
+        this.availableDateId = availableDateId;
+        this.totalPrice = totalPrice;
+        this.code = code;
+        this.detailInfo = detailInfo;
+    }
 }

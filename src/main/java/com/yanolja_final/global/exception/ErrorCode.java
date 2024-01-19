@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 @Getter
 public enum ErrorCode {
 
-
     // EMAIL
     EMAIL_SENDING_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "이메일 전송에 실패했습니다."),
     EMAIL_TEMPLATE_LOAD_FAILURE(HttpStatus.INTERNAL_SERVER_ERROR, "이메일 템플릿 로드에 실패했습니다."),
@@ -20,16 +19,23 @@ public enum ErrorCode {
 
     // AUTH
     INVALID_PASSWORD(HttpStatus.BAD_REQUEST, "비밀번호가 틀렸습니다."),
+    DUPLICATED_CURRENT_PASSWORD(HttpStatus.BAD_REQUEST, "현재 비밀번호와 동일합니다."),
 
     // PACKAGE
     PACKAGE_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 패키지입니다."),
+    PACKAGE_DEPARTURE_OPTION_NOT_FOUND(HttpStatus.NOT_FOUND,"존재하지 않는 패키지 옵션입니다."),
+    PACKAGE_DATE_NOT_FOUND(HttpStatus.NOT_FOUND,"해당 패키지와 일치하는 날짜가 없습니다."),
     AVAILABLE_DATE_NOT_FOUND(HttpStatus.NOT_FOUND, "예약 가능한 날짜가 아닙니다."),
 
     // ORDER
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 주문입니다."),
+    MAXIMUM_CAPACITY(HttpStatus.BAD_REQUEST, "예약 인원이 초과되었습니다."),
 
     // WISH
     WISH_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 찜ID 입니다."),
+
+    // THEME
+    THEME_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 테마 입니다."),
 
     // POLL
     POLL_NOT_FOUND(HttpStatus.BAD_REQUEST, "등록된 찬/반 토론 이벤트가 없습니다."),
