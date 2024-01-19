@@ -115,4 +115,8 @@ public class User extends SoftDeletableBaseEntity {
             this.postCode = postCode;
         }
     }
+
+    public void updatePassword(String newEncryptedPassword) {
+        this.encryptedPassword = newEncryptedPassword;
+    }
 }
