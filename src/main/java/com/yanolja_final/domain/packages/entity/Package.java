@@ -19,7 +19,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.Getter;
@@ -74,6 +73,9 @@ public class Package extends BaseEntity {
     private String exclusionList;
 
     @Column(nullable = false)
+    private Integer hotelStars;
+
+    @Column(nullable = false)
     private Integer viewedCount = 0;
 
     @Column(nullable = false)
@@ -114,6 +116,10 @@ public class Package extends BaseEntity {
         return this.hashtags.stream().map(Hashtag::getName).collect(Collectors.toList());
     }
 
+    public void plusPurchasedCount() {
+        this.purchasedCount++;
+    }
+
     public String getThumbnailImageUrl() {
         return this.images.get(0).getImageUrl();
     }
@@ -129,11 +135,14 @@ public class Package extends BaseEntity {
     public PackageDepartureOption getAvailableDate(String strDepartDate) {
         if (strDepartDate == null) {
             int minPrice = getMinPrice();
-            return availableDates.stream().filter(ad -> ad.getAdultPrice().equals(minPrice)).findFirst().orElseThrow(PackageNotFoundException::new);
+            return availableDates.stream().filter(ad -> ad.getAdultPrice().equals(minPrice))
+                .findFirst().orElseThrow(PackageNotFoundException::new);
         }
-        LocalDate departDate = LocalDate.parse(strDepartDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        return availableDates.stream().filter(ad -> ad.getDepartureDate().equals(departDate)).findFirst().orElseThrow(
-            AvailableDateNotFoundException::new);
+        LocalDate departDate =
+            LocalDate.parse(strDepartDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return availableDates.stream().filter(ad -> ad.getDepartureDate().equals(departDate))
+            .findFirst().orElseThrow(
+                AvailableDateNotFoundException::new);
     }
 
     public List<String> getImageUrls() {
@@ -145,10 +154,17 @@ public class Package extends BaseEntity {
     }
 
     public List<String> getIntroImageUrls() {
-        return this.introImages.stream().map(PackageIntroImage::getImageUrl).collect(Collectors.toList());
+        return this.introImages.stream().map(PackageIntroImage::getImageUrl)
+            .collect(Collectors.toList());
     }
 
     public void viewed() {
         this.viewedCount++;
+    }
+
+    public long getCommonHashtagsCount(Package other) {
+        return other.hashtags.stream()
+            .filter(this.hashtags::contains)
+            .count();
     }
 }
