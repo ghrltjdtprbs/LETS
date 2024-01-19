@@ -33,11 +33,11 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long packageId;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;
-
-    private Long packageId;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
