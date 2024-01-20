@@ -77,13 +77,22 @@ public class PackageService {
     }
 
 
-    public SearchedPackageCountResponse getFilteredPackageCount(Integer minPrice, Integer maxPrice,
+    public SearchedPackageCountResponse getFilteredPackageCount(
+        Integer minPrice,
+        Integer maxPrice,
         String hashtags,
-        String nations, String continents) {
-        Integer count = packageQueryRepository.countByAdultPriceRangeAndFilters(minPrice, maxPrice,
-            slideString(nations),
-            slideString(continents), slideString(hashtags));
-        return SearchedPackageCountResponse.from(count);
+        String nations,
+        String continents
+    ) {
+        List<Long> result =
+            packageQueryRepository.countByAdultPriceRangeAndFilters(
+                minPrice,
+                maxPrice,
+                slideString(nations),
+                slideString(continents),
+                slideString(hashtags)
+            );
+        return SearchedPackageCountResponse.from(result.size());
     }
 
     private String[] slideString(String str) {
