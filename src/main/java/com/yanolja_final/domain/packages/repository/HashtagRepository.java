@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
 
     List<Hashtag> findAllByOrderByNameAsc();
+    List<Hashtag> findByOrderBySearchedCountDesc();
 }

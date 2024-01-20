@@ -1,7 +1,5 @@
 package com.yanolja_final.domain.search.controller.response;
 
-import com.yanolja_final.domain.packages.dto.response.ContinentResponse;
-import com.yanolja_final.domain.packages.dto.response.NationResponse;
 import com.yanolja_final.domain.packages.entity.Continent;
 import com.yanolja_final.domain.packages.entity.Nation;
 import java.util.List;
