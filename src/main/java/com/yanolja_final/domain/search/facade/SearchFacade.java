@@ -26,8 +26,8 @@ public class SearchFacade {
         return hashtagService.getAllHashtagInfo();
     }
 
-    public List<ContinentNationResponse> getAllContinentAndNationInfo() {
-        List<Nation> nations = nationService.getAllNationInfo();
+    public List<ContinentNationResponse> getAllContinentAndPopularNationInfo() {
+        List<Nation> nations = nationService.getPopularNationInfo();
         List<Continent> continents = continentService.getAllContinentInfo();
         return List.of(ContinentNationResponse.from(nations, continents));
     }
