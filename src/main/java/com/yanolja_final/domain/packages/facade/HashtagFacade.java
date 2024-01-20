@@ -26,8 +26,12 @@ public class HashtagFacade {
     private final HashtagService hashtagService;
     private final WishService wishService;
 
+    @Transactional
     public Page<PackageListItemResponse> getPackagesByHashtagKeyword(Long userId, String keyword,
         Pageable pageable, String sortBy) {
+        if("".equals(keyword)){
+            keyword=null;
+        }
         User user = userId == null ? null : userService.findById(userId);
         Hashtag hashtag = hashtagService.getHashtagByKeyword(keyword);
         Page<Package> packagePage = packageService.getPackagesByHashtag(hashtag, sortBy, pageable);

@@ -17,7 +17,9 @@ public class HashtagService {
     private final HashtagRepository hashtagRepository;
 
     public Hashtag getHashtagByKeyword(String keyword) {
-        return hashtagRepository.findByNameContaining(keyword).orElse(null);
+        Hashtag hashtag = hashtagRepository.findFirstByNameContaining(keyword).orElse(null);
+        incrementSearchedCount(hashtag);
+        return hashtag;
     }
 
     public List<HashtagResponse> getAllHashtagInfo() {
@@ -28,5 +30,13 @@ public class HashtagService {
 
     public List<Hashtag> findAllByOrderBySearchedCountDesc() {
         return hashtagRepository.findByOrderBySearchedCountDesc();
+    }
+
+    private void incrementSearchedCount(Hashtag hashtag) {
+        if (hashtag == null) {
+            return;
+        }
+        hashtag.increaseSearchedCount();
+        hashtagRepository.save(hashtag);
     }
 }

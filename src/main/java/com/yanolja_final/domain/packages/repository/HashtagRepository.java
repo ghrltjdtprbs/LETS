@@ -11,5 +11,5 @@ public interface HashtagRepository extends JpaRepository<Hashtag, Long> {
 
     List<Hashtag> findByOrderBySearchedCountDesc();
 
-    Optional<Hashtag> findByNameContaining(String keyword);
+    Optional<Hashtag> findFirstByNameContaining(String keyword);
 }
