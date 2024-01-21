@@ -13,9 +13,10 @@ public class CookieUtils {
     public Cookie makeCookie(String name, String value) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
-        cookie.setAttribute("SameSite", "None");
+        cookie.setAttribute("SameSite", "Strict");
         cookie.setDomain(domain);
         cookie.setSecure(true);
+        cookie.setHttpOnly(true);
 
         return cookie;
     }
