@@ -3,7 +3,6 @@ package com.yanolja_final.domain.packages.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanolja_final.domain.order.exception.MaximumCapacityExceededException;
-import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.entity.Continent;
 import com.yanolja_final.domain.packages.entity.Hashtag;
@@ -115,5 +114,9 @@ public class PackageService {
 
     public List<Package> findAllByNation(Nation nation) {
         return packageRepository.findAllByNation(nation);
+    }
+
+    public Page<Package> findSimilarPackages(Package basePackage, Pageable pageable) {
+        return packageRepository.findSimilarPackages(basePackage, pageable);
     }
 }
