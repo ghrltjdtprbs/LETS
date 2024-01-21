@@ -13,10 +13,16 @@ public class CookieUtils {
     public Cookie makeCookie(String name, String value) {
         Cookie cookie = new Cookie(name, value);
         cookie.setPath("/");
-        cookie.setAttribute("Samesite", "None");
+        cookie.setAttribute("SameSite", "None");
         cookie.setDomain(domain);
-        cookie.setSecure(false);
+        cookie.setSecure(true);
 
+        return cookie;
+    }
+
+    public Cookie expireCookie(String name) {
+        Cookie cookie = makeCookie(name, "");
+        cookie.setMaxAge(0);
         return cookie;
     }
 }
