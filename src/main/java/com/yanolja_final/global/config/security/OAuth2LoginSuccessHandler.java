@@ -42,9 +42,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8.toString());
 
 
-        //TODO :   프론트 주소로 변경
-        //
-        String redirectUrl = "http://localhost:8080/v1/users/oauth2/info?token=" + token
+        String redirectUrl = "https://winnerone.site/v1/users/oauth2/info?token=" + token
             +"&email="+email+"&name="+encodedName;
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
