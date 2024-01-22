@@ -2,7 +2,7 @@ package com.yanolja_final.domain.wish.entity;
 
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.user.entity.User;
-import com.yanolja_final.global.common.BaseTimeEntity;
+import com.yanolja_final.global.common.BaseEntity;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,14 +12,17 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
-public class Wish extends BaseTimeEntity {
+@Builder
+public class Wish extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +34,10 @@ public class Wish extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "package_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private Package aPackage;
+    private Package APackage;
+
+    public Wish(User user, Package APackage) {
+        this.user = user;
+        this.APackage = APackage;
+    }
 }

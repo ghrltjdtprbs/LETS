@@ -4,7 +4,6 @@ import com.yanolja_final.domain.user.dto.request.CreateUserRequest;
 import com.yanolja_final.domain.user.dto.response.CreateUserResponse;
 import com.yanolja_final.domain.user.entity.Authority;
 import com.yanolja_final.domain.user.entity.User;
-import com.yanolja_final.domain.user.exception.PhoneNumberAlreadyRegisteredException;
 import com.yanolja_final.domain.user.exception.UserAlreadyRegisteredException;
 import com.yanolja_final.domain.user.exception.UserNotFoundException;
 import com.yanolja_final.domain.user.repository.UserRepository;
@@ -14,7 +13,6 @@ import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,9 +31,6 @@ public class UserService {
         userRepository.findByEmail(createUserRequest.email()).ifPresent(user -> {
             throw new UserAlreadyRegisteredException();
         });
-        userRepository.findByPhoneNumber(createUserRequest.phoneNumber()).ifPresent(user -> {
-            throw new PhoneNumberAlreadyRegisteredException();
-        });
         String encodedPassword = passwordEncoder.encode(createUserRequest.password());
         User newUser = createUserRequest.toEntity(encodedPassword, DEFAULT_AUTHORITIES);
 
@@ -53,7 +48,6 @@ public class UserService {
             String encodedPassword = passwordEncoder.encode(createUserRequest.password());
             user.updateCredentials(
                 createUserRequest.username(),
-                createUserRequest.phoneNumber(),
                 encodedPassword
             );
             userRepository.save(user);
@@ -77,10 +71,21 @@ public class UserService {
     public User findByEmail(String email) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(UserNotFoundException::new);
+        isDeletedUser(user);
+        return user;
+    }
+    
+    @Transactional(readOnly = true)
+    public User findActiveUserById (Long id){
+        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        isDeletedUser(user);
+        return user;
+    }
+
+    private static void isDeletedUser(User user) {
         if (user.isDeleted()) {
             throw new UserNotFoundException();
         }
-        return user;
     }
 
     public void deleteUser(Long userId) {
@@ -88,5 +93,10 @@ public class UserService {
             .orElseThrow(() -> new UserNotFoundException());
         user.delete(LocalDateTime.now());
         userRepository.save(user);
+    }
+
+    public User findById(Long id) {
+        return userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException());
     }
 }

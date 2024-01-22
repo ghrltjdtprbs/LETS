@@ -9,6 +9,7 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,6 +22,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
+
+    private final CookieUtils cookieUtils;
+
     private final AuthFacade authFacade;
 
     @PostMapping("/email/login")
@@ -30,7 +34,7 @@ public class AuthController {
     ) {
         TokenDTO tokenDTO = authFacade.login(loginRequest);
 
-        Cookie accessToken = CookieUtils.makeCookie(
+        Cookie accessToken = cookieUtils.makeCookie(
             ACCESS_TOKEN_COOKIE_NAME, tokenDTO.accessToken()
         );
         response.addCookie(accessToken);
@@ -41,12 +45,8 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<ResponseDTO<Void>> logout(HttpServletResponse response) {
-        Cookie emptyAccessToken = new Cookie(ACCESS_TOKEN_COOKIE_NAME, null);
-        emptyAccessToken.setMaxAge(0);
-        emptyAccessToken.setHttpOnly(false);
-        emptyAccessToken.setPath("/");
-
-        response.addCookie(emptyAccessToken);
+        Cookie expiredCookie = cookieUtils.expireCookie(ACCESS_TOKEN_COOKIE_NAME);
+        response.addCookie(expiredCookie);
 
         return ResponseEntity.ok(ResponseDTO.ok());
     }

@@ -4,13 +4,11 @@ import com.yanolja_final.domain.order.entity.Order;
 import com.yanolja_final.domain.poll.entity.PollAnswer;
 import com.yanolja_final.domain.review.entity.Review;
 import com.yanolja_final.domain.wish.entity.Wish;
-import com.yanolja_final.global.common.BaseTimeEntity;
+import com.yanolja_final.global.common.SoftDeletableBaseEntity;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
-import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.ForeignKey;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -18,7 +16,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,26 +28,31 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 @NoArgsConstructor
 @Getter
-public class User extends BaseTimeEntity {
+public class User extends SoftDeletableBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
+    @Column(length = 320, unique = true)
     private String email;
 
-    @Column(unique = true)
+    @Column(length = 30, unique = true)
     private String phoneNumber;
 
+    @Column(length = 10, nullable = false)
     private String username;
 
+    @Column(length = 100)
+    private String addr1;
+
+    @Column(length = 100)
+    private String addr2;
+
+    @Column(length = 10)
+    private String postCode;
+
     private String encryptedPassword;
-
-    private String provider;  //어떤 소셜로그인인지
-
-    @OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-    private UserImage image;
 
     private boolean isTermsAgreed = false;
 
@@ -70,24 +72,22 @@ public class User extends BaseTimeEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.REMOVE)
     private List<Wish> wishes;
 
-    @OneToOne(mappedBy = "user")
-    private PollAnswer pollAnswer;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<PollAnswer> pollAnswers;
 
     @Builder
-    public  User(String email, String phoneNumber, String username,
-        String encryptedPassword,boolean isTermsAgreed, Set<Authority> authorities, String provider) {
+    public User(String email, String phoneNumber, String username,
+        String encryptedPassword, boolean isTermsAgreed, Set<Authority> authorities) {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.encryptedPassword = encryptedPassword;
         this.isTermsAgreed = isTermsAgreed;
         this.authorities = authorities;
-        this.provider = provider;
     }
 
-    public void updateCredentials(String username, String phoneNumber, String encryptedPassword) {
+    public void updateCredentials(String username, String encryptedPassword) {
         this.username = username;
-        this.phoneNumber = phoneNumber;
         this.encryptedPassword = encryptedPassword;
     }
 
@@ -99,5 +99,24 @@ public class User extends BaseTimeEntity {
     @Override
     public void delete(LocalDateTime currentTime) {
         super.delete(currentTime);
+    }
+
+    public void updateUserInfo(String phoneNumber, String addr1, String addr2, String postCode) {
+        if (phoneNumber != null) {
+            this.phoneNumber = phoneNumber;
+        }
+        if (addr1 != null) {
+            this.addr1 = addr1;
+        }
+        if (addr2 != null) {
+            this.addr2 = addr2;
+        }
+        if (postCode != null) {
+            this.postCode = postCode;
+        }
+    }
+
+    public void updatePassword(String newEncryptedPassword) {
+        this.encryptedPassword = newEncryptedPassword;
     }
 }

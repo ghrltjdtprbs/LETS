@@ -1,8 +1,9 @@
 package com.yanolja_final.domain.order.entity;
 
 import com.yanolja_final.domain.packages.entity.Package;
+import com.yanolja_final.domain.review.entity.Review;
 import com.yanolja_final.domain.user.entity.User;
-import com.yanolja_final.global.common.BaseTimeEntity;
+import com.yanolja_final.global.common.SoftDeletableBaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -13,7 +14,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Getter
-public class Order extends BaseTimeEntity {
+public class Order extends SoftDeletableBaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,12 +38,31 @@ public class Order extends BaseTimeEntity {
     @JoinColumn(name = "package_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private Package aPackage;
 
+    @OneToOne(mappedBy = "order", fetch = FetchType.LAZY)
+    private Review review;
+
     @Column(nullable = false)
     private Long availableDateId;
 
-    @Column(name = "order_code", length = 100, nullable = false)
+    @Column(nullable = false)
+    private Integer totalPrice;
+
+    @Column(length = 100, nullable = false)
     private String code;
 
-    @Column(name="detail_json",columnDefinition = "TEXT", nullable = false)
+    @Column(name = "detail", columnDefinition = "TEXT", nullable = false)
     private String detailInfo;
+
+    @Builder
+    public Order(User user, Package aPackage, Review review, Long availableDateId,
+        Integer totalPrice, String code,
+        String detailInfo) {
+        this.user = user;
+        this.aPackage = aPackage;
+        this.review = review;
+        this.availableDateId = availableDateId;
+        this.totalPrice = totalPrice;
+        this.code = code;
+        this.detailInfo = detailInfo;
+    }
 }

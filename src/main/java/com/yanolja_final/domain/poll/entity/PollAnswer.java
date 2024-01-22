@@ -1,7 +1,7 @@
 package com.yanolja_final.domain.poll.entity;
 
 import com.yanolja_final.domain.user.entity.User;
-import com.yanolja_final.global.common.BaseTimeEntity;
+import com.yanolja_final.global.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.ConstraintMode;
 import jakarta.persistence.Entity;
@@ -11,14 +11,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @NoArgsConstructor
 @Getter
-public class PollAnswer extends BaseTimeEntity {
+public class PollAnswer extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,10 +31,17 @@ public class PollAnswer extends BaseTimeEntity {
     private Long pollId;
 
     @ManyToOne
-    @JoinColumn(name = "poll_question_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
-    private PollQuestion pollQuestion;
-
-    @OneToOne
-    @JoinColumn(name = "user_id", foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
+    @JoinColumn(name = "user_id", nullable = false, foreignKey = @ForeignKey(ConstraintMode.NO_CONSTRAINT))
     private User user;
+
+    @Builder
+    public PollAnswer(
+        Character answer,
+        Long pollId,
+        User user
+    ) {
+        this.answer = answer;
+        this.pollId = pollId;
+        this.user = user;
+    }
 }
