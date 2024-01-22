@@ -1,5 +1,7 @@
 package com.yanolja_final.domain.advertisement.entity;
 
+import com.yanolja_final.domain.packages.entity.Continent;
+import com.yanolja_final.domain.packages.entity.Nation;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.global.common.BaseEntity;
 import jakarta.persistence.Column;
@@ -12,6 +14,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import java.util.List;
 import java.util.Set;
 import lombok.Builder;
@@ -33,23 +36,16 @@ public class Advertisement extends BaseEntity {
     @Column(length = 300, nullable = false)
     private String imageUrl;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "advertisement")
-    private List<AdvertisementImage> images;
+    @OneToOne
+    private Continent continent;
 
-    @ManyToMany
-    @JoinTable(
-        name = "advertisement_package",
-        joinColumns = {@JoinColumn(name = "ad_id", referencedColumnName = "id")},
-        inverseJoinColumns = {@JoinColumn(name = "package_id", referencedColumnName = "id")}
-    )
-    private Set<Package> packages;
+    @OneToOne
+    private Nation nation;
 
-    @Builder
-    protected Advertisement(String name, String imageUrl, List<AdvertisementImage> images,
-        Set<Package> packages) {
+    public Advertisement(String name, String imageUrl, Continent continent, Nation nation) {
         this.name = name;
         this.imageUrl = imageUrl;
-        this.images = images;
-        this.packages = packages;
+        this.continent = continent;
+        this.nation = nation;
     }
 }

@@ -5,7 +5,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanolja_final.domain.order.exception.MaximumCapacityExceededException;
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
+import com.yanolja_final.domain.packages.entity.Continent;
 import com.yanolja_final.domain.packages.entity.Hashtag;
+import com.yanolja_final.domain.packages.entity.Nation;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
 import com.yanolja_final.domain.packages.exception.PackageDateNotFoundException;
@@ -13,6 +15,7 @@ import com.yanolja_final.domain.packages.exception.PackageDepartureOptionNotFoun
 import com.yanolja_final.domain.packages.exception.PackageNotFoundException;
 import com.yanolja_final.domain.packages.repository.PackageDepartureOptionRepository;
 import com.yanolja_final.domain.packages.repository.PackageRepository;
+import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -106,4 +109,11 @@ public class PackageService {
             PackageDepartureOptionNotFoundException::new);
     }
 
+    public List<Package> findAllByContinent(Continent continent) {
+        return packageRepository.findAllByContinent(continent);
+    }
+
+    public List<Package> findAllByNation(Nation nation) {
+        return packageRepository.findAllByNation(nation);
+    }
 }

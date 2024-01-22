@@ -1,6 +1,8 @@
 package com.yanolja_final.domain.packages.repository;
 
+import com.yanolja_final.domain.packages.entity.Continent;
 import com.yanolja_final.domain.packages.entity.Hashtag;
+import com.yanolja_final.domain.packages.entity.Nation;
 import com.yanolja_final.domain.packages.entity.Package;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -15,4 +17,8 @@ public interface PackageRepository extends JpaRepository<Package, Long> {
 
     List<Package> findAllByOrderByMonthlyPurchasedCountDesc();
     Page<Package> findByHashtagsContains(Hashtag hashtag, Pageable pageable);
+
+    List<Package> findAllByContinent(Continent continent);
+
+    List<Package> findAllByNation(Nation nation);
 }
