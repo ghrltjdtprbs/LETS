@@ -21,5 +21,6 @@ public class Nation extends BaseEntity {
     @Column(length = 50, nullable = false)
     private String name;
 
+    @Column(length = 500)
     private String imageUrl;
 }

@@ -13,14 +13,13 @@ import com.yanolja_final.domain.packages.exception.PackageDateNotFoundException;
 import com.yanolja_final.domain.packages.exception.PackageDepartureOptionNotFoundException;
 import com.yanolja_final.domain.packages.exception.PackageNotFoundException;
 import com.yanolja_final.domain.packages.repository.PackageDepartureOptionRepository;
+import com.yanolja_final.domain.packages.repository.PackageQueryRepository;
 import com.yanolja_final.domain.packages.repository.PackageRepository;
-import java.util.Collection;
+import com.yanolja_final.domain.search.controller.response.SearchedPackageCountResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PackageService {
 
     private final PackageRepository packageRepository;
+    private final PackageQueryRepository packageQueryRepository;
     private final PackageDepartureOptionRepository packageDepartureOptionRepository;
     private final ObjectMapper objectMapper;
 
@@ -76,15 +76,61 @@ public class PackageService {
         packageRepository.save(aPackage);
     }
 
-    public Page<Package> getPackagesByHashtag(Hashtag hashtag, String sortBy, Pageable pageable) {
-        Sort sort = Sort.by("departureTime").ascending();
-        if ("price_desc".equals(sortBy)) {
-            sort = Sort.by("price").descending();
-        } else if ("price_asc".equals(sortBy)) {
-            sort = Sort.by("price").ascending();
+
+    public SearchedPackageCountResponse getFilteredPackageCount(
+        Integer minPrice,
+        Integer maxPrice,
+        String hashtags,
+        String nations,
+        String continents
+    ) {
+        Long result =
+            packageQueryRepository.countByAdultPriceRangeAndFilters(
+                minPrice,
+                maxPrice,
+                slideString(nations),
+                slideString(continents),
+                slideString(hashtags)
+            );
+        return SearchedPackageCountResponse.from(Math.toIntExact(result));
+    }
+
+    public Page<Package> getFilteredPackage(
+        Integer minPrice,
+        Integer maxPrice,
+        List<Hashtag> hashtags,
+        String nations,
+        String continents,
+        String sortBy,
+        Pageable pageable
+    ) {
+
+        String[] hashtagNames =
+            (hashtags != null && !hashtags.isEmpty()) ? hashtags.stream().map(Hashtag::getName)
+                .toArray(String[]::new) : null;
+
+        Page<Package> responsePage =
+            packageQueryRepository.packageInfoByAdultPriceRangeAndFilters(
+                minPrice,
+                maxPrice,
+                slideString(nations),
+                slideString(continents),
+                hashtagNames,
+                sortBy,
+                pageable
+            );
+        return responsePage;
+    }
+
+    private String[] slideString(String str) {
+        if (str == null) {
+            return null;
         }
-        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-        return packageRepository.findByHashtagsContains(hashtag, pageable);
+        return str.split(",");
+    }
+
+    public Page<Package> getPackagesByHashtag(Hashtag hashtag, String sortBy, Pageable pageable) {
+        return packageRepository.findByHashtagAndSort(hashtag, sortBy, pageable);
     }
 
     // PackageDepartureOption

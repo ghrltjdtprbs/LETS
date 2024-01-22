@@ -28,9 +28,13 @@ public class Hashtag extends BaseEntity {
     @Column(nullable = false)
     private int searchedCount = 0;
 
-    @Column(length = 300, nullable = false)
+    @Column(length = 300,nullable = false)
     private String imageUrl;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "hashtags")
     private Set<Package> packages;
+
+    public void increaseSearchedCount(){
+        this.searchedCount++;
+    }
 }

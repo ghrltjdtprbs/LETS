@@ -7,6 +7,7 @@ import java.util.List;
 
 public record PackageSummaryResponse(
     String title,
+    String imageUrl,
     int price,
     int hotelStars,
     List<String> schedules,
@@ -24,6 +25,7 @@ public record PackageSummaryResponse(
     public static PackageSummaryResponse from(Package aPackage, PackageDepartureOption departureOption, int reviewCount, double averageStars, List<String> schedules) {
         return new PackageSummaryResponse(
             aPackage.getTitle(),
+            aPackage.getThumbnailImageUrl(),
             aPackage.getMinPrice(),
             aPackage.getHotelStars(),
             schedules,
