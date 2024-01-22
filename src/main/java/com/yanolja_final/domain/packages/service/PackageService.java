@@ -76,14 +76,44 @@ public class PackageService {
         packageRepository.save(aPackage);
     }
 
-
-    public SearchedPackageCountResponse getFilteredPackageCount(Integer minPrice, Integer maxPrice,
+    public SearchedPackageCountResponse getFilteredPackageCount(
+        Integer minPrice,
+        Integer maxPrice,
         String hashtags,
-        String nations, String continents) {
-        Integer count = packageQueryRepository.countByAdultPriceRangeAndFilters(minPrice, maxPrice,
-            slideString(nations),
-            slideString(continents), slideString(hashtags));
-        return SearchedPackageCountResponse.from(count);
+        String nations,
+        String continents
+    ) {
+        List<Long> packageIds =
+            packageQueryRepository.countByAdultPriceRangeAndFilters(
+                minPrice,
+                maxPrice,
+                slideString(nations),
+                slideString(continents),
+                slideString(hashtags)
+            );
+        return SearchedPackageCountResponse.from(packageIds.size());
+    }
+
+    public Page<Package> getFilteredPackage(
+        Integer minPrice,
+        Integer maxPrice,
+        String hashtags,
+        String nations,
+        String continents,
+        String sortBy,
+        Pageable pageable
+    ) {
+        Page<Package> responsePage =
+            packageQueryRepository.packageInfoByAdultPriceRangeAndFilters(
+                minPrice,
+                maxPrice,
+                slideString(nations),
+                slideString(continents),
+                slideString(hashtags),
+                sortBy,
+                pageable
+            );
+        return responsePage;
     }
 
     private String[] slideString(String str) {
