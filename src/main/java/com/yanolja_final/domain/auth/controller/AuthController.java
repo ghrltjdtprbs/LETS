@@ -23,8 +23,6 @@ public class AuthController {
 
     public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
 
-    @Value("${cookie.domain}")
-    private String domain;
     private final CookieUtils cookieUtils;
 
     private final AuthFacade authFacade;
@@ -47,13 +45,8 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<ResponseDTO<Void>> logout(HttpServletResponse response) {
-        Cookie emptyAccessToken = new Cookie(ACCESS_TOKEN_COOKIE_NAME, null);
-        emptyAccessToken.setMaxAge(0);
-        emptyAccessToken.setHttpOnly(false);
-        emptyAccessToken.setDomain(domain);
-        emptyAccessToken.setPath("/");
-
-        response.addCookie(emptyAccessToken);
+        Cookie expiredCookie = cookieUtils.expireCookie(ACCESS_TOKEN_COOKIE_NAME);
+        response.addCookie(expiredCookie);
 
         return ResponseEntity.ok(ResponseDTO.ok());
     }
