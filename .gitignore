@@ -39,4 +39,4 @@ out/
 ### etc ###
 logs/
 
-
+src/main/generated
