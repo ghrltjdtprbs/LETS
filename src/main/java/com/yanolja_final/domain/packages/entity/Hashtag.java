@@ -33,4 +33,8 @@ public class Hashtag extends BaseEntity {
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "hashtags")
     private Set<Package> packages;
+
+    public void increaseSearchedCount(){
+        this.searchedCount++;
+    }
 }
