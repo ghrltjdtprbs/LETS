@@ -45,7 +45,7 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             .getRegistrationId();
 
         if (provider.equals("google")) {
-            oauth2Userinfo = new GoogleUserInfo(oauth2User.getAttributes());
+            oauth2Userinfo = new NaverUserInfo(oauth2User.getAttributes());
         } else if (provider.equals("kakao")) {
             oauth2Userinfo = new KakaoUserInfo((Map) oauth2User.getAttributes().get("response"));
         }

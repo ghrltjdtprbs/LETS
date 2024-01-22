@@ -8,11 +8,11 @@ import java.util.Map;
  * 구글,카카오,페이스북 등 로그인하고자 하는 대상별로 제공하는 세부 값들이 다르기에 따로 클래스를 생성했습니다.
  */
 
-public class GoogleUserInfo implements OAuth2UserInfo{
+public class NaverUserInfo implements OAuth2UserInfo{
 
     private Map<String, Object> attributes;
 
-    public GoogleUserInfo(Map<String, Object> attributes) {
+    public NaverUserInfo(Map<String, Object> attributes) {
         this.attributes = attributes;
     }
 

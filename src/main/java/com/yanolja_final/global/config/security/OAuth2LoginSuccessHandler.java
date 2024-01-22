@@ -41,7 +41,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         //한국어 인코딩 설정
         String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8.toString());
 
-        String redirectUrl = "프론트 도메인" + token
+        String redirectUrl = "https://winnerone.site/social-loading?token=" + token
             +"&email="+email+"&name="+encodedName;
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }

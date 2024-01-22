@@ -54,6 +54,8 @@ public class User extends SoftDeletableBaseEntity {
 
     private String encryptedPassword;
 
+    private String provider;
+
     private boolean isTermsAgreed = false;
 
     @ManyToMany
@@ -77,13 +79,14 @@ public class User extends SoftDeletableBaseEntity {
 
     @Builder
     public User(String email, String phoneNumber, String username,
-        String encryptedPassword, boolean isTermsAgreed, Set<Authority> authorities) {
+        String encryptedPassword, boolean isTermsAgreed, Set<Authority> authorities, String provider) {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.encryptedPassword = encryptedPassword;
         this.isTermsAgreed = isTermsAgreed;
         this.authorities = authorities;
+        this.provider = provider;
     }
 
     public void updateCredentials(String username, String encryptedPassword) {
