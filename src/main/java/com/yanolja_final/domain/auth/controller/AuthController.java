@@ -54,15 +54,17 @@ public class AuthController {
     }
 
     @GetMapping("/oauth2/info")
-    public ResponseEntity<ResponseDTO<TokenDTO>> oauth2Test(
-        @RequestParam String token, @RequestParam String email, @RequestParam String name) {
-        TokenDTO loginResponseDto = new TokenDTO(token);
-        System.out.println("email"+email);
-        System.out.println("name"+name);
+    public ResponseEntity<ResponseDTO<Void>> oauth2Test(
+        @RequestParam String token,
+        HttpServletResponse response
+    ) {
+        TokenDTO tokenDto = new TokenDTO(token);
 
-        ResponseDTO<TokenDTO> response = ResponseDTO.okWithData(loginResponseDto);
-        return ResponseEntity
-            .status(response.getCode())
-            .body(response);
+        Cookie accessToken = cookieUtils.makeCookie(
+            ACCESS_TOKEN_COOKIE_NAME, tokenDto.accessToken()
+        );
+        response.addCookie(accessToken);
+
+        return ResponseEntity.ok(ResponseDTO.ok());
     }
 }
