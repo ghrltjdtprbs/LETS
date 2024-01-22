@@ -93,6 +93,8 @@ public class SecurityConfig {
         corsConfiguration.addAllowedOriginPattern("http://localhost:3000");
         corsConfiguration.addAllowedOriginPattern("https://winnerone.site");
         corsConfiguration.addAllowedOriginPattern("https://www.winnerone.site");
+        corsConfiguration.addAllowedOriginPattern("https://local.winnerone.site");
+        corsConfiguration.addAllowedOriginPattern("https://local.winnerone.site:3000");
         corsConfiguration.addAllowedHeader("*");
         corsConfiguration.addAllowedMethod("*");
         corsConfiguration.setAllowCredentials(true);
