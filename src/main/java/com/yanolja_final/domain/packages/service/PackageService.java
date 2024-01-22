@@ -161,4 +161,8 @@ public class PackageService {
     public List<Package> findAllByNation(Nation nation) {
         return packageRepository.findAllByNation(nation);
     }
+
+    public Page<Package> findSimilarPackages(Package basePackage, Pageable pageable) {
+        return packageRepository.findSimilarPackages(basePackage, pageable);
+    }
 }

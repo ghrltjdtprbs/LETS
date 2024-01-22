@@ -20,6 +20,22 @@ public interface PackageRepository extends JpaRepository<Package, Long> {
     List<Package> findAllByOrderByMonthlyPurchasedCountDesc();
     List<Package> findAllByContinent(Continent continent);
     List<Package> findAllByNation(Nation nation);
+
+    /**
+     * @return p와 공통 해시태그를 많이 가진 순으로 정렬된 p와 같은 나라인 다른 패키지들
+     */
+    @Query("SELECT p2"
+        + " FROM Package p1"
+        + " JOIN p1.hashtags h1"
+        + " JOIN h1.packages p2"
+        + " WHERE p1 = :p"
+        + " AND p2.nation = p1.nation"
+        + " AND p2 <> p1"
+        + " AND h1 IN (SELECT h FROM Package p3 JOIN p3.hashtags h WHERE p3 = p2)"
+        + " GROUP BY p2.id"
+        + " ORDER BY COUNT(h1) DESC")
+    Page<Package> findSimilarPackages(Package p, Pageable pageable);
+
     @Query("SELECT p FROM Package p " +
         "JOIN p.availableDates d " +
         "WHERE :hashtag member of p.hashtags " +
