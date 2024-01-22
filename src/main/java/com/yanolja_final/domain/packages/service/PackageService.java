@@ -3,7 +3,6 @@ package com.yanolja_final.domain.packages.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanolja_final.domain.order.exception.MaximumCapacityExceededException;
-import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.entity.Continent;
 import com.yanolja_final.domain.packages.entity.Hashtag;
@@ -14,7 +13,9 @@ import com.yanolja_final.domain.packages.exception.PackageDateNotFoundException;
 import com.yanolja_final.domain.packages.exception.PackageDepartureOptionNotFoundException;
 import com.yanolja_final.domain.packages.exception.PackageNotFoundException;
 import com.yanolja_final.domain.packages.repository.PackageDepartureOptionRepository;
+import com.yanolja_final.domain.packages.repository.PackageQueryRepository;
 import com.yanolja_final.domain.packages.repository.PackageRepository;
+import com.yanolja_final.domain.search.controller.response.SearchedPackageCountResponse;
 import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class PackageService {
 
     private final PackageRepository packageRepository;
+    private final PackageQueryRepository packageQueryRepository;
     private final PackageDepartureOptionRepository packageDepartureOptionRepository;
     private final ObjectMapper objectMapper;
 
@@ -75,6 +77,32 @@ public class PackageService {
     public void viewed(Package aPackage) {
         aPackage.viewed();
         packageRepository.save(aPackage);
+    }
+
+
+    public SearchedPackageCountResponse getFilteredPackageCount(
+        Integer minPrice,
+        Integer maxPrice,
+        String hashtags,
+        String nations,
+        String continents
+    ) {
+        Long result =
+            packageQueryRepository.countByAdultPriceRangeAndFilters(
+                minPrice,
+                maxPrice,
+                slideString(nations),
+                slideString(continents),
+                slideString(hashtags)
+            );
+        return SearchedPackageCountResponse.from(Math.toIntExact(result));
+    }
+
+    private String[] slideString(String str) {
+        if (str == null) {
+            return null;
+        }
+        return str.split(",");
     }
 
     public Page<Package> getPackagesByHashtag(Hashtag hashtag, String sortBy, Pageable pageable) {
