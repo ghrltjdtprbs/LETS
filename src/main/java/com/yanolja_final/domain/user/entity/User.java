@@ -40,7 +40,7 @@ public class User extends SoftDeletableBaseEntity {
     @Column(length = 30, unique = true)
     private String phoneNumber;
 
-    @Column(length = 10, nullable = false)
+    @Column(length = 10, nullable = true)
     private String username;
 
     @Column(length = 100)
@@ -53,6 +53,8 @@ public class User extends SoftDeletableBaseEntity {
     private String postCode;
 
     private String encryptedPassword;
+
+    private String provider;
 
     private boolean isTermsAgreed = false;
 
@@ -77,13 +79,14 @@ public class User extends SoftDeletableBaseEntity {
 
     @Builder
     public User(String email, String phoneNumber, String username,
-        String encryptedPassword, boolean isTermsAgreed, Set<Authority> authorities) {
+        String encryptedPassword, boolean isTermsAgreed, Set<Authority> authorities, String provider) {
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.username = username;
         this.encryptedPassword = encryptedPassword;
         this.isTermsAgreed = isTermsAgreed;
         this.authorities = authorities;
+        this.provider = provider;
     }
 
     public void updateCredentials(String username, String encryptedPassword) {
