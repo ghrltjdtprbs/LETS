@@ -16,7 +16,6 @@ import com.yanolja_final.domain.packages.repository.PackageDepartureOptionReposi
 import com.yanolja_final.domain.packages.repository.PackageQueryRepository;
 import com.yanolja_final.domain.packages.repository.PackageRepository;
 import com.yanolja_final.domain.search.controller.response.SearchedPackageCountResponse;
-import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -94,6 +93,33 @@ public class PackageService {
                 slideString(hashtags)
             );
         return SearchedPackageCountResponse.from(Math.toIntExact(result));
+    }
+
+    public Page<Package> getFilteredPackage(
+        Integer minPrice,
+        Integer maxPrice,
+        List<Hashtag> hashtags,
+        String nations,
+        String continents,
+        String sortBy,
+        Pageable pageable
+    ) {
+
+        String[] hashtagNames =
+            (hashtags != null && !hashtags.isEmpty()) ? hashtags.stream().map(Hashtag::getName)
+                .toArray(String[]::new) : null;
+
+        Page<Package> responsePage =
+            packageQueryRepository.packageInfoByAdultPriceRangeAndFilters(
+                minPrice,
+                maxPrice,
+                slideString(nations),
+                slideString(continents),
+                hashtagNames,
+                sortBy,
+                pageable
+            );
+        return responsePage;
     }
 
     private String[] slideString(String str) {

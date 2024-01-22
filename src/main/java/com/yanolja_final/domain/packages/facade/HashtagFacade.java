@@ -27,13 +27,17 @@ public class HashtagFacade {
     private final WishService wishService;
 
     @Transactional
-    public Page<PackageListItemResponse> getPackagesByHashtagKeyword(Long userId, String keyword,
-        Pageable pageable, String sortBy) {
-        if("".equals(keyword)){
-            keyword=null;
+    public Page<PackageListItemResponse> getPackagesByHashtagKeyword(
+        Long userId,
+        String keyword,
+        Pageable pageable,
+        String sortBy
+    ) {
+        if (keyword.isEmpty()) {
+            keyword = null;
         }
         User user = userId == null ? null : userService.findById(userId);
-        Hashtag hashtag = hashtagService.getHashtagByKeyword(keyword);
+        Hashtag hashtag = hashtagService.getHashtagByKeywordWithIncrementSearchedCount(keyword);
         Page<Package> packagePage = packageService.getPackagesByHashtag(hashtag, sortBy, pageable);
         return packagePage.map(p -> PackageListItemResponse.from(p, wishService.isWish(user, p)));
     }
