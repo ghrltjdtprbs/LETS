@@ -11,6 +11,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -60,5 +62,23 @@ public class PackageDepartureOption extends BaseEntity {
 
     public int getTripDays() {
         return this.aPackage.getTripDays();
+    }
+
+    public Long calculateDday() {
+        LocalDate currentDate = LocalDate.now();
+        long dday = ChronoUnit.DAYS.between(currentDate, this.departureDate);
+        return dday;
+    }
+
+    public String formattedDepartureDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String departureDate = this.departureDate.format(formatter);
+        return departureDate;
+    }
+
+    public String formattedEndDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate endDate = this.departureDate.plusDays(getTripDays() - 1);
+        return endDate.format(formatter);
     }
 }
