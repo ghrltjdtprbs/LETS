@@ -40,7 +40,7 @@ public class User extends SoftDeletableBaseEntity {
     @Column(length = 30, unique = true)
     private String phoneNumber;
 
-    @Column(length = 10, nullable = false)
+    @Column(length = 10, nullable = true)
     private String username;
 
     @Column(length = 100)

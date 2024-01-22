@@ -44,10 +44,14 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
         String provider = userRequest.getClientRegistration()
             .getRegistrationId();
 
-        if (provider.equals("google")) {
-            oauth2Userinfo = new NaverUserInfo(oauth2User.getAttributes());
-        } else if (provider.equals("kakao")) {
-            oauth2Userinfo = new KakaoUserInfo((Map) oauth2User.getAttributes().get("response"));
+       // System.out.println("getClientRegistration : " + userRequest.getClientRegistration ());
+       // System.out.println("getAccessToken: " + userRequest.getAccessToken());
+       // System.out.println("getAttributes: " + super.loadUser(userRequest).getAttributes());
+
+        if (provider.equals("kakao")) {
+            oauth2Userinfo = new KakaoUserInfo(oauth2User.getAttributes());
+        } else if (provider.equals("naver")) {
+            oauth2Userinfo = new NaverUserInfo((Map) oauth2User.getAttributes().get("response"));
         }
 
         Optional<User> user = userRepository.findByEmailAndProvider(

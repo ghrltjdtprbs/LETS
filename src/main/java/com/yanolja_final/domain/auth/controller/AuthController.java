@@ -11,9 +11,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -49,5 +51,18 @@ public class AuthController {
         response.addCookie(expiredCookie);
 
         return ResponseEntity.ok(ResponseDTO.ok());
+    }
+
+    @GetMapping("/oauth2/info")
+    public ResponseEntity<ResponseDTO<TokenDTO>> oauth2Test(
+        @RequestParam String token, @RequestParam String email, @RequestParam String name) {
+        TokenDTO loginResponseDto = new TokenDTO(token);
+        System.out.println("email"+email);
+        System.out.println("name"+name);
+
+        ResponseDTO<TokenDTO> response = ResponseDTO.okWithData(loginResponseDto);
+        return ResponseEntity
+            .status(response.getCode())
+            .body(response);
     }
 }
