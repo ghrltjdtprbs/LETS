@@ -1,6 +1,10 @@
 package com.yanolja_final.domain.order.entity;
 
+import com.yanolja_final.domain.order.exception.OrderNotFoundException;
 import com.yanolja_final.domain.packages.entity.Package;
+import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
+import com.yanolja_final.domain.packages.exception.PackageDateNotFoundException;
+import com.yanolja_final.domain.packages.exception.PackageNotFoundException;
 import com.yanolja_final.domain.review.entity.Review;
 import com.yanolja_final.domain.user.entity.User;
 import com.yanolja_final.global.common.SoftDeletableBaseEntity;
@@ -16,6 +20,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
+import java.util.Comparator;
+import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -64,5 +71,30 @@ public class Order extends SoftDeletableBaseEntity {
         this.totalPrice = totalPrice;
         this.code = code;
         this.detailInfo = detailInfo;
+    }
+
+    public static Order userOrderWithEarliestDepartureDate(User user) {
+        List<Order> userOrders = user.getOrders();
+        Order userOrderWithEarliestDepartureDate = userOrders.stream()
+            .min(Comparator.comparing(order -> order.departureDateForOrder(order.getPackageDepartureOption())))
+            .orElseThrow(OrderNotFoundException::new);
+        return userOrderWithEarliestDepartureDate;
+    }
+
+    private LocalDate departureDateForOrder(PackageDepartureOption option) {
+        return option.getDepartureDate();
+    }
+
+    public PackageDepartureOption getPackageDepartureOption() {
+        List<PackageDepartureOption> availableDates = aPackage.getAvailableDates();
+        if (availableDates.isEmpty()) {
+            throw new PackageDateNotFoundException();
+        }
+        Long availableDateId = this.availableDateId;
+        PackageDepartureOption packageDepartureOption = availableDates.stream()
+            .filter(option -> option.getId().equals(availableDateId))
+            .findFirst()
+            .orElseThrow(PackageNotFoundException::new);
+        return packageDepartureOption;
     }
 }
