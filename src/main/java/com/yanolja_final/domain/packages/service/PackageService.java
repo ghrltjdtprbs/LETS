@@ -84,7 +84,7 @@ public class PackageService {
         String nations,
         String continents
     ) {
-        List<Long> result =
+        Long result =
             packageQueryRepository.countByAdultPriceRangeAndFilters(
                 minPrice,
                 maxPrice,
@@ -92,7 +92,7 @@ public class PackageService {
                 slideString(continents),
                 slideString(hashtags)
             );
-        return SearchedPackageCountResponse.from(result.size());
+        return SearchedPackageCountResponse.from(Math.toIntExact(result));
     }
 
     private String[] slideString(String str) {
