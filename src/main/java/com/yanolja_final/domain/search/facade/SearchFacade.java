@@ -2,6 +2,7 @@ package com.yanolja_final.domain.search.facade;
 
 import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.entity.Continent;
+import com.yanolja_final.domain.packages.entity.Hashtag;
 import com.yanolja_final.domain.packages.entity.Nation;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.service.ContinentService;
@@ -48,21 +49,23 @@ public class SearchFacade {
         return HashTagNamesResponse.from(hashtagService.findAllByOrderBySearchedCountDesc());
     }
 
+    @Transactional
     public Page<PackageListItemResponse> getFilteredPackage(
         Long userId,
         int minPrice,
         int maxPrice,
-        String hashtags,
+        String hashtagsString,
         String nations,
         String continents,
         String sortBy,
         Pageable pageable
     ) {
         User user = userId == null ? null : userService.findById(userId);
+        List<Hashtag> hashtags =
+            hashtagService.getHashtagWithIncrementSearchedCount(hashtagsString);
         Page<Package> packages = packageService.getFilteredPackage(
             minPrice, maxPrice, hashtags, nations, continents, sortBy, pageable
         );
-
         return packages.map(p -> PackageListItemResponse.from(p, wishService.isWish(user, p)));
     }
 
