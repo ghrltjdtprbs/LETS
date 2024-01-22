@@ -12,6 +12,7 @@ import org.springframework.core.NestedExceptionUtils;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -28,6 +29,15 @@ public class GlobalExceptionRestAdvice {
         return ResponseEntity
             .status(e.getErrorCode().getHttpStatus())
             .body(ResponseDTO.error(e.getErrorCode()));
+    }
+
+    @ExceptionHandler
+    public ResponseEntity<ResponseDTO<Void>> httpMessageNotReadableException(
+        HttpMessageNotReadableException e) {
+        log.error(e.getMessage(), e);
+        return ResponseEntity
+            .status(HttpStatus.BAD_REQUEST)
+            .body(ResponseDTO.errorWithMessage(HttpStatus.BAD_REQUEST, e.getMessage()));
     }
 
     @ExceptionHandler
@@ -65,7 +75,7 @@ public class GlobalExceptionRestAdvice {
         log.error(e.getMessage(), e);
         return ResponseEntity
             .status(HttpStatus.INTERNAL_SERVER_ERROR)
-            .body(ResponseDTO.errorWithMessage(HttpStatus.INTERNAL_SERVER_ERROR, "서버 에러!"));
+            .body(ResponseDTO.errorWithMessage(HttpStatus.INTERNAL_SERVER_ERROR, "디비 에러!"));
     }
 
     @ExceptionHandler

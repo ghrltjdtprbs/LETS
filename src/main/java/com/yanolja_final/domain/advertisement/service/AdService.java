@@ -1,6 +1,5 @@
 package com.yanolja_final.domain.advertisement.service;
 
-import com.yanolja_final.domain.advertisement.dto.response.AdDetailResponse;
 import com.yanolja_final.domain.advertisement.dto.response.AdListItemResponse;
 import com.yanolja_final.domain.advertisement.entity.Advertisement;
 import com.yanolja_final.domain.advertisement.exception.AdvertisementNotFound;
@@ -25,8 +24,7 @@ public class AdService {
             .collect(Collectors.toList());
     }
 
-    public AdDetailResponse getDetail(Long id) {
-        Advertisement ad = adRepository.findById(id).orElseThrow(AdvertisementNotFound::new);
-        return AdDetailResponse.from(ad);
+    public Advertisement findById(Long id) {
+        return adRepository.findById(id).orElseThrow(AdvertisementNotFound::new);
     }
 }

@@ -11,9 +11,11 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -23,8 +25,6 @@ public class AuthController {
 
     public static final String ACCESS_TOKEN_COOKIE_NAME = "accessToken";
 
-    @Value("${cookie.domain}")
-    private String domain;
     private final CookieUtils cookieUtils;
 
     private final AuthFacade authFacade;
@@ -47,13 +47,23 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ResponseEntity<ResponseDTO<Void>> logout(HttpServletResponse response) {
-        Cookie emptyAccessToken = new Cookie(ACCESS_TOKEN_COOKIE_NAME, null);
-        emptyAccessToken.setMaxAge(0);
-        emptyAccessToken.setHttpOnly(false);
-        emptyAccessToken.setDomain(domain);
-        emptyAccessToken.setPath("/");
+        Cookie expiredCookie = cookieUtils.expireCookie(ACCESS_TOKEN_COOKIE_NAME);
+        response.addCookie(expiredCookie);
 
-        response.addCookie(emptyAccessToken);
+        return ResponseEntity.ok(ResponseDTO.ok());
+    }
+
+    @GetMapping("/oauth2/info")
+    public ResponseEntity<ResponseDTO<Void>> oauth2Test(
+        @RequestParam String token,
+        HttpServletResponse response
+    ) {
+        TokenDTO tokenDto = new TokenDTO(token);
+
+        Cookie accessToken = cookieUtils.makeCookie(
+            ACCESS_TOKEN_COOKIE_NAME, tokenDto.accessToken()
+        );
+        response.addCookie(accessToken);
 
         return ResponseEntity.ok(ResponseDTO.ok());
     }
