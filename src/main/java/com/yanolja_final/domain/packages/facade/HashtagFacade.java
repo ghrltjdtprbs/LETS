@@ -33,7 +33,7 @@ public class HashtagFacade {
         Pageable pageable,
         String sortBy
     ) {
-        if ("".equals(keyword)) {
+        if (keyword.isEmpty()) {
             keyword = null;
         }
         User user = userId == null ? null : userService.findById(userId);
