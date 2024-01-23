@@ -52,7 +52,7 @@ public class AuthController {
 
         return ResponseEntity.ok(ResponseDTO.ok());
     }
-
+/*
     @GetMapping("/oauth2/info")
     public ResponseEntity<ResponseDTO<Void>> oauth2Test(
         @RequestParam String token,
@@ -67,4 +67,6 @@ public class AuthController {
 
         return ResponseEntity.ok(ResponseDTO.ok());
     }
+
+ */
 }
