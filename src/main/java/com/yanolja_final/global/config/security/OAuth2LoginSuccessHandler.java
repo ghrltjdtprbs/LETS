@@ -44,7 +44,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         );
         response.addCookie(accessToken);
 
-        String redirectUrl = "https://winnerone.site/signin";
+        String redirectUrl = "https://winnerone.site";
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 }
