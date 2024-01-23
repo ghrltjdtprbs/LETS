@@ -19,6 +19,7 @@ import com.yanolja_final.domain.search.controller.response.SearchedPackageCountR
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -130,7 +131,14 @@ public class PackageService {
     }
 
     public Page<Package> getPackagesByHashtag(Hashtag hashtag, String sortBy, Pageable pageable) {
-        return packageRepository.findByHashtagAndSort(hashtag, sortBy, pageable);
+        List<Package> byHashtagAndSort =
+            packageRepository.findByHashtagAndSort(hashtag.getName(), sortBy);
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), byHashtagAndSort.size());
+
+        List<Package> pageContent = byHashtagAndSort.subList(start, end);
+        return new PageImpl<>(pageContent, pageable, byHashtagAndSort.size());
     }
 
     // PackageDepartureOption

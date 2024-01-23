@@ -54,7 +54,7 @@ public class SearchController {
     }
 
     @GetMapping("/options/destinations")
-    public ResponseEntity<ResponseDTO<List<ContinentNationResponse>>> getAllContinentAndNationInfo() {
+    public ResponseEntity<ResponseDTO<ContinentNationResponse>> getAllContinentAndNationInfo() {
         return ResponseEntity.ok(
             ResponseDTO.okWithData(searchFacade.getAllContinentAndPopularNationInfo())
         );

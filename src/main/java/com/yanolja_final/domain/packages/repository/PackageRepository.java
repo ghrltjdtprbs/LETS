@@ -1,7 +1,6 @@
 package com.yanolja_final.domain.packages.repository;
 
 import com.yanolja_final.domain.packages.entity.Continent;
-import com.yanolja_final.domain.packages.entity.Hashtag;
 import com.yanolja_final.domain.packages.entity.Nation;
 import com.yanolja_final.domain.packages.entity.Package;
 import java.util.List;
@@ -18,7 +17,9 @@ public interface PackageRepository extends JpaRepository<Package, Long> {
     Page<Package> findAllByOrderByMonthlyPurchasedCountDesc(Pageable pageable);
 
     List<Package> findAllByOrderByMonthlyPurchasedCountDesc();
+
     List<Package> findAllByContinent(Continent continent);
+
     List<Package> findAllByNation(Nation nation);
 
     /**
@@ -37,15 +38,16 @@ public interface PackageRepository extends JpaRepository<Package, Long> {
     Page<Package> findSimilarPackages(Package p, Pageable pageable);
 
     @Query("SELECT p FROM Package p " +
-        "JOIN p.availableDates d " +
-        "WHERE :hashtag member of p.hashtags " +
+        "LEFT JOIN p.availableDates pdo " +
+        "WHERE pdo.adultPrice = (SELECT MIN(pdo2.adultPrice) FROM PackageDepartureOption pdo2 WHERE pdo2.aPackage.id = p.id) "
+        +
+        "AND :hashtag IN (SELECT h2.name FROM p.hashtags h2) " +
         "ORDER BY " +
-        "CASE WHEN :sortBy = 'departure_date' THEN d.departureDate END ASC, " +
-        "CASE WHEN :sortBy = 'price_desc' THEN d.adultPrice END DESC, " +
-        "CASE WHEN :sortBy = 'price_asc' THEN d.adultPrice END ASC")
-    Page<Package> findByHashtagAndSort(
-        @Param("hashtag") Hashtag hashtag,
-        @Param("sortBy") String sortBy,
-        Pageable pageable
+        "CASE WHEN :sortBy = 'departure_date' THEN pdo.departureDate END ASC, " +
+        "CASE WHEN :sortBy = 'price_desc' THEN pdo.adultPrice END DESC, " +
+        "CASE WHEN :sortBy = 'price_asc' THEN pdo.adultPrice END ASC")
+    List<Package> findByHashtagAndSort(
+        @Param("hashtag") String hashtagName,
+        @Param("sortBy") String sortBy
     );
 }
