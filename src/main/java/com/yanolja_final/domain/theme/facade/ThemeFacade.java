@@ -36,7 +36,7 @@ public class ThemeFacade {
         List<PackageSummary> packageSummaries = packagesPage.getContent().stream()
             .map(p -> new PackageSummary(
                 p.getId(),
-                p.getIntroImages().isEmpty() ? null : p.getIntroImages().get(0).getImageUrl(),
+                p.getThumbnailImageUrl(),
                 p.getTransportation(),
                 p.getTitle())
             )
