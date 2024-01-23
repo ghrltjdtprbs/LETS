@@ -1,6 +1,9 @@
 package com.yanolja_final.domain.order.entity;
 
 import com.yanolja_final.domain.packages.entity.Package;
+import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
+import com.yanolja_final.domain.packages.exception.PackageDateNotFoundException;
+import com.yanolja_final.domain.packages.exception.PassedDepartureDateException;
 import com.yanolja_final.domain.review.entity.Review;
 import com.yanolja_final.domain.user.entity.User;
 import com.yanolja_final.global.common.SoftDeletableBaseEntity;
@@ -16,6 +19,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -65,4 +69,18 @@ public class Order extends SoftDeletableBaseEntity {
         this.code = code;
         this.detailInfo = detailInfo;
     }
+
+    public PackageDepartureOption preventPassedDepartureDate() {
+        PackageDepartureOption packageDepartureOption = aPackage.getAvailableDates()
+            .stream()
+            .filter(option -> option.getId().equals(this.availableDateId))
+            .findFirst()
+            .orElseThrow(PackageDateNotFoundException::new);
+        if (!packageDepartureOption.isNotExpired()) {
+            throw new PassedDepartureDateException();
+        }
+        return packageDepartureOption;
+    }
+
+
 }
