@@ -76,11 +76,11 @@ public class Order extends SoftDeletableBaseEntity {
             .filter(option -> option.getId().equals(this.availableDateId))
             .findFirst()
             .orElseThrow(PackageDateNotFoundException::new);
-        LocalDate currentDate = LocalDate.now();
-        LocalDate departureDate = packageDepartureOption.getDepartureDate();
-        if (currentDate.isAfter(departureDate)) {
+        if (!packageDepartureOption.isNotExpired()) {
             throw new PassedDepartureDateException();
         }
         return packageDepartureOption;
     }
+
+
 }

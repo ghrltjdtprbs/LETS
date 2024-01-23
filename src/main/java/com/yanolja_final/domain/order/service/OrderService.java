@@ -9,8 +9,6 @@ import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
 import com.yanolja_final.domain.user.entity.User;
 import java.time.LocalDate;
-import java.util.Comparator;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -52,13 +50,5 @@ public class OrderService {
         String orderCode = String.format("%04d%02d%02d%05d",
             today.getYear(), today.getMonthValue(), today.getDayOfMonth(), todayOrderCount);
         return orderCode;
-    }
-
-    public Order userOrderWithEarliestDepartureDate(User user) {
-        List<Order> userOrders = user.getOrders();
-        Order userOrderWithEarliestDepartureDate = userOrders.stream()
-            .min(Comparator.comparing(order -> order.preventPassedDepartureDate().getDepartureDate()))
-                .orElseThrow(OrderNotFoundException::new);
-        return userOrderWithEarliestDepartureDate;
     }
 }
