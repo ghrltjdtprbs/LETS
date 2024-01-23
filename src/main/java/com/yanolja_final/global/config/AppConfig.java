@@ -2,6 +2,8 @@ package com.yanolja_final.global.config;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yanolja_final.global.filter.LoggingFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,5 +27,13 @@ public class AppConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public FilterRegistrationBean<LoggingFilter> loggingFilter() {
+        FilterRegistrationBean<LoggingFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new LoggingFilter());
+        registrationBean.addUrlPatterns("/*"); // 모든 요청에 대해 필터 적용
+        return registrationBean;
     }
 }
