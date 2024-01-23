@@ -5,12 +5,22 @@ import com.yanolja_final.domain.poll.entity.Poll;
 
 public record PollResponse(
     @JsonProperty("alreadySubmitted")
-    boolean isAlreadySubmitted,
+    Boolean isAlreadySubmitted,
     String subject,
     Long pollId,
     String[] A,
     String[] B
 ) {
+
+    public static PollResponse from(Poll poll) {
+        return new PollResponse(
+            null,
+            poll.getTitle(),
+            poll.getId(),
+            slideString(poll.getAQuestion()),
+            slideString(poll.getBQuestion())
+        );
+    }
 
     public static PollResponse from(Poll poll, boolean isAlreadySubmitted) {
         if (isAlreadySubmitted) {

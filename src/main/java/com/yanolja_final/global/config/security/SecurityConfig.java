@@ -1,18 +1,12 @@
 package com.yanolja_final.global.config.security;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanolja_final.global.config.security.jwt.JwtFilter;
-import com.yanolja_final.global.util.ResponseDTO;
 import jakarta.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -36,7 +30,8 @@ public class SecurityConfig {
         "/v1/docs/**", "/v1/users/email/**", "/h2-console/**", "/health", "/v1/notices",
         "/v1/notices/**", "/v1/faq", "/v1/faq/**", "/v1/reviews/packages/**",
         "/v1/packages/**", "/v1/advertisements", "/v1/advertisements/**", "/v1/themes/**",
-        "/v1/search/**","/v1/hashtag-search", "/signin/**", "/v1/users/oauth2/info/**", "/login/oauth2/code/**",
+        "/v1/search/**","/v1/hashtag-search", "/signin/**", "/v1/polls/main",
+
     };
 
     private final JwtFilter jwtFilter;
@@ -60,16 +55,12 @@ public class SecurityConfig {
 
         http.exceptionHandling(exceptionHandling -> exceptionHandling
             .accessDeniedHandler(
-                (request, response, accessDeniedException) -> {
-                    ResponseDTO<Void> responseDTO = ResponseDTO.errorWithMessage(HttpStatus.FORBIDDEN, "Access Denied");
-                    sendResponse(response, responseDTO);
-                }
+                (request, response, accessDeniedException)
+                    -> response.sendError(HttpServletResponse.SC_FORBIDDEN)
             )
             .authenticationEntryPoint(
-                (request, response, accessDeniedException) -> {
-                    ResponseDTO<Void> responseDTO = ResponseDTO.errorWithMessage(HttpStatus.UNAUTHORIZED, "Unauthorized: 1. 비로그인 상태로 로그인이 필요한 API에 접근했거나 2. 없는 API URI에 요청을 보내고 있습니다");
-                    sendResponse(response, responseDTO);
-                }
+                (request, response, accessDeniedException)
+                    -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
             )
         );
 
@@ -106,16 +97,6 @@ public class SecurityConfig {
         );
 
         return http.build();
-    }
-
-    private void sendResponse(HttpServletResponse response, ResponseDTO<Void> responseDTO) throws IOException {
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(responseDTO.getCode());
-        PrintWriter out = response.getWriter();
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        out.print(objectMapper.writeValueAsString(responseDTO));
-        out.flush();
     }
 
     @Bean
