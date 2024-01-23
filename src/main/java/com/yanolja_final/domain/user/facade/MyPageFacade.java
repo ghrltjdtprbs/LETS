@@ -1,6 +1,7 @@
 package com.yanolja_final.domain.user.facade;
 
 import com.yanolja_final.domain.order.entity.Order;
+import com.yanolja_final.domain.order.service.OrderService;
 import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
 import com.yanolja_final.domain.user.dto.request.UpdateMyPageRequest;
 import com.yanolja_final.domain.user.dto.request.UpdatePasswordRequest;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 public class MyPageFacade {
 
     private final MyPageService myPageService;
+    private final OrderService orderService;
 
     public MyPageResponse updateUserInfo(UpdateMyPageRequest request, Long userId) {
         MyPageResponse response = myPageService.updateUserInfo(request, userId);
@@ -33,8 +35,8 @@ public class MyPageFacade {
 
     public UpcomingPackageResponse getUpcomingPackageResponse(Long userId) {
         User user = userId  == null ? null : myPageService.findById(userId);
-        Order userOrder = Order.userOrderWithEarliestDepartureDate(user);
-        PackageDepartureOption packageDepartureOption = userOrder.getPackageDepartureOption();
+        Order userOrder = orderService.userOrderWithEarliestDepartureDate(user);
+        PackageDepartureOption packageDepartureOption = userOrder.preventPassedDepartureDate();
         Long dday = packageDepartureOption.calculateDday();
         String departureDate = packageDepartureOption.formattedDepartureDate();
         String endDate = packageDepartureOption.formattedEndDate();
