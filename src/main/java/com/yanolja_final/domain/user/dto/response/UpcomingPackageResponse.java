@@ -29,4 +29,16 @@ public record UpcomingPackageResponse(
           endDate
       );
   }
+
+  public static UpcomingPackageResponse emptyResponse() {
+      return new UpcomingPackageResponse(
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+      );
+  }
 }

@@ -1,8 +1,6 @@
 package com.yanolja_final.domain.user.entity;
 
 import com.yanolja_final.domain.order.entity.Order;
-import com.yanolja_final.domain.order.exception.OrderNotFoundException;
-import com.yanolja_final.domain.packages.exception.PassedDepartureDateException;
 import com.yanolja_final.domain.poll.entity.PollAnswer;
 import com.yanolja_final.domain.review.entity.Review;
 import com.yanolja_final.domain.wish.entity.Wish;
@@ -138,6 +136,6 @@ public class User extends SoftDeletableBaseEntity {
             })
             .min(Comparator.comparing(AbstractMap.SimpleEntry::getValue))
             .map(AbstractMap.SimpleEntry::getKey)
-            .orElseThrow(OrderNotFoundException::new);
+            .orElse(null);
     }
 }
