@@ -25,6 +25,22 @@ public class PollService {
     private final PollRepository pollRepository;
     private final PollAnswerRepository pollAnswerRepository;
 
+    public PollResponse getActivePollForMainPage() {
+        Poll poll = findPollMaxId();
+        return PollResponse.from(poll);
+    }
+
+    public PollResponse getActivePoll(User user) {
+        Poll poll = findPollMaxId();
+        Optional<PollAnswer> pollAnswer =
+            pollAnswerRepository.findByUserIdAndPollId(user.getId(), poll.getId());
+
+        if (pollAnswer.isPresent()) {
+            return PollResponse.from(poll, true);
+        }
+        return PollResponse.from(poll, false);
+    }
+
     @Transactional
     public void savePollAnswer(User user, PollAnswerRequest request) {
         Poll poll = findPollMaxId();
@@ -38,17 +54,6 @@ public class PollService {
 
         updatePollCount(request.choose(), poll);
         pollRepository.save(poll);
-    }
-
-    public PollResponse getActivePoll(User user) {
-        Poll poll = findPollMaxId();
-        Optional<PollAnswer> pollAnswer =
-            pollAnswerRepository.findByUserIdAndPollId(user.getId(), poll.getId());
-
-        if (pollAnswer.isPresent()) {
-            return PollResponse.from(poll, true);
-        }
-        return PollResponse.from(poll, false);
     }
 
     public PollResultResponse getActivePollResult(User user) {

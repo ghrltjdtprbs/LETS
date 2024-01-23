@@ -22,6 +22,13 @@ public class PollController {
 
     private final PollFacade pollFacade;
 
+    @GetMapping("/main")
+    ResponseEntity<ResponseDTO<PollResponse>> getActivePollForMainPage() {
+        return ResponseEntity.ok(
+            ResponseDTO.okWithData(pollFacade.getActivePollForMainPage())
+        );
+    }
+
     @GetMapping
     public ResponseEntity<ResponseDTO<PollResponse>> getActivePoll(
         @LoginedUserId Long userId
