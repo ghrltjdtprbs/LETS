@@ -73,7 +73,7 @@ public class SecurityConfig {
             .requestMatchers(
                 new AntPathRequestMatcher("/v1/user", HttpMethod.POST.name())
             ).permitAll()
-            .anyRequest().authenticated()
+            .anyRequest().permitAll()
         );
 
         http.addFilterBefore(
