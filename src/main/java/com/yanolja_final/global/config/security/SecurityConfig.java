@@ -1,12 +1,18 @@
 package com.yanolja_final.global.config.security;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanolja_final.global.config.security.jwt.JwtFilter;
+import com.yanolja_final.global.util.ResponseDTO;
 import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -54,12 +60,16 @@ public class SecurityConfig {
 
         http.exceptionHandling(exceptionHandling -> exceptionHandling
             .accessDeniedHandler(
-                (request, response, accessDeniedException)
-                    -> response.sendError(HttpServletResponse.SC_FORBIDDEN)
+                (request, response, accessDeniedException) -> {
+                    ResponseDTO<Void> responseDTO = ResponseDTO.errorWithMessage(HttpStatus.FORBIDDEN, "Access Denied");
+                    sendResponse(response, responseDTO);
+                }
             )
             .authenticationEntryPoint(
-                (request, response, accessDeniedException)
-                    -> response.sendError(HttpServletResponse.SC_UNAUTHORIZED)
+                (request, response, accessDeniedException) -> {
+                    ResponseDTO<Void> responseDTO = ResponseDTO.errorWithMessage(HttpStatus.UNAUTHORIZED, "Unauthorized: 1. 비로그인 상태로 로그인이 필요한 API에 접근했거나 2. 없는 API URI에 요청을 보내고 있습니다");
+                    sendResponse(response, responseDTO);
+                }
             )
         );
 
@@ -96,6 +106,16 @@ public class SecurityConfig {
         );
 
         return http.build();
+    }
+
+    private void sendResponse(HttpServletResponse response, ResponseDTO<Void> responseDTO) throws IOException {
+        response.setContentType("application/json;charset=UTF-8");
+        response.setStatus(responseDTO.getCode());
+        PrintWriter out = response.getWriter();
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        out.print(objectMapper.writeValueAsString(responseDTO));
+        out.flush();
     }
 
     @Bean

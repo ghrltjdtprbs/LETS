@@ -7,6 +7,7 @@ import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
 import java.time.LocalDate;
 
 public record OrderResponse(
+    Long orderId,
     String orderCode,
     Long availableDateId,
     @JsonProperty("package")
@@ -20,6 +21,7 @@ public record OrderResponse(
         boolean isReviewed
     ) {
         return new OrderResponse(
+            order.getId(),
             order.getCode(),
             order.getAvailableDateId(),
             OrderPackageResponse.from(order,departureDate,isWish, isReviewed)

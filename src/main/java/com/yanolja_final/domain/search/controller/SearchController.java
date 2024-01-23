@@ -29,7 +29,7 @@ public class SearchController {
     public ResponseEntity<ResponseDTO<Map<String, Object>>> getFilteredPackage(
         @LoginedUserId Long userId,
         @RequestParam(name = "minPrice", required = false, defaultValue = "0") int minPrice,
-        @RequestParam(name = "maxPrice", required = false, defaultValue = "500000") int maxPrice,
+        @RequestParam(name = "maxPrice", required = false, defaultValue = "" + Integer.MAX_VALUE) int maxPrice,
         @RequestParam(name = "hashtags", required = false) String hashtags,
         @RequestParam(name = "nations", required = false) String nations,
         @RequestParam(name = "continents", required = false) String continents,
@@ -42,6 +42,22 @@ public class SearchController {
                     searchFacade.getFilteredPackage(userId, minPrice, maxPrice, hashtags, nations,
                         continents, sortBy, pageable)
                 )
+            )
+        );
+    }
+
+    @GetMapping("/count")
+    public ResponseEntity<ResponseDTO<SearchedPackageCountResponse>> getFilteredPackageCount(
+        @RequestParam(name = "minPrice", required = false, defaultValue = "0") int minPrice,
+        @RequestParam(name = "maxPrice", required = false, defaultValue = "" + Integer.MAX_VALUE) int maxPrice,
+        @RequestParam(name = "hashtags", required = false) String hashtags,
+        @RequestParam(name = "nations", required = false) String nations,
+        @RequestParam(name = "continents", required = false) String continents
+    ) {
+        return ResponseEntity.ok(
+            ResponseDTO.okWithData(
+                searchFacade.getFilteredPackageCount(minPrice, maxPrice, hashtags, nations,
+                    continents)
             )
         );
     }
@@ -64,22 +80,6 @@ public class SearchController {
     public ResponseEntity<ResponseDTO<HashTagNamesResponse>> getAllHashtagNameBySearchedCountDesc() {
         return ResponseEntity.ok(
             ResponseDTO.okWithData(searchFacade.findAllByOrderBySearchedCountDesc())
-        );
-    }
-
-    @GetMapping("/count")
-    public ResponseEntity<ResponseDTO<SearchedPackageCountResponse>> getFilteredPackageCount(
-        @RequestParam(name = "minPrice", required = false, defaultValue = "0") int minPrice,
-        @RequestParam(name = "maxPrice", required = false, defaultValue = "500000") int maxPrice,
-        @RequestParam(name = "hashtags", required = false) String hashtags,
-        @RequestParam(name = "nations", required = false) String nations,
-        @RequestParam(name = "continents", required = false) String continents
-    ) {
-        return ResponseEntity.ok(
-            ResponseDTO.okWithData(
-                searchFacade.getFilteredPackageCount(minPrice, maxPrice, hashtags, nations,
-                    continents)
-            )
         );
     }
 }
