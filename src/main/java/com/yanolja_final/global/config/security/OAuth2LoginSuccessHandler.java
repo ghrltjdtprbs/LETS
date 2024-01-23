@@ -1,7 +1,9 @@
 package com.yanolja_final.global.config.security;
 
+import com.yanolja_final.global.common.CookieUtils;
 import com.yanolja_final.global.config.security.jwt.JwtProvider;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -28,22 +30,21 @@ import org.springframework.stereotype.Component;
 public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtProvider jwtProvider;
+    private final CookieUtils cookieUtils;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
-        Authentication authentication) throws IOException, ServletException {
+        Authentication authentication) throws IOException {
 
         PrincipalDetails principalDetails = (PrincipalDetails) authentication.getPrincipal();
         String token = jwtProvider.createToken(principalDetails.getUser());
-        String email = principalDetails.getEmail();
-        String name = principalDetails.getUsername();
 
-        //한국어 인코딩 설정
-        String encodedName = URLEncoder.encode(name, StandardCharsets.UTF_8.toString());
+        Cookie accessToken = cookieUtils.makeCookie(
+            "accessToken", token
+        );
+        response.addCookie(accessToken);
 
-
-        String redirectUrl = "https://winnerone.site/signin?token=" + token
-            +"&email="+email+"&name="+encodedName;
+        String redirectUrl = "https://winnerone.site/signin";
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }
 }
