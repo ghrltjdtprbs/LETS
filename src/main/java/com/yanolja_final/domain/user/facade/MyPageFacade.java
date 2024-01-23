@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 public class MyPageFacade {
 
     private final MyPageService myPageService;
-    private final OrderService orderService;
 
     public MyPageResponse updateUserInfo(UpdateMyPageRequest request, Long userId) {
         MyPageResponse response = myPageService.updateUserInfo(request, userId);
@@ -33,22 +32,9 @@ public class MyPageFacade {
         myPageService.updatePassword(request, userId);
     }
 
-    public UpcomingPackageResponse getUpcomingPackageResponse(Long userId) {
-        User user = userId  == null ? null : myPageService.findById(userId);
-        Order userOrder = orderService.userOrderWithEarliestDepartureDate(user);
-        PackageDepartureOption packageDepartureOption = userOrder.preventPassedDepartureDate();
-        Long dday = packageDepartureOption.calculateDday();
-        String departureDate = packageDepartureOption.formattedDepartureDate();
-        String endDate = packageDepartureOption.formattedEndDate();
-
-        return new UpcomingPackageResponse(
-            userOrder.getAPackage().getId(),
-            userOrder.getAPackage().getThumbnailImageUrl(),
-            userOrder.getAPackage().getTitle(),
-            dday,
-            userOrder.getAPackage().getNationName(),
-            departureDate,
-            endDate
-        );
-    }
+     public UpcomingPackageResponse getUpcomingPackageResponse(Long userId) {
+         User user = userId == null ? null : myPageService.findById(userId);
+         Order userOrder = user.userOrderWithEarliestDepartureDate();
+         return UpcomingPackageResponse.from(user, userOrder);
+     }
 }
