@@ -16,14 +16,18 @@ public class PollFacade {
     private final UserService userService;
     private final PollService pollService;
 
-    public void savePollAnswer(Long userId, PollAnswerRequest request) {
-        User user = userService.findActiveUserById(userId);
-        pollService.savePollAnswer(user, request);
+    public PollResponse getActivePollForMainPage() {
+        return pollService.getActivePollForMainPage();
     }
 
     public PollResponse getActivePoll(Long userId) {
         User user = userService.findActiveUserById(userId);
         return pollService.getActivePoll(user);
+    }
+
+    public void savePollAnswer(Long userId, PollAnswerRequest request) {
+        User user = userService.findActiveUserById(userId);
+        pollService.savePollAnswer(user, request);
     }
 
     public PollResultResponse getActivePollResult(Long userId) {
