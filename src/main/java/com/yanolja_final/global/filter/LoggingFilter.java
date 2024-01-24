@@ -20,9 +20,14 @@ public class LoggingFilter implements Filter {
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper((HttpServletRequest) request);
         chain.doFilter(wrappedRequest, response);
 
+        String method = wrappedRequest.getMethod();
         String uri = wrappedRequest.getRequestURI();
         String body = getRequestBody(wrappedRequest);
-        log.info("Request URI: " + uri + ", Body: " + body);
+        if (body.isEmpty()) {
+            log.info("[요청] {} {}", method, uri);
+        } else {
+            log.info("[요청] {} {}\nRequest Body: {}", method, uri, body);
+        }
     }
 
     private String getRequestBody(ContentCachingRequestWrapper request) {
