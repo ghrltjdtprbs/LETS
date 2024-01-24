@@ -3,6 +3,7 @@ package com.yanolja_final.domain.wish.service;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.user.entity.User;
 import com.yanolja_final.domain.wish.entity.Wish;
+import com.yanolja_final.domain.wish.exception.DuplicateWishException;
 import com.yanolja_final.domain.wish.exception.WishNotFoundException;
 import com.yanolja_final.domain.wish.repository.WishRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,9 @@ public class WishService {
 
 
     public Wish createWish(Package aPackage, User user) {
+        if (wishRepository.existsByUserAndAPackage(user, aPackage)) {
+            throw new DuplicateWishException();
+        }
         return wishRepository.save(new Wish(user, aPackage));
     }
 
