@@ -1,8 +1,9 @@
 package com.yanolja_final.domain.packages.controller;
 
+import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.facade.HashtagFacade;
 import com.yanolja_final.global.config.argumentresolver.LoginedUserId;
-import com.yanolja_final.global.util.PaginationUtils;
+import com.yanolja_final.global.util.PagedResponseDTO;
 import com.yanolja_final.global.util.ResponseDTO;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -21,17 +22,14 @@ public class HashtagController {
     private final HashtagFacade hashtagFacade;
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<Map<String, Object>>> getPackagesByHashtagKeyword(
+    public ResponseEntity<PagedResponseDTO<PackageListItemResponse>> getPackagesByHashtagKeyword(
         @LoginedUserId Long userId,
         @RequestParam String keyword,
         Pageable pageable,
         @RequestParam(required = false) String sortBy
     ) {
         return ResponseEntity.ok(
-            ResponseDTO.okWithData(
-                PaginationUtils.createPageResponse(
-                    hashtagFacade.getPackagesByHashtagKeyword(userId, keyword, pageable, sortBy))
-            )
+            PagedResponseDTO.okWithData(hashtagFacade.getPackagesByHashtagKeyword(userId, keyword, pageable, sortBy))
         );
     }
 }

@@ -2,15 +2,14 @@ package com.yanolja_final.domain.order.controller;
 
 import com.yanolja_final.domain.order.controller.request.OrderCreateRequest;
 import com.yanolja_final.domain.order.controller.response.OrderCreateResponse;
+import com.yanolja_final.domain.order.controller.response.OrderResponse;
 import com.yanolja_final.domain.order.facade.OrderFacade;
 import com.yanolja_final.global.config.argumentresolver.LoginedUserId;
-import com.yanolja_final.global.util.PaginationUtils;
+import com.yanolja_final.global.util.PagedResponseDTO;
 import com.yanolja_final.global.util.ResponseDTO;
 import jakarta.validation.Valid;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,13 +25,13 @@ public class OrderController {
     private final OrderFacade orderFacade;
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<Map<String, Object>>> read(
+    public ResponseEntity<PagedResponseDTO<OrderResponse>> read(
         @LoginedUserId Long userId,
         Pageable pageable
     ) {
         return ResponseEntity.ok(
-            ResponseDTO.okWithData(
-                PaginationUtils.createPageResponse(orderFacade.read(userId, pageable)))
+            PagedResponseDTO.okWithData(
+                orderFacade.read(userId, pageable))
         );
     }
 

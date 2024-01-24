@@ -3,7 +3,7 @@ package com.yanolja_final.domain.theme.controller;
 import com.yanolja_final.domain.theme.dto.response.ThemePackageResponse;
 import com.yanolja_final.domain.theme.dto.response.ThemeResponse;
 import com.yanolja_final.domain.theme.facade.ThemeFacade;
-import com.yanolja_final.global.util.PaginationUtils;
+import com.yanolja_final.global.util.PagedResponseDTO;
 import com.yanolja_final.global.util.ResponseDTO;
 
 import java.util.List;
@@ -35,14 +35,15 @@ public class ThemeController {
     }
 
     @GetMapping("/{themeId}")
-    public ResponseEntity<ResponseDTO<Map<String, Object>>> getThemePackages(
+    public ResponseEntity<PagedResponseDTO<ThemePackageResponse>> getThemePackages(
         @PathVariable Long themeId,
         @RequestParam(defaultValue = "departure_date") String sortBy,
-        @PageableDefault(size = 10) Pageable pageable) {
+        @PageableDefault Pageable pageable) {
 
         Page<ThemePackageResponse> themePackagesPage = themeFacade.getThemePackages(themeId, sortBy, pageable);
-        Map<String, Object> response = PaginationUtils.createPageResponse(themePackagesPage);
+        PagedResponseDTO<ThemePackageResponse> response = PagedResponseDTO.okWithData(
+            themePackagesPage);
 
-        return ResponseEntity.ok(ResponseDTO.okWithData(response));
+        return ResponseEntity.ok(response);
     }
 }

@@ -1,12 +1,13 @@
 package com.yanolja_final.domain.search.controller;
 
+import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.search.controller.response.ContinentNationResponse;
 import com.yanolja_final.domain.search.controller.response.HashTagNamesResponse;
 import com.yanolja_final.domain.search.controller.response.HashtagResponse;
 import com.yanolja_final.domain.search.controller.response.SearchedPackageCountResponse;
 import com.yanolja_final.domain.search.facade.SearchFacade;
 import com.yanolja_final.global.config.argumentresolver.LoginedUserId;
-import com.yanolja_final.global.util.PaginationUtils;
+import com.yanolja_final.global.util.PagedResponseDTO;
 import com.yanolja_final.global.util.ResponseDTO;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +27,7 @@ public class SearchController {
     private final SearchFacade searchFacade;
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<Map<String, Object>>> getFilteredPackage(
+    public ResponseEntity<PagedResponseDTO<PackageListItemResponse>> getFilteredPackage(
         @LoginedUserId Long userId,
         @RequestParam(name = "minPrice", required = false, defaultValue = "0") int minPrice,
         @RequestParam(name = "maxPrice", required = false, defaultValue = "" + Integer.MAX_VALUE) int maxPrice,
@@ -37,11 +38,9 @@ public class SearchController {
         Pageable pageable
     ) {
         return ResponseEntity.ok(
-            ResponseDTO.okWithData(
-                PaginationUtils.createPageResponse(
-                    searchFacade.getFilteredPackage(userId, minPrice, maxPrice, hashtags, nations,
-                        continents, sortBy, pageable)
-                )
+            PagedResponseDTO.okWithData(
+                searchFacade.getFilteredPackage(userId, minPrice, maxPrice, hashtags, nations,
+                    continents, sortBy, pageable)
             )
         );
     }

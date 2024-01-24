@@ -5,7 +5,7 @@ import com.yanolja_final.domain.wish.dto.response.WishListResponse;
 import com.yanolja_final.domain.wish.entity.Wish;
 import com.yanolja_final.domain.wish.facade.WishFacade;
 import com.yanolja_final.global.config.argumentresolver.LoginedUserId;
-import com.yanolja_final.global.util.PaginationUtils;
+import com.yanolja_final.global.util.PagedResponseDTO;
 import com.yanolja_final.global.util.ResponseDTO;
 
 import java.util.Map;
@@ -45,13 +45,14 @@ public class WishController {
     }
 
     @GetMapping
-    public ResponseEntity<ResponseDTO<Map<String, Object>>> getUserWishes(
+    public ResponseEntity<PagedResponseDTO<WishListResponse>> getUserWishes(
         @LoginedUserId Long userId,
         @PageableDefault(size = 5) Pageable pageable) {
 
         Page<WishListResponse> wishesPage = wishFacade.getUserWishes(userId, pageable);
-        Map<String, Object> response = PaginationUtils.createPageResponse(wishesPage);
 
-        return ResponseEntity.ok(ResponseDTO.okWithData(response));
+        return ResponseEntity.ok(
+            PagedResponseDTO.okWithData(wishesPage)
+        );
     }
 }

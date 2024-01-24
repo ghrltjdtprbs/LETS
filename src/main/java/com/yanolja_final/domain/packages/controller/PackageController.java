@@ -1,6 +1,5 @@
 package com.yanolja_final.domain.packages.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yanolja_final.domain.packages.dto.response.PackageAvailableDateResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageCompareResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageDetailResponse;
@@ -8,7 +7,7 @@ import com.yanolja_final.domain.packages.dto.response.PackageListItemResponse;
 import com.yanolja_final.domain.packages.dto.response.PackageScheduleResponse;
 import com.yanolja_final.domain.packages.facade.PackageFacade;
 import com.yanolja_final.global.config.argumentresolver.LoginedUserId;
-import com.yanolja_final.global.util.PaginationUtils;
+import com.yanolja_final.global.util.PagedResponseDTO;
 import com.yanolja_final.global.util.ResponseDTO;
 import java.util.List;
 import java.util.Map;
@@ -39,12 +38,12 @@ public class PackageController {
     }
 
     @GetMapping
-    public ResponseDTO<Map<String, Object>> listOfAll(
+    public PagedResponseDTO<PackageListItemResponse> listOfAll(
         @LoginedUserId Long userId,
         Pageable pageable
     ) {
         Page<PackageListItemResponse> list = packageFacade.getAllList(pageable, userId);
-        return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
+        return PagedResponseDTO.okWithData(list);
     }
 
     @GetMapping("/{id}/schedules")
@@ -64,21 +63,21 @@ public class PackageController {
     }
 
     @GetMapping("/top-views")
-    public ResponseDTO<Map<String, Object>> topViews(
+    public PagedResponseDTO<PackageListItemResponse> topViews(
         @LoginedUserId Long userId,
         Pageable pageable
     ) {
         Page<PackageListItemResponse> list = packageFacade.getTopViews(pageable, userId);
-        return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
+        return PagedResponseDTO.okWithData(list);
     }
 
     @GetMapping("/top-purchases")
-    public ResponseDTO<Map<String, Object>> topPurchases(
+    public PagedResponseDTO<PackageListItemResponse> topPurchases(
         @LoginedUserId Long userId,
         Pageable pageable
     ) {
         Page<PackageListItemResponse> list = packageFacade.getTopPurchases(pageable, userId);
-        return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
+        return PagedResponseDTO.okWithData(list);
     }
 
     @GetMapping("/compare")
@@ -91,13 +90,13 @@ public class PackageController {
     }
 
     @GetMapping("/similar-packages")
-    public ResponseDTO<Map<String, Object>> similarPackages(
+    public PagedResponseDTO<PackageListItemResponse> similarPackages(
         @RequestParam Long fixedPackageId,
         @LoginedUserId Long userId,
         Pageable pageable
     ) {
         Page<PackageListItemResponse> list = packageFacade.getSimilarPackages(pageable,
             fixedPackageId, userId);
-        return ResponseDTO.okWithData(PaginationUtils.createPageResponse(list));
+        return PagedResponseDTO.okWithData(list);
     }
 }
