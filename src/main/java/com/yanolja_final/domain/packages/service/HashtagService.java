@@ -17,12 +17,14 @@ public class HashtagService {
 
     private final HashtagRepository hashtagRepository;
 
+    @Transactional
     public Hashtag getHashtagByKeywordWithIncrementSearchedCount(String keyword) {
         Hashtag hashtag = hashtagRepository.findFirstByNameContaining(keyword).orElse(null);
         incrementSearchedCount(hashtag);
         return hashtag;
     }
 
+    @Transactional
     public List<Hashtag> getHashtagWithIncrementSearchedCount(String hashtagString) {
         List<Hashtag> result = new ArrayList<>();
 
