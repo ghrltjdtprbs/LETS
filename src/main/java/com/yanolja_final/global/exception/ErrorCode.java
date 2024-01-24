@@ -34,6 +34,7 @@ public enum ErrorCode {
 
     // WISH
     WISH_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 찜ID 입니다."),
+    WISH_ALREADY_EXISTS(HttpStatus.BAD_REQUEST, "이미 좋아요를 누른 패키지입니다."),
 
     // THEME
     THEME_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 테마 입니다."),
