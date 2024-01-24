@@ -1,6 +1,7 @@
 package com.yanolja_final.domain.packages.service;
 
 import com.yanolja_final.domain.packages.entity.Hashtag;
+import com.yanolja_final.domain.packages.exception.HashtagNotFoundException;
 import com.yanolja_final.domain.packages.repository.HashtagRepository;
 import com.yanolja_final.domain.search.controller.response.HashtagResponse;
 import java.util.ArrayList;
@@ -17,19 +18,23 @@ public class HashtagService {
 
     private final HashtagRepository hashtagRepository;
 
+    @Transactional
     public Hashtag getHashtagByKeywordWithIncrementSearchedCount(String keyword) {
-        Hashtag hashtag = hashtagRepository.findFirstByNameContaining(keyword).orElse(null);
+        Hashtag hashtag = hashtagRepository.findFirstByNameContaining(keyword)
+            .orElseThrow(HashtagNotFoundException::new);
         incrementSearchedCount(hashtag);
         return hashtag;
     }
 
+    @Transactional
     public List<Hashtag> getHashtagWithIncrementSearchedCount(String hashtagString) {
         List<Hashtag> result = new ArrayList<>();
 
         String[] hashtagNames = extractHashtags(hashtagString);
         if (hashtagNames != null) {
             for (String hashtagName : hashtagNames) {
-                Hashtag hashtag = hashtagRepository.findByName(hashtagName).orElse(null);
+                Hashtag hashtag = hashtagRepository.findByName(hashtagName)
+                    .orElseThrow(HashtagNotFoundException::new);
                 if (hashtag != null) {
                     incrementSearchedCount(hashtag);
                     result.add(hashtag);

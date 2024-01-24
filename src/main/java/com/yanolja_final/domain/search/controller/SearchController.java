@@ -34,7 +34,7 @@ public class SearchController {
         @RequestParam(name = "hashtags", required = false) String hashtags,
         @RequestParam(name = "nations", required = false) String nations,
         @RequestParam(name = "continents", required = false) String continents,
-        @RequestParam(required = false) String sortBy,
+        @RequestParam(defaultValue = "departure_date", required = false) String sortBy,
         Pageable pageable
     ) {
         return ResponseEntity.ok(

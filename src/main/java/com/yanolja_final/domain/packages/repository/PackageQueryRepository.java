@@ -98,17 +98,19 @@ public class PackageQueryRepository {
             .select(qPackage)
             .from(qPackage)
             .leftJoin(qPackage.availableDates, qPackageDepartureOption)
-            .where(builder)
-            .groupBy(qPackage.id);
+            .where(builder);
 
         if ("departure_date".equals(sortBy)) {
             resultPackages
+                .groupBy(qPackage.id)
                 .orderBy(qPackageDepartureOption.departureDate.min().asc());
         } else if ("price_asc".equals(sortBy)) {
             resultPackages
+                .groupBy(qPackage.id)
                 .orderBy(qPackageDepartureOption.adultPrice.min().asc());
         } else if ("price_desc".equals(sortBy)) {
             resultPackages
+                .groupBy(qPackage.id)
                 .orderBy(qPackageDepartureOption.adultPrice.min().desc());
         }
 
