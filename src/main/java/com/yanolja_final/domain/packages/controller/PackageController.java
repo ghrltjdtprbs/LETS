@@ -65,9 +65,12 @@ public class PackageController {
     @GetMapping("/top-views")
     public PagedResponseDTO<PackageListItemResponse> topViews(
         @LoginedUserId Long userId,
+        @RequestParam(required = false, defaultValue = "전체") String continentName,
+        @RequestParam(required = false, defaultValue = "전체") String nationName,
         Pageable pageable
     ) {
-        Page<PackageListItemResponse> list = packageFacade.getTopViews(pageable, userId);
+        Page<PackageListItemResponse> list
+            = packageFacade.getTopViews(pageable, userId, continentName, nationName);
         return PagedResponseDTO.okWithData(list);
     }
 

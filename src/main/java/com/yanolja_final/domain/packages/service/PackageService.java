@@ -16,6 +16,8 @@ import com.yanolja_final.domain.packages.repository.PackageDepartureOptionReposi
 import com.yanolja_final.domain.packages.repository.PackageQueryRepository;
 import com.yanolja_final.domain.packages.repository.PackageRepository;
 import com.yanolja_final.domain.search.controller.response.SearchedPackageCountResponse;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.TypedQuery;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,7 +34,9 @@ public class PackageService {
     private final PackageRepository packageRepository;
     private final PackageQueryRepository packageQueryRepository;
     private final PackageDepartureOptionRepository packageDepartureOptionRepository;
+
     private final ObjectMapper objectMapper;
+    private final EntityManager entityManager;
 
     // Package
     public Package getPackageWithIncrementPurchasedCount(Long id) {
@@ -54,8 +58,52 @@ public class PackageService {
         return packageRepository.findAll();
     }
 
-    public Page<Package> findAllByViewedCount(Pageable pageable) {
-        return packageRepository.findAllByOrderByViewedCountDesc(pageable);
+    public Page<Package> findAllByViewedCount(
+        Pageable pageable, String continentName, String nationName
+    ) {
+        boolean filterByNation = !"전체".equals(nationName);
+        boolean filterByContinent = !"전체".equals(continentName);
+
+        String jpql = "SELECT p FROM Package p ";
+        String countJpql = "SELECT COUNT(p) FROM Package p ";
+
+        if (filterByNation || filterByContinent) {
+            jpql += "JOIN p.nation n JOIN p.continent c ";
+            countJpql += "JOIN p.nation n JOIN p.continent c ";
+        }
+
+        String whereClause = "WHERE (1=1) ";
+
+        if (filterByNation) {
+            whereClause += "AND n.name = :nationName ";
+        }
+
+        if (filterByContinent) {
+            whereClause += "AND c.name = :continentName ";
+        }
+
+        jpql += whereClause + "ORDER BY p.viewedCount DESC";
+        countJpql += whereClause;
+
+        TypedQuery<Package> query = entityManager.createQuery(jpql, Package.class);
+        TypedQuery<Long> countQuery = entityManager.createQuery(countJpql, Long.class);
+
+        if (filterByNation) {
+            query.setParameter("nationName", nationName);
+            countQuery.setParameter("nationName", nationName);
+        }
+        if (filterByContinent) {
+            query.setParameter("continentName", continentName);
+            countQuery.setParameter("continentName", continentName);
+        }
+
+        int totalRows = countQuery.getSingleResult().intValue();
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
+
+        List<Package> packages = query.getResultList();
+
+        return new PageImpl<>(packages, pageable, totalRows);
     }
 
     public Page<Package> findAllByPurchasedCount(Pageable pageable) {
