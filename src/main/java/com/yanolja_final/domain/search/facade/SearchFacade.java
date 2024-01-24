@@ -39,10 +39,10 @@ public class SearchFacade {
         return hashtagService.getAllHashtagInfo();
     }
 
-    public List<ContinentNationResponse> getAllContinentAndPopularNationInfo() {
+    public ContinentNationResponse getAllContinentAndPopularNationInfo() {
         List<Nation> nations = nationService.getPopularNationInfo();
         List<Continent> continents = continentService.getAllContinentInfo();
-        return List.of(ContinentNationResponse.from(nations, continents));
+        return ContinentNationResponse.from(nations, continents);
     }
 
     public HashTagNamesResponse findAllByOrderBySearchedCountDesc() {
