@@ -28,6 +28,9 @@ public enum ErrorCode {
     AVAILABLE_DATE_NOT_FOUND(HttpStatus.NOT_FOUND, "예약 가능한 날짜가 아닙니다."),
     PASSED_DEPARTURE_DATE(HttpStatus.BAD_REQUEST, "이미 지나간 출발 일자 입니다."),
 
+    // HASHTAG
+    HASHTAG_NOT_FOUND(HttpStatus.NOT_FOUND, "해쉬태그를 찾을 수 없습니다."),
+
     // ORDER
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 주문입니다."),
     MAXIMUM_CAPACITY(HttpStatus.BAD_REQUEST, "예약 인원이 초과되었습니다."),

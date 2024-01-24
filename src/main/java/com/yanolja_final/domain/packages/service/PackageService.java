@@ -146,9 +146,7 @@ public class PackageService {
         PackageDepartureOption packageDepartureOption = findByDepartureOptionId(id);
 
         packageDepartureOptionRepository.findByPackageIdAndDepartureOptionId(packageId, id)
-            .orElseThrow(
-                PackageDateNotFoundException::new
-            );
+            .orElseThrow(PackageDateNotFoundException::new);
 
         if (packageDepartureOption.getIncrementCurrentReservationCount(orderTotalPeople)
             > packageDepartureOption.getMaxReservationCount()) {
