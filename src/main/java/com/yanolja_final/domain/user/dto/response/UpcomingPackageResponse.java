@@ -14,7 +14,7 @@ public record UpcomingPackageResponse(
     String endDate
 ) {
   public static UpcomingPackageResponse from(User user, Order order) {
-      PackageDepartureOption packageDepartureOption = order.preventPassedDepartureDate();
+      PackageDepartureOption packageDepartureOption = order.getPackageDepartureOption();
       Long dday = packageDepartureOption.calculateDday();
       String departureDate = packageDepartureOption.formattedDepartureDate();
       String endDate = packageDepartureOption.formattedEndDate();
@@ -27,6 +27,18 @@ public record UpcomingPackageResponse(
           order.getAPackage().getNationName(),
           departureDate,
           endDate
+      );
+  }
+
+  public static UpcomingPackageResponse emptyResponse() {
+      return new UpcomingPackageResponse(
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
       );
   }
 }

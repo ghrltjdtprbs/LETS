@@ -35,6 +35,9 @@ public class MyPageFacade {
      public UpcomingPackageResponse getUpcomingPackageResponse(Long userId) {
          User user = userId == null ? null : myPageService.findById(userId);
          Order userOrder = user.userOrderWithEarliestDepartureDate();
+         if (userOrder == null) {
+             return UpcomingPackageResponse.emptyResponse();
+         }
          return UpcomingPackageResponse.from(user, userOrder);
      }
 }

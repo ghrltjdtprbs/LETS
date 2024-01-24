@@ -2,8 +2,6 @@ package com.yanolja_final.domain.order.entity;
 
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
-import com.yanolja_final.domain.packages.exception.PackageDateNotFoundException;
-import com.yanolja_final.domain.packages.exception.PassedDepartureDateException;
 import com.yanolja_final.domain.review.entity.Review;
 import com.yanolja_final.domain.user.entity.User;
 import com.yanolja_final.global.common.SoftDeletableBaseEntity;
@@ -70,17 +68,20 @@ public class Order extends SoftDeletableBaseEntity {
         this.detailInfo = detailInfo;
     }
 
-    public PackageDepartureOption preventPassedDepartureDate() {
+    public PackageDepartureOption getPackageDepartureOption() {
         PackageDepartureOption packageDepartureOption = aPackage.getAvailableDates()
             .stream()
             .filter(option -> option.getId().equals(this.availableDateId))
             .findFirst()
-            .orElseThrow(PackageDateNotFoundException::new);
-        if (!packageDepartureOption.isNotExpired()) {
-            throw new PassedDepartureDateException();
-        }
+            .orElse(null);
         return packageDepartureOption;
     }
 
-
+    public boolean passedDepartureDate() {
+        LocalDate currentDate = LocalDate.now();
+        boolean passedDate = aPackage.getAvailableDates()
+            .stream()
+            .anyMatch(option -> option.getDepartureDate().isBefore(currentDate));
+        return passedDate;
+    }
 }
