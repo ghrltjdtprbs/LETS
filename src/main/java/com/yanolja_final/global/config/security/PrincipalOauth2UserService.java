@@ -49,27 +49,26 @@ public class PrincipalOauth2UserService extends DefaultOAuth2UserService {
             oauth2Userinfo = new NaverUserInfo((Map) oauth2User.getAttributes().get("response"));
         }
 
-        Optional<User> user = userRepository.findByEmailAndProvider(
-            oauth2Userinfo.getEmail(), oauth2Userinfo.getProvider());
+        Optional<User> userOptional = userRepository.findByEmail(oauth2Userinfo.getEmail());
 
-        //이미 소셜로그인을 한적이 있는지 없는지
-        if (user.isEmpty()) {
-
-            User newUser = User.builder()
+        User user;
+        if (userOptional.isPresent()) {
+            user = userOptional.get();
+        } else {
+            user = User.builder()
                 .email(oauth2Userinfo.getEmail())
                 .username(oauth2Userinfo.getName())
-                .encryptedPassword("OAuth2")  //Oauth2로 로그인을 해서 패스워드는 의미없음.
+                .encryptedPassword("OAuth2") // OAuth2 로그인 사용시 패스워드는 의미가 없습니다.
                 .phoneNumber(oauth2Userinfo.getPhoneNumber())
                 .authorities(DEFAULT_AUTHORITIES)
                 .provider(provider)
                 .build();
 
-            userRepository.save(newUser);
-
-            return new PrincipalDetails(newUser, oauth2User.getAttributes());
-        } else {
-
-            return new PrincipalDetails(user.get(), oauth2User.getAttributes());
+            userRepository.save(user);
         }
+
+        return new PrincipalDetails(user, oauth2User.getAttributes());
     }
 }
+
+
