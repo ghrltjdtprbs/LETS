@@ -3,6 +3,7 @@ package com.yanolja_final.domain.user.entity;
 import com.yanolja_final.domain.order.entity.Order;
 import com.yanolja_final.domain.poll.entity.PollAnswer;
 import com.yanolja_final.domain.review.entity.Review;
+import com.yanolja_final.domain.user.exception.PassedPackageDateException;
 import com.yanolja_final.domain.wish.entity.Wish;
 import com.yanolja_final.global.common.SoftDeletableBaseEntity;
 import jakarta.persistence.CascadeType;
@@ -17,9 +18,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.AbstractMap;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
@@ -128,14 +127,13 @@ public class User extends SoftDeletableBaseEntity {
 
     public Order userOrderWithEarliestDepartureDate() {
         return orders.stream()
-            .map(order -> new AbstractMap.SimpleEntry<>(order, order.preventPassedDepartureDate().getDepartureDate()))
-            .filter(entry -> {
-                LocalDate currentDate = LocalDate.now();
-                LocalDate departureDate = entry.getValue();
-                return !departureDate.isBefore(currentDate) || departureDate.isEqual(currentDate);
+            .filter(order -> {
+                if (order.passedDepartureDate()) {
+                    throw new PassedPackageDateException();
+                }
+                return !order.passedDepartureDate();
             })
-            .min(Comparator.comparing(AbstractMap.SimpleEntry::getValue))
-            .map(AbstractMap.SimpleEntry::getKey)
+            .min(Comparator.comparing(order -> order.getPackageDepartureOption().getDepartureDate()))
             .orElse(null);
     }
 }

@@ -17,6 +17,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDate;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -67,15 +68,20 @@ public class Order extends SoftDeletableBaseEntity {
         this.detailInfo = detailInfo;
     }
 
-    public PackageDepartureOption preventPassedDepartureDate() {
+    public PackageDepartureOption getPackageDepartureOption() {
         PackageDepartureOption packageDepartureOption = aPackage.getAvailableDates()
             .stream()
             .filter(option -> option.getId().equals(this.availableDateId))
             .findFirst()
             .orElse(null);
-        if (!packageDepartureOption.isNotExpired()) {
-            return null;
-        }
         return packageDepartureOption;
+    }
+
+    public boolean passedDepartureDate() {
+        LocalDate currentDate = LocalDate.now();
+        boolean passedDate = aPackage.getAvailableDates()
+            .stream()
+            .anyMatch(option -> option.getDepartureDate().isBefore(currentDate));
+        return passedDate;
     }
 }
