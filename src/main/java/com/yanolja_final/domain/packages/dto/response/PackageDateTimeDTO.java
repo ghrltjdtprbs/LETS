@@ -16,7 +16,7 @@ public record PackageDateTimeDTO(
         return new PackageDateTimeDTO(
             departureDate.format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
             departureDate.getDayOfWeek().getDisplayName(TextStyle.SHORT, Locale.KOREAN),
-            departureTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+            departureTime == null ? "" : departureTime.format(DateTimeFormatter.ofPattern("HH:mm"))
         );
     }
 }
