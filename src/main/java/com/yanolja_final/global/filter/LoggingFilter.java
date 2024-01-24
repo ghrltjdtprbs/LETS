@@ -23,7 +23,11 @@ public class LoggingFilter implements Filter {
         chain.doFilter(wrappedRequest, response);
 
         String method = wrappedRequest.getMethod();
-        String uri = wrappedRequest.getRequestURI() + "?" + getQueryParams(wrappedRequest);
+        String uri = wrappedRequest.getRequestURI();
+        String queryParams = getQueryParams(wrappedRequest);
+        if (!queryParams.isEmpty()) {
+            uri += "?" + queryParams;
+        }
         String body = getRequestBody(wrappedRequest);
         if (body.isEmpty()) {
             log.info("[요청] {} {}", method, uri);
