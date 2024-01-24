@@ -2,7 +2,6 @@ package com.yanolja_final.domain.packages.dto.response;
 
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
-import com.yanolja_final.domain.review.entity.Review;
 import java.util.List;
 
 public record PackageSummaryResponse(
@@ -10,7 +9,7 @@ public record PackageSummaryResponse(
     String imageUrl,
     int price,
     int hotelStars,
-    List<String> schedules,
+    List<PackageScheduleResponse> schedules,
     int shoppingCount,
     List<String> hashtags,
     int lodgeDays,
@@ -22,7 +21,9 @@ public record PackageSummaryResponse(
     int purchasedCount
 ) {
 
-    public static PackageSummaryResponse from(Package aPackage, PackageDepartureOption departureOption, int reviewCount, double averageStars, List<String> schedules) {
+    public static PackageSummaryResponse from(Package aPackage,
+        PackageDepartureOption departureOption, int reviewCount, double averageStars,
+        List<PackageScheduleResponse> schedules) {
         return new PackageSummaryResponse(
             aPackage.getTitle(),
             aPackage.getThumbnailImageUrl(),

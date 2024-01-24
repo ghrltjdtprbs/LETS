@@ -97,10 +97,6 @@ public class PackageFacade {
 
         List<PackageScheduleResponse> scheduleResponses = packageService.getSchedulesById(
             packageId);
-        List<String> schedules = scheduleResponses.stream()
-            .map(PackageScheduleResponse::schedule)
-            .flatMap(List::stream)
-            .collect(Collectors.toList());
 
         List<Review> reviews = reviewService.findReviewsByPackageId(packageId);
         int reviewCount = reviews.size();
@@ -108,7 +104,7 @@ public class PackageFacade {
         double averageStars = reviewCount == 0 ? 0.0 : scoreSum / (double) reviewCount / 4;
 
         return PackageSummaryResponse.from(
-            aPackage, departureOption, reviewCount, averageStars, schedules
+            aPackage, departureOption, reviewCount, averageStars, scheduleResponses
         );
     }
 
