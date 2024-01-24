@@ -8,6 +8,8 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
+import java.util.StringJoiner;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 
@@ -21,13 +23,25 @@ public class LoggingFilter implements Filter {
         chain.doFilter(wrappedRequest, response);
 
         String method = wrappedRequest.getMethod();
-        String uri = wrappedRequest.getRequestURI();
+        String uri = wrappedRequest.getRequestURI() + "?" + getQueryParams(wrappedRequest);
         String body = getRequestBody(wrappedRequest);
         if (body.isEmpty()) {
             log.info("[요청] {} {}", method, uri);
         } else {
             log.info("[요청] {} {}\nRequest Body: {}", method, uri, body);
         }
+    }
+
+    private String getQueryParams(HttpServletRequest request) {
+        Map<String, String[]> paramMap = request.getParameterMap();
+        StringJoiner sj = new StringJoiner("&");
+        for (Map.Entry<String, String[]> entry : paramMap.entrySet()) {
+            String key = entry.getKey();
+            for (String value : entry.getValue()) {
+                sj.add(key + "=" + value);
+            }
+        }
+        return sj.toString();
     }
 
     private String getRequestBody(ContentCachingRequestWrapper request) {
