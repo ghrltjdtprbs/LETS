@@ -25,7 +25,7 @@ public class HashtagController {
         @LoginedUserId Long userId,
         @RequestParam String keyword,
         Pageable pageable,
-        @RequestParam(required = false) String sortBy
+        @RequestParam(defaultValue = "departure_date", required = false) String sortBy
     ) {
         return ResponseEntity.ok(
             ResponseDTO.okWithData(
