@@ -16,9 +16,9 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
         "WHERE r.packageId = :packageId AND r.user.id = :userId")
     boolean isUserReviewedPackage(@Param("userId") Long userId, @Param("packageId") Long packageId);
 
-    @Query("SELECT r FROM Review r WHERE r.order.aPackage.id = :packageId")
-    List<Review> findReviewsByPackageIdSummary(@Param("packageId") Long packageId);
+    @Query("SELECT r FROM Review r WHERE r.packageId = :packageId OR r.order IS NULL")
+    List<Review> findByPackageIdIncludingNullOrderSummary(@Param("packageId") Long packageId);
 
-    @Query("SELECT r FROM Review r WHERE r.order.aPackage.id = :packageId")
-    Page<Review> findReviewsByPackageId(@Param("packageId") Long packageId, Pageable pageable);
+    @Query("SELECT r FROM Review r WHERE r.packageId = :packageId OR r.order IS NULL")
+    Page<Review> findByPackageIdIncludingNullOrder(@Param("packageId") Long packageId, Pageable pageable);
 }
