@@ -38,7 +38,7 @@ public class HashtagFacade {
         }
         User user = userId == null ? null : userService.findById(userId);
         Hashtag hashtag = hashtagService.getHashtagByKeywordWithIncrementSearchedCount(keyword);
-        Page<Package> packagePage = packageService.getPackagesByHashtag(hashtag, sortBy, pageable);
-        return packagePage.map(p -> PackageListItemResponse.from(p, wishService.isWish(user, p)));
+        Page<Package> packagePage = packageService.getPackageByHashtag2(hashtag, sortBy, pageable);
+       return packagePage.map(p -> PackageListItemResponse.from(p, wishService.isWish(user, p)));
     }
 }
