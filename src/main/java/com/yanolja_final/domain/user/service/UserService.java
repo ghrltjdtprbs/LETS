@@ -32,9 +32,6 @@ public class UserService {
         userRepository.findByEmail(createUserRequest.email()).ifPresent(user -> {
             throw new UserAlreadyRegisteredException();
         });
-        if (!createUserRequest.isTermsAgreed()) {
-            throw new AgreeNotTureException();
-        }
         String encodedPassword = passwordEncoder.encode(createUserRequest.password());
         User newUser = createUserRequest.toEntity(encodedPassword, DEFAULT_AUTHORITIES);
 
@@ -64,6 +61,9 @@ public class UserService {
 
     public ResponseDTO<CreateUserResponse> registerOrRecoverUser(
         CreateUserRequest createUserRequest) {
+        if (!createUserRequest.isTermsAgreed()) {
+            throw new AgreeNotTureException();
+        }
         ResponseDTO<CreateUserResponse> recoveryResponse = recoverUser(createUserRequest);
         if (recoveryResponse != null) {
             return recoveryResponse;
