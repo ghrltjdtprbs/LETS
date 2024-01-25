@@ -4,6 +4,7 @@ import com.yanolja_final.domain.user.dto.request.CreateUserRequest;
 import com.yanolja_final.domain.user.dto.response.CreateUserResponse;
 import com.yanolja_final.domain.user.entity.Authority;
 import com.yanolja_final.domain.user.entity.User;
+import com.yanolja_final.domain.user.exception.AgreeNotTureException;
 import com.yanolja_final.domain.user.exception.UserAlreadyRegisteredException;
 import com.yanolja_final.domain.user.exception.UserNotFoundException;
 import com.yanolja_final.domain.user.repository.UserRepository;
@@ -31,6 +32,9 @@ public class UserService {
         userRepository.findByEmail(createUserRequest.email()).ifPresent(user -> {
             throw new UserAlreadyRegisteredException();
         });
+        if (!createUserRequest.isTermsAgreed()) {
+            throw new AgreeNotTureException();
+        }
         String encodedPassword = passwordEncoder.encode(createUserRequest.password());
         User newUser = createUserRequest.toEntity(encodedPassword, DEFAULT_AUTHORITIES);
 
