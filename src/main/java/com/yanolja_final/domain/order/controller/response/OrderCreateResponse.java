@@ -7,7 +7,8 @@ public record OrderCreateResponse(
     String orderCode,
     UserInfoResponse myInfo
 ) {
-    public static OrderCreateResponse fromEntities(Order order, User user){
+
+    public static OrderCreateResponse fromEntities(Order order, User user) {
         return new OrderCreateResponse(
             order.getCode(),
             UserInfoResponse.fromEntity(user)
