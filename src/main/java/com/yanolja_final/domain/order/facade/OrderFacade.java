@@ -35,18 +35,14 @@ public class OrderFacade {
         User user = userService.findActiveUserById(userId);
         Page<Order> ordersPage = orderService.read(user, pageable);
 
-        Page<OrderResponse> orderResponsePage = ordersPage.map(order -> {
-            PackageDepartureOption packageDepartureOption =
-                packageService.findByDepartureOptionId(order.getAvailableDateId());
-            boolean isWish =
-                wishService.isUserWishingPackage(order.getId(), order.getAPackage().getId());
-            boolean isReviewed =
-                reviewService.isUserReviewedPackage(order.getId(), order.getAPackage().getId());
-            return OrderResponse.from(order, packageDepartureOption.getDepartureDate(), isWish,
-                isReviewed);
-        });
-
-        return orderResponsePage;
+        return ordersPage.map(o -> {
+                PackageDepartureOption packageDepartureOption =
+                    packageService.findByDepartureOptionId(o.getAvailableDateId());
+                return OrderResponse.from(o, packageDepartureOption.getDepartureDate(),
+                    wishService.isWish(user, o.getAPackage()),
+                    reviewService.isReviewed(user, o));
+            }
+        );
     }
 
     @Transactional

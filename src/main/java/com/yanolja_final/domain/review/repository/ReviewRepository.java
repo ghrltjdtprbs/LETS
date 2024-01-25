@@ -1,22 +1,20 @@
 package com.yanolja_final.domain.review.repository;
 
+import com.yanolja_final.domain.order.entity.Order;
 import com.yanolja_final.domain.review.entity.Review;
+import com.yanolja_final.domain.user.entity.User;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     Page<Review> findByUserId(Long userId, Pageable pageable);
 
-    @Query("SELECT CASE WHEN COUNT(r) > 0 THEN true ELSE false END FROM Review r " +
-        "WHERE r.packageId = :packageId AND r.user.id = :userId")
-    boolean isUserReviewedPackage(@Param("userId") Long userId, @Param("packageId") Long packageId);
-
     List<Review> findByPackageId(Long packageId);
 
     Page<Review> findByPackageId(Long packageId, Pageable pageable);
+
+    boolean existsByUserAndOrder(User user, Order order);
 }

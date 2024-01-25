@@ -38,11 +38,6 @@ public class WishService {
         return wishRepository.findByUserId(userId, pageable);
     }
 
-    @Transactional(readOnly = true)
-    public boolean isUserWishingPackage(Long userId, Long packageId) {
-        return wishRepository.isUserWishingPackage(userId, packageId);
-    }
-
     public boolean isWish(User user, Package aPackage) {
         if (user == null) {
             return false;
