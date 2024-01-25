@@ -43,7 +43,7 @@ public class MyPageController {
 
     @PutMapping("/password")
     public ResponseEntity<ResponseDTO<Void>> updatePassword(
-        @RequestBody UpdatePasswordRequest request, @LoginedUserId Long userId
+        @Valid @RequestBody UpdatePasswordRequest request, @LoginedUserId Long userId
     ) {
         myPageFacade.updatePassword(request, userId);
         return ResponseEntity.ok(ResponseDTO.ok());
