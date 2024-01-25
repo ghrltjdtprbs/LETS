@@ -35,6 +35,7 @@ public class PackageFacade {
     private final WishService wishService;
     private final UserService userService;
 
+    @Transactional
     public PackageDetailResponse getDetail(Long packageId, Long userId, String departDate) {
         Package aPackage = packageService.findById(packageId);
         User user = userId == null ? null : userService.findById(userId);

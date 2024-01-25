@@ -35,6 +35,8 @@ public enum ErrorCode {
     // ORDER
     ORDER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 주문입니다."),
     MAXIMUM_CAPACITY(HttpStatus.BAD_REQUEST, "예약 인원이 초과되었습니다."),
+    INVALID_CANCEL_FEE_AGREEMENT(HttpStatus.BAD_REQUEST, "취소 수수료 동의는 반드시 true여야 합니다."),
+    NO_GUESTS(HttpStatus.BAD_REQUEST,"예약 인원은 반드시 한 명 이상 필요합니다."),
 
     // WISH
     WISH_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 찜ID 입니다."),
