@@ -38,7 +38,7 @@ public interface PackageRepository extends JpaRepository<Package, Long> {
     Page<Package> findSimilarPackages(Package p, Pageable pageable);
 
     @Query("SELECT p FROM Package p " +
-        "LEFT JOIN p.availableDates pdo " +
+        "LEFT JOIN FETCH p.availableDates pdo " +
         "WHERE pdo.adultPrice = (SELECT MIN(pdo2.adultPrice) FROM PackageDepartureOption pdo2 WHERE pdo2.aPackage.id = p.id) "
         +
         "AND :hashtag IN (SELECT h2.name FROM p.hashtags h2) " +
