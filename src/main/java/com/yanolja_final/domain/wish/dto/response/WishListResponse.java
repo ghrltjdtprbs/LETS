@@ -19,7 +19,7 @@ public record WishListResponse(
     public WishListResponse(Wish wish) {
         this(
             wish.getAPackage().getId(),
-            getFirstImageUrl(wish.getAPackage()),
+            wish.getAPackage().getThumbnailImageUrl(),
             wish.getAPackage().getNationName(),
             wish.getAPackage().getTitle(),
             wish.getAPackage().getHashtags().stream().map(Hashtag::getName).collect(Collectors.toList()),
@@ -27,10 +27,5 @@ public record WishListResponse(
             wish.getAPackage().getLodgeDays(),
             wish.getAPackage().getTripDays()
         );
-    }
-
-    private static String getFirstImageUrl(Package aPackage) {
-        List<String> introImageUrls = aPackage.getIntroImageUrls();
-        return introImageUrls.isEmpty() ? null : introImageUrls.get(0);
     }
 }
