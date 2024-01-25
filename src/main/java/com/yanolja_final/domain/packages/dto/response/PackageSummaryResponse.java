@@ -37,7 +37,7 @@ public record PackageSummaryResponse(
             departureOption.getCurrentReservationCount(),
             departureOption.getMinReservationCount(),
             reviewCount,
-            averageStars,
+            Math.round(averageStars * 10) / 10.0,
             aPackage.getMonthlyPurchasedCount()
         );
     }

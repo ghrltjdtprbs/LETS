@@ -54,7 +54,7 @@ public record PackageDetailResponse(
             aPackage.getNationName(),
             aPackage.getContinentName(),
             aPackage.getTitle(),
-            averageStars,
+            Math.round(averageStars * 10) / 10.0,
             PackagePriceDTO.from(departOption),
             PackageReservationDTO.from(departOption),
             aPackage.getTransportation(),
