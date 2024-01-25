@@ -46,10 +46,10 @@ public class ReviewService {
     }
 
     public List<Review> findReviewsByPackageId(Long packageId) {
-        return reviewRepository.findByPackageIdIncludingNullOrderSummary(packageId);
+        return reviewRepository.findByPackageId(packageId);
     }
 
     public Page<Review> findPackageReviews(Long packageId, Pageable pageable) {
-        return reviewRepository.findByPackageIdIncludingNullOrder(packageId, pageable);
+        return reviewRepository.findByPackageId(packageId, pageable);
     }
 }
