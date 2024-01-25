@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -33,28 +32,20 @@ public class ThemeFacade {
         Theme theme = themeService.getThemeById(themeId);
         Page<Package> packagesPage = packageService.getPackagesByHashtag(theme.getHashtag(), sortBy, pageable);
 
-        List<PackageSummary> packageSummaries = packagesPage.getContent().stream()
-            .map(p -> new PackageSummary(
-                p.getId(),
-                p.getThumbnailImageUrl(),
-                p.getTransportation(),
-                p.getTitle())
-            )
-            .collect(Collectors.toList());
-
-        Integer minPrice = packagesPage.getContent().stream()
-            .mapToInt(Package::getMinPrice)
-            .min()
-            .orElse(0);
-
-        ThemePackageResponse response = new ThemePackageResponse(
+        return packagesPage.map(p -> new ThemePackageResponse(
             theme.getId(),
             theme.getName(),
             theme.getDescription(),
-            minPrice,
+            p.getMinPrice(),
             theme.getImageUrl(),
-            packageSummaries
-        );
-        return new PageImpl<>(Collections.singletonList(response));
+            Collections.singletonList(
+                new PackageSummary(
+                    p.getId(),
+                    p.getThumbnailImageUrl(),
+                    p.getTransportation(),
+                    p.getTitle()
+                )
+            )
+        ));
     }
 }
