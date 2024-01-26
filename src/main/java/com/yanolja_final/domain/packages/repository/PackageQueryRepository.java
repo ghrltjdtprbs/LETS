@@ -59,26 +59,30 @@ public class PackageQueryRepository {
             .fetchOne();
     }
 
-    public Page<Package> packageInfoByAdultPriceRangeAndFilters(
-        int minPrice,
-        int maxPrice,
+    public Page<Package> packageInfoByFilters(
+        Integer minPrice,
+        Integer maxPrice,
         String[] nations,
         String[] continents,
         String[] hashtags,
         String sortBy,
         Pageable pageable
     ) {
+        BooleanBuilder builder = new BooleanBuilder();
 
-        QPackageDepartureOption qPackageDepartureOptionSub =
-            new QPackageDepartureOption("packageDepartureSub");
+        if (minPrice != null && maxPrice != null) {
+            QPackageDepartureOption qPackageDepartureOptionSub =
+                new QPackageDepartureOption("packageDepartureSub");
 
-        JPAQuery<Long> minPriceSubQuery = new JPAQuery<Long>()
-            .select(qPackageDepartureOptionSub.aPackage.id)
-            .from(qPackageDepartureOptionSub)
-            .groupBy(qPackageDepartureOptionSub.aPackage.id)
-            .having(qPackageDepartureOptionSub.adultPrice.min().between(minPrice, maxPrice));
+            JPAQuery<Long> minPriceSubQuery = new JPAQuery<Long>()
+                .select(qPackageDepartureOptionSub.aPackage.id)
+                .from(qPackageDepartureOptionSub)
+                .groupBy(qPackageDepartureOptionSub.aPackage.id)
+                .having(qPackageDepartureOptionSub.adultPrice.min().between(minPrice, maxPrice));
 
-        BooleanBuilder builder = new BooleanBuilder(qPackage.id.in(minPriceSubQuery));
+            builder.and(qPackage.id.in(minPriceSubQuery));
+        }
+
         if ((nations != null && nations.length > 0) || (continents != null
             && continents.length > 0)) {
             BooleanBuilder nationOrContinentBuilder = new BooleanBuilder();
@@ -100,11 +104,7 @@ public class PackageQueryRepository {
             .leftJoin(qPackage.availableDates, qPackageDepartureOption)
             .where(builder);
 
-        if ("departure_date".equals(sortBy)) {
-            resultPackages
-                .groupBy(qPackage.id)
-                .orderBy(qPackageDepartureOption.departureDate.min().asc());
-        } else if ("price_asc".equals(sortBy)) {
+        if ("price_asc".equals(sortBy)) {
             resultPackages
                 .groupBy(qPackage.id)
                 .orderBy(qPackageDepartureOption.adultPrice.min().asc());
@@ -112,6 +112,10 @@ public class PackageQueryRepository {
             resultPackages
                 .groupBy(qPackage.id)
                 .orderBy(qPackageDepartureOption.adultPrice.min().desc());
+        } else {
+            resultPackages
+                .groupBy(qPackage.id)
+                .orderBy(qPackageDepartureOption.departureDate.min().asc());
         }
 
         List<Package> result = resultPackages
