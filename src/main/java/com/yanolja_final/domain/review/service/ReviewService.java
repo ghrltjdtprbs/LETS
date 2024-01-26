@@ -25,6 +25,7 @@ public class ReviewService {
 
     public Review createReview(Order order, User user, CreateReviewRequest request) {
         Review review = request.toReview(order, user);
+        review.setPackageId(order.getAPackage().getId());
         return reviewRepository.save(review);
     }
 

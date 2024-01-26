@@ -62,4 +62,8 @@ public class Review extends BaseEntity {
     public int getTotalScore() {
         return productScore + scheduleScore + guideScore + appointmentScore;
     }
+
+    public void setPackageId(Long packageId) {
+        this.packageId = packageId;
+    }
 }
