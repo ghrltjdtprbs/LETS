@@ -41,10 +41,10 @@ public class Package extends BaseEntity {
     @Column
     private LocalTime endTime;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Nation nation;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Continent continent;
 
     @Column(length = 100, nullable = false)
