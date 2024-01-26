@@ -9,7 +9,6 @@ import com.yanolja_final.domain.review.exception.UnauthorizedReviewDeletionExcep
 import com.yanolja_final.domain.review.repository.ReviewRepository;
 import com.yanolja_final.domain.user.entity.User;
 import jakarta.transaction.Transactional;
-
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -42,15 +41,15 @@ public class ReviewService {
         return reviewRepository.findByUserId(userId, pageable).map(ReviewResponse::fromReview);
     }
 
-    public boolean isUserReviewedPackage(Long userId, Long packageId) {
-        return reviewRepository.isUserReviewedPackage(userId, packageId);
-    }
-
     public List<Review> findReviewsByPackageId(Long packageId) {
         return reviewRepository.findByPackageId(packageId);
     }
 
     public Page<Review> findPackageReviews(Long packageId, Pageable pageable) {
         return reviewRepository.findByPackageId(packageId, pageable);
+    }
+
+    public boolean isReviewed(User user, Order order) {
+        return reviewRepository.existsByUserAndOrder(user, order);
     }
 }
