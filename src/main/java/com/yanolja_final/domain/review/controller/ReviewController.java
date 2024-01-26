@@ -8,7 +8,7 @@ import com.yanolja_final.global.config.argumentresolver.LoginedUserId;
 import com.yanolja_final.global.util.PagedResponseDTO;
 import com.yanolja_final.global.util.ResponseDTO;
 
-import java.util.Map;
+import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,7 +33,7 @@ public class ReviewController {
 
     @PostMapping("/orders/{orderId}")
     public ResponseDTO<ReviewResponse> createReview(@PathVariable Long orderId,
-        @RequestBody CreateReviewRequest request,
+        @RequestBody @Valid CreateReviewRequest request,
         @LoginedUserId Long userId) {
         ReviewResponse response = reviewFacade.createReview(orderId, request, userId);
         return ResponseDTO.okWithData(response);
