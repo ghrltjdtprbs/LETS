@@ -4,7 +4,6 @@ import com.yanolja_final.domain.order.controller.request.OrderCreateRequest;
 import com.yanolja_final.domain.order.controller.response.OrderCreateResponse;
 import com.yanolja_final.domain.order.controller.response.OrderResponse;
 import com.yanolja_final.domain.order.entity.Order;
-import com.yanolja_final.domain.order.exception.InvalidCancelFeeAgreementException;
 import com.yanolja_final.domain.order.exception.NoGuestsException;
 import com.yanolja_final.domain.order.service.OrderService;
 import com.yanolja_final.domain.packages.entity.Package;
@@ -47,9 +46,6 @@ public class OrderFacade {
 
     @Transactional
     public OrderCreateResponse create(Long userId, OrderCreateRequest request) {
-        if (!request.cancelFeeAgreement()) {
-            throw new InvalidCancelFeeAgreementException();
-        }
         if (
             request.numberOfPeople().adult() <= 0 && request.numberOfPeople().infant() <= 0
                 && request.numberOfPeople().baby() <= 0

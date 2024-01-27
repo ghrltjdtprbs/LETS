@@ -6,6 +6,7 @@ import com.yanolja_final.domain.order.dto.OrderDetailInfoDTO;
 import com.yanolja_final.domain.order.entity.Order;
 import com.yanolja_final.domain.packages.entity.Package;
 import com.yanolja_final.domain.packages.entity.PackageDepartureOption;
+import com.yanolja_final.global.exception.valid.OnlyTrueCheck;
 import com.yanolja_final.domain.user.entity.User;
 import jakarta.validation.constraints.NotNull;
 
@@ -15,6 +16,7 @@ public record OrderCreateRequest(
     @NotNull
     Long availableDateId,
     String requestMessage,
+    @OnlyTrueCheck
     @NotNull
     Boolean cancelFeeAgreement,
     @NotNull
