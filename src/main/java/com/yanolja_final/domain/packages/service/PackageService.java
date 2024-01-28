@@ -18,13 +18,10 @@ import com.yanolja_final.domain.packages.repository.PackageRepository;
 import com.yanolja_final.domain.search.controller.response.SearchedPackageCountResponse;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -162,7 +159,7 @@ public class PackageService {
                 .toArray(String[]::new) : null;
 
         Page<Package> responsePage =
-            packageQueryRepository.packageInfoByAdultPriceRangeAndFilters(
+            packageQueryRepository.packageInfoByFilters(
                 minPrice,
                 maxPrice,
                 slideString(nations),
@@ -181,60 +178,9 @@ public class PackageService {
         return str.split(",");
     }
 
-    public Page<Package> getPackagesByHashtag(Hashtag hashtag, String sortBy, Pageable pageable) {
-        List<Package> byHashtagAndSort =
-            packageRepository.findByHashtagAndSort(hashtag.getName(), sortBy);
-
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), byHashtagAndSort.size());
-
-        List<Package> pageContent = byHashtagAndSort.subList(start, end);
-        return new PageImpl<>(pageContent, pageable, byHashtagAndSort.size());
-    }
-
-    public Page<Package> getPackageByHashtag2(Hashtag hashtag, String sortBy, Pageable pageable) {
-        List<Package> allPackages = packageRepository.findAll();
-
-        List<Package> filteredPackages = allPackages.stream()
-            .filter(p -> p.getHashtags().contains(hashtag))
-            .collect(Collectors.toList());
-
-        switch (sortBy) {
-            case "price_desc":
-                filteredPackages.sort(Comparator.comparing(p -> p.getAvailableDates().stream()
-                        .mapToInt(PackageDepartureOption::getAdultPrice)
-                        .min()
-                        .orElse(0),
-                    Comparator.reverseOrder()));
-                break;
-            case "price_asc":
-                filteredPackages.sort(Comparator.comparing(p -> p.getAvailableDates().stream()
-                    .mapToInt(PackageDepartureOption::getAdultPrice)
-                    .min()
-                    .orElse(0)));
-                break;
-            default:
-                filteredPackages.sort(Comparator.comparing(p -> p.getAvailableDates().stream()
-                    .min(Comparator.comparingInt(PackageDepartureOption::getAdultPrice))
-                    .map(PackageDepartureOption::getDepartureDate)
-                    .orElse(null)));
-                break;
-        }
-
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<Package> pagedPackages;
-
-        if (filteredPackages.size() < startItem) {
-            pagedPackages = List.of();
-        } else {
-            int toIndex = Math.min(startItem + pageSize, filteredPackages.size());
-            pagedPackages = filteredPackages.subList(startItem, toIndex);
-        }
-
-        return new PageImpl<>(pagedPackages, PageRequest.of(currentPage, pageSize),
-            filteredPackages.size());
+    public Page<Package> getPackageByHashtag(Hashtag hashtag, String sortBy, Pageable pageable) {
+        return packageQueryRepository.packageInfoByFilters(null, null, null, null,
+            new String[] {hashtag.getName()}, sortBy, pageable);
     }
 
     // PackageDepartureOption

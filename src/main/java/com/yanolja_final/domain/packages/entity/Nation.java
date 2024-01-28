@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @NoArgsConstructor
@@ -23,4 +24,7 @@ public class Nation extends BaseEntity {
 
     @Column(length = 500)
     private String imageUrl;
+
+    @ColumnDefault("0")
+    private Integer priority = 0;
 }

@@ -28,9 +28,11 @@ public class ThemeFacade {
             .collect(Collectors.toList());
     }
 
-    public Page<ThemePackageResponse> getThemePackages(Long themeId, String sortBy, Pageable pageable) {
+    public Page<ThemePackageResponse> getThemePackages(Long themeId, String sortBy,
+        Pageable pageable) {
         Theme theme = themeService.getThemeById(themeId);
-        Page<Package> packagesPage = packageService.getPackagesByHashtag(theme.getHashtag(), sortBy, pageable);
+        Page<Package> packagesPage =
+            packageService.getPackageByHashtag(theme.getHashtag(), sortBy, pageable);
 
         return packagesPage.map(p -> new ThemePackageResponse(
             theme.getId(),

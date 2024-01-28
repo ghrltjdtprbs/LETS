@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface NationRepository extends JpaRepository<Nation, Long> {
 
-    List<Nation> findByIdIn(List<Long> ids);
+    List<Nation> findByIdInOrderByPriorityDesc(List<Long> ids);
 }

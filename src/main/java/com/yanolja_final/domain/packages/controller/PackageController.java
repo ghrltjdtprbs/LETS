@@ -10,7 +10,6 @@ import com.yanolja_final.global.config.argumentresolver.LoginedUserId;
 import com.yanolja_final.global.util.PagedResponseDTO;
 import com.yanolja_final.global.util.ResponseDTO;
 import java.util.List;
-import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
