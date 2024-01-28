@@ -19,6 +19,6 @@ public class NationService {
     private static final List<Long> nationIds = Arrays.asList(5L, 19L, 8L, 1L, 13L, 17L);
 
     public List<Nation> getPopularNationInfo() {
-        return nationRepository.findByIdIn(nationIds);
+        return nationRepository.findByIdInOrderByPriorityDesc(nationIds);
     }
 }

@@ -15,6 +15,6 @@ public class ContinentService {
     public final ContinentRepository continentRepository;
 
     public List<Continent> getAllContinentInfo() {
-        return continentRepository.findAllByOrderByNameAsc();
+        return continentRepository.findAllByOrderByPriorityDesc();
     }
 }
