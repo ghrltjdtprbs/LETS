@@ -1,6 +1,5 @@
 package com.yanolja_final.global.util;
 
-import com.yanolja_final.global.exception.ErrorCode;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
