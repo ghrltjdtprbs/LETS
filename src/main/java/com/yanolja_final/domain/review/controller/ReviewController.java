@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -40,15 +41,15 @@ public class ReviewController {
     }
 
     @DeleteMapping("/{reviewId}")
-    public ResponseDTO<Void> deleteReview(@PathVariable Long reviewId,@LoginedUserId Long userId) {
-        reviewFacade.deleteReview(reviewId,userId);
+    public ResponseDTO<Void> deleteReview(@PathVariable Long reviewId, @LoginedUserId Long userId) {
+        reviewFacade.deleteReview(reviewId, userId);
         return ResponseDTO.ok();
     }
 
     @GetMapping("/my")
     public ResponseEntity<PagedResponseDTO<ReviewResponse>> getUserReviews(
         @LoginedUserId Long userId,
-        @PageableDefault(size = 5) Pageable pageable) {
+        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 5) Pageable pageable) {
 
         Page<ReviewResponse> reviewsPage = reviewFacade.getUserReviews(userId, pageable);
         PagedResponseDTO<ReviewResponse> response = PagedResponseDTO.okWithData(reviewsPage);
@@ -57,7 +58,8 @@ public class ReviewController {
     }
 
     @GetMapping("/packages/{packageId}/list/summary")
-    public ResponseDTO<ReviewSummaryResponse> getPackageReviewsSummary(@PathVariable Long packageId) {
+    public ResponseDTO<ReviewSummaryResponse> getPackageReviewsSummary(
+        @PathVariable Long packageId) {
         ReviewSummaryResponse summary = reviewFacade.getPackageReviewsSummary(packageId);
         return ResponseDTO.okWithData(summary);
     }
@@ -65,7 +67,7 @@ public class ReviewController {
     @GetMapping("/packages/{packageId}/list")
     public ResponseEntity<PagedResponseDTO<ReviewResponse>> getPackageReviews(
         @PathVariable Long packageId,
-        @PageableDefault(size = 6) Pageable pageable) {
+        @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC, size = 6) Pageable pageable) {
 
         Page<ReviewResponse> reviewsPage = reviewFacade.getPackageReviews(packageId, pageable);
         PagedResponseDTO<ReviewResponse> response = PagedResponseDTO.okWithData(reviewsPage);
