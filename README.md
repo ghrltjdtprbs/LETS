@@ -1,9 +1,7 @@
 # [Winner One](https://winnerone.site/)
 
-![image](https://github.com/yanolja-finalproject/Backend/assets/87019291/51b20a20-5cdc-49ba-87c7-571c363c97a9)
-
-![image](https://github.com/yanolja-finalproject/Backend/assets/87019291/092e3f1b-5427-4790-8845-74927c5991ce)
-![image](https://github.com/yanolja-finalproject/Backend/assets/87019291/8d2b94ca-97a5-4f67-9e06-92eadf6a93c5)
+### 해당 웹 페이지는 모바일 크기를 기준으로 만들었습니다. 
+#### (Moblie M - 375px)
 
 ## 📍 소개
 
@@ -72,7 +70,7 @@ com.yanolja_fianl
     └── util
 ```
 
-### 6. 기타 합의사항
+### 3. 기타 합의사항
 
 - **협업 관련**
     - 데일리 스크럼: 매일 오후 18:00 팀 전체 데일리 스크럼 진행
@@ -90,3 +88,8 @@ com.yanolja_fianl
 ## ERD
 ![Winnerone](https://github.com/yanolja-finalproject/Backend/assets/87019291/94fa3373-0bda-420a-b896-f055d07b5fea)
 
+## 사진
+![image](https://github.com/yanolja-finalproject/Backend/assets/87019291/51b20a20-5cdc-49ba-87c7-571c363c97a9)
+
+![image](https://github.com/yanolja-finalproject/Backend/assets/87019291/092e3f1b-5427-4790-8845-74927c5991ce)
+![image](https://github.com/yanolja-finalproject/Backend/assets/87019291/8d2b94ca-97a5-4f67-9e06-92eadf6a93c5)
