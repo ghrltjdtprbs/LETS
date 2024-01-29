@@ -1,15 +1,9 @@
-# Winner One
+# [Winner One](https://winnerone.site/)
 
 ![image](https://github.com/yanolja-finalproject/Backend/assets/87019291/51b20a20-5cdc-49ba-87c7-571c363c97a9)
 
 ![image](https://github.com/yanolja-finalproject/Backend/assets/87019291/092e3f1b-5427-4790-8845-74927c5991ce)
 ![image](https://github.com/yanolja-finalproject/Backend/assets/87019291/8d2b94ca-97a5-4f67-9e06-92eadf6a93c5)
-
-
-
-## 프로젝트 실행을 위한 환경 세팅
-
-//...
 
 ## 📍 소개
 
@@ -25,6 +19,7 @@
 - **언어**: Java 17
 - **개발 환경**: IntelliJ, Gradle, Spring Boot 3
 - **라이브러리**: Spring Web, Spring Security, JPA, QueryDSL, Lombok, JWT, OAuth2
+- **배포**: EC2, RDS(MySQL)
 - **CI**: GitHub Actions
 - **API 명세** : Notion
 
@@ -95,4 +90,3 @@ com.yanolja_fianl
 ## ERD
 ![Winnerone](https://github.com/yanolja-finalproject/Backend/assets/87019291/94fa3373-0bda-420a-b896-f055d07b5fea)
 
-## 시연 영상
