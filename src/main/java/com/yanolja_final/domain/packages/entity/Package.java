@@ -126,7 +126,6 @@ public class Package extends BaseEntity {
 
     public int getMinPrice() {
         return availableDates.stream()
-            .filter(PackageDepartureOption::isNotExpired)
             .mapToInt(PackageDepartureOption::getAdultPrice)
             .min()
             .orElseThrow(PackageNotFoundException::new);
